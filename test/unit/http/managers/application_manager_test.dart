@@ -159,19 +159,6 @@ void main() {
     );
 
     testEndpoint(
-      '/applications/@me',
-      (client) => client.applications.fetchCurrentApplication(),
-      response: sampleApplication,
-    );
-
-    testEndpoint(
-      '/applications/@me',
-      method: 'PATCH',
-      (client) => client.applications.updateCurrentApplication(ApplicationUpdateBuilder()),
-      response: sampleApplication,
-    );
-
-    testEndpoint(
       '/applications/0/skus',
       (client) => client.applications.listSkus(Snowflake.zero),
       response: [sampleSku],

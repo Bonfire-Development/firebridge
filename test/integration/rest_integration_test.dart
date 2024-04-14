@@ -56,18 +56,6 @@ void main() {
       await expectLater(client.user.get(), completes);
     });
 
-    test('client.application', () {
-      expect(client.application.id, isNot(Snowflake.zero));
-    });
-
-    test('applications', () async {
-      late Application application;
-
-      await expectLater(() async => application = await client.applications.fetchCurrentApplication(), completes);
-      await expectLater(application.listSkus(), completes);
-      await expectLater(client.applications.updateCurrentApplication(ApplicationUpdateBuilder(description: application.description)), completes);
-    });
-
     test('users', () async {
       await expectLater(client.users.fetchCurrentUser(), completes);
       await expectLater(client.users.listCurrentUserGuilds(), completes);

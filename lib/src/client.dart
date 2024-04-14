@@ -144,9 +144,7 @@ abstract class Nyxx {
     return _doConnect(apiOptions, clientOptions, () async {
       final client = NyxxGateway._(apiOptions, clientOptions);
 
-      client
-        .._application = await client.applications.fetchCurrentApplication()
-        .._user = await client.users.fetchCurrentUser();
+      client._user = await client.users.fetchCurrentUser();
 
       // We can't use client.gateway as it is not initialized yet
       final gatewayManager = GatewayManager(client);
