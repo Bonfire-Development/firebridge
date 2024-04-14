@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:nock/nock.dart';
@@ -75,7 +76,7 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
   group(name, () {
     test('parse', () {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
       final config = CacheConfig<T>();
 
@@ -97,7 +98,7 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
       for (final parsingTest in additionalParsingTests) {
         test(parsingTest.name, () {
           final client = MockNyxx();
-          when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+          when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
           when(() => client.options).thenReturn(RestClientOptions());
           final config = CacheConfig<T>();
 
@@ -121,7 +122,7 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
 
     test('fetch caches entity', () async {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
       when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
@@ -214,7 +215,7 @@ Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager
         nock.init();
 
         final client = MockNyxx();
-        when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+        when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
         when(() => client.options).thenReturn(RestClientOptions());
         when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
@@ -247,7 +248,7 @@ Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager
 
       test('update caches entity', () async {
         final client = MockNyxx();
-        when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+        when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
         when(() => client.options).thenReturn(RestClientOptions());
         when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
@@ -273,7 +274,7 @@ Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager
 
       test('delete caches entity', () async {
         final client = MockNyxx();
-        when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+        when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
         when(() => client.options).thenReturn(RestClientOptions());
         when(() => client.httpHandler).thenReturn(HttpHandler(client));
 

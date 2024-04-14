@@ -46,7 +46,7 @@ class RestApiOptions extends ApiOptions {
   final String token;
 
   @override
-  String get authorizationHeader => '$token';
+  String get authorizationHeader => token;
 
   /// Create a new [RestApiOptions].
   RestApiOptions({required this.token, super.userAgent});

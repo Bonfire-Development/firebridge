@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:nock/nock.dart';
@@ -23,7 +24,7 @@ Future<void> testEndpoint(
     // This test ensures code uses HttpHandler.executeSafe instead of HttpHandler.execute
     test('respects response status', () async {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
       when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
@@ -41,7 +42,7 @@ Future<void> testEndpoint(
 
     test('works', () async {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
       when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
