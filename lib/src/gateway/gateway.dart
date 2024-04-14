@@ -300,10 +300,6 @@ class Gateway extends GatewayManager with EventParser {
       gatewayResumeUrl: Uri.parse(raw['resume_gateway_url'] as String),
       shardId: (raw['shard'] as List<Object?>?)?[0] as int?,
       totalShards: (raw['shard'] as List<Object?>?)?[1] as int?,
-      application: PartialApplication(
-        id: Snowflake.parse((raw['application'] as Map<String, Object?>)['id']!),
-        manager: client.applications,
-      ),
     );
   }
 
