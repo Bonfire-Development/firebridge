@@ -12,7 +12,7 @@ abstract class ApiOptions {
   static const nyxxRepositoryUrl = 'https://github.com/nyxx-discord/nyxx';
 
   /// The default value for the `User-Agent` header for bots made with nyxx.
-  static const defaultUserAgent = 'DiscordBot ($nyxxRepositoryUrl, $nyxxVersion)';
+  static const defaultUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'; // 'DiscordBot ($nyxxRepositoryUrl, $nyxxVersion)';
 
   /// The host at which the API can be found.
   ///
@@ -23,7 +23,7 @@ abstract class ApiOptions {
   String get baseUri => '/api/v$apiVersion';
 
   /// The version of the API to use.
-  int get apiVersion => 10;
+  int get apiVersion => 9;
 
   /// The value of the `Authorization` header to use when authenticating requests.
   String get authorizationHeader;
@@ -46,7 +46,7 @@ class RestApiOptions extends ApiOptions {
   final String token;
 
   @override
-  String get authorizationHeader => 'Bot $token';
+  String get authorizationHeader => '$token';
 
   /// Create a new [RestApiOptions].
   RestApiOptions({required this.token, super.userAgent});
@@ -61,7 +61,7 @@ class OAuth2ApiOptions extends ApiOptions implements RestApiOptions {
   String get token => credentials.accessToken;
 
   @override
-  String get authorizationHeader => 'Bearer ${credentials.accessToken}';
+  String get authorizationHeader => '${credentials.accessToken}';
 
   /// Create a new [OAuth2ApiOptions].
   OAuth2ApiOptions({required this.credentials, super.userAgent});

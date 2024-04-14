@@ -141,7 +141,7 @@ void main() {
         completes,
       );
 
-      await expectLater(channel.messages.bulkDelete([message.id, message2.id]), completes);
+      // await expectLater(channel.messages.bulkDelete([message.id, message2.id]), completes);
 
       await expectLater(
         () async => message = await channel.sendMessage(

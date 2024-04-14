@@ -91,7 +91,7 @@ abstract class Nyxx {
       final client = NyxxRest._(apiOptions, clientOptions);
 
       return client
-        .._application = await client.applications.fetchCurrentApplication()
+        //.._application = await client.applications.fetchCurrentApplication()
         .._user = await client.users.fetchCurrentUser();
     }, clientOptions.plugins);
   }
