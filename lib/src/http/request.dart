@@ -99,7 +99,7 @@ abstract class HttpRequest {
   };
 
   Map<String, String> _getHeaders(Nyxx client) => {
-    "Authorization": "Njc4MzU1NjA3OTkyMDA4NzM2.GYaQPa.OWhmYRYLeyg_hMCRHSsCsrOUx2bedNrt05bBlk",
+    "Authorization": "TOKEN_GOES_HERE",
     "X-Discord-Timezone": "America/New_York",
     "Sec-Ch-Ua-Platform": '"Windows"',
     'Accept-Language': 'en-US',
@@ -117,7 +117,7 @@ abstract class HttpRequest {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
     'X-Discord-Locale': 'en-US',
     'X-Debug-Options': 'bugReporterEnabled',
-    "X-Super-Properties": base64Encode(utf8.encode(jsonEncode(superProps))),// "eyJvcyI6IldpbmRvd3MiLCJicm93c2VyIjoiQ2hyb21lIiwiZGV2aWNlIjoiIiwic3lzdGVtX2xvY2FsZSI6ImVuLVVTIiwiYnJvd3Nlcl91c2VyX2FnZW50IjoiTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEyMS4wLjYxNjcuMTYwIFNhZmFyaS81MzcuMzYiLCJicm93c2VyX3ZlcnNpb24iOiIxMjEuMC42MTY3LjE2MCIsIm9zX3ZlcnNpb24iOiIxMCIsInJlZmVycmVyIjoiIiwicmVmZXJyaW5nX2RvbWFpbiI6IiIsInJlZmVycmVyX2N1cnJlbnQiOiIiLCJyZWZlcnJpbmdfZG9tYWluX2N1cnJlbnQiOiIiLCJyZWxlYXNlX2NoYW5uZWwiOiJzdGFibGUiLCJjbGllbnRfYnVpbGRfbnVtYmVyIjoyODQxODcsImNsaWVudF9ldmVudF9zb3VyY2UiOm51bGx9",
+    "X-Super-Properties": base64Encode(utf8.encode(jsonEncode(superProps))),
     "Content-Type": "application/json",
   };
 
