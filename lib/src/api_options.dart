@@ -61,7 +61,7 @@ class OAuth2ApiOptions extends ApiOptions implements RestApiOptions {
   String get token => credentials.accessToken;
 
   @override
-  String get authorizationHeader => '${credentials.accessToken}';
+  String get authorizationHeader => credentials.accessToken;
 
   /// Create a new [OAuth2ApiOptions].
   OAuth2ApiOptions({required this.credentials, super.userAgent});
