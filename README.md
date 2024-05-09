@@ -1,12 +1,12 @@
-# nyxx
+# Firebridge
 
-[![Discord](https://discordapp.com/api/guilds/846136758470443069/widget.png?style=shield)](https://discord.gg/nyxx)
-[![pub](https://img.shields.io/pub/v/nyxx.svg)](https://pub.dev/packages/nyxx)
 [![documentation](https://img.shields.io/badge/Documentation-nyxx-yellow.svg)](https://pub.dev/documentation/nyxx/latest/)
 
-A complete, robust and efficient wrapper around Discord's API for bots & applications.
+An experimental package to use Discord with user accounts, built off of Nyxx.
 
-To get started using nyxx, follow our [getting started guide](https://nyxx.l7ssha.xyz/docs/tutorials/writing_your_first_bot) to write your first bot.
+**Note**: Using this with your user account is against TOS! Proceed at your own risk.
+
+To get started using nyxx, follow the Nyxx [getting started guide](https://nyxx.l7ssha.xyz/docs/tutorials/writing_your_first_bot) to write your first bot.
 
 If you're already familiar with Discord's API, here's a quick example to get you started:
 ```dart
