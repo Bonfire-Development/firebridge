@@ -19,7 +19,6 @@ import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/plugin/plugin.dart';
 import 'package:firebridge/src/utils/flags.dart';
-import 'package:oauth2/oauth2.dart';
 import 'package:runtime_type/runtime_type.dart';
 
 /// A helper function to nest and execute calls to plugin connect methods.

@@ -1,3 +1,7 @@
+## 6.2.5
+__05.09.2024__
+- feat: Integrate patches from nyxx_self for solve obscure null check error
+
 ## 6.2.4
 __05.09.2024__
 - feat: Integrate patches from nyxx_self for solve obscure null check error
