@@ -44,20 +44,10 @@ mixin class EventParser {
   }
 
   RawDispatchEvent parseDispatch(Map<String, Object?> raw) {
-    Map<String, Object?> payload;
-
-    if (raw['d'].runtimeType == List<dynamic>) {
-      payload = {"data": raw['d'] as List<dynamic>};
-      // TODO: Actually parse this information. Is it even useful?
-    } else {
-      payload = raw['d'] as Map<String, Object?>;
-    }
-
-
     return RawDispatchEvent(
       seq: raw['s'] as int,
       name: raw['t'] as String,
-      payload: payload
+      payload: raw['d'] as Map<String, Object?>,
     );
   }
 }

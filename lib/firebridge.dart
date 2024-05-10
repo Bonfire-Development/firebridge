@@ -311,7 +311,6 @@ export 'src/models/interaction.dart'
         InteractionContextType;
 export 'src/models/entitlement.dart' show Entitlement, PartialEntitlement, EntitlementType;
 export 'src/models/sku.dart' show Sku, SkuType, SkuFlags;
-export 'src/models/oauth2.dart' show OAuth2Information;
 
 export 'src/utils/flags.dart' show Flag, Flags;
 export 'src/intents.dart' show GatewayIntents;

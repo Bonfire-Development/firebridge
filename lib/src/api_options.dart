@@ -1,18 +1,11 @@
 import 'package:firebridge/src/builders/presence.dart';
 import 'package:firebridge/src/intents.dart';
 import 'package:firebridge/src/utils/flags.dart';
-import 'package:oauth2/oauth2.dart';
 
 /// Options for connecting to the Discord API.
 abstract class ApiOptions {
-  /// The version of nyxx used in [defaultUserAgent].
-  static const nyxxVersion = '6.2.1';
-
-  /// The URL to the nyxx repository used in [defaultUserAgent].
-  static const nyxxRepositoryUrl = 'https://github.com/nyxx-discord/nyxx';
-
-  /// The default value for the `User-Agent` header for bots made with nyxx.
-  static const defaultUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'; // 'DiscordBot ($nyxxRepositoryUrl, $nyxxVersion)';
+  /// The default value for the `User-Agent` header.
+  static const defaultUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36';
 
   /// The host at which the API can be found.
   ///
@@ -50,21 +43,6 @@ class RestApiOptions extends ApiOptions {
 
   /// Create a new [RestApiOptions].
   RestApiOptions({required this.token, super.userAgent});
-}
-
-/// Options for connecting the the Discord API using credentials from an OAuth2 flow.
-class OAuth2ApiOptions extends ApiOptions implements RestApiOptions {
-  /// The credentials to use when connecting to the API.
-  Credentials credentials;
-
-  @override
-  String get token => credentials.accessToken;
-
-  @override
-  String get authorizationHeader => credentials.accessToken;
-
-  /// Create a new [OAuth2ApiOptions].
-  OAuth2ApiOptions({required this.credentials, super.userAgent});
 }
 
 /// Options for connecting to the Discord API for making HTTP requests and connecting to the Gateway

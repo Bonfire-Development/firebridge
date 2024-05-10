@@ -12,6 +12,7 @@ import 'package:firebridge/src/gateway/shard.dart';
 import 'package:firebridge/src/http/managers/gateway_manager.dart';
 import 'package:firebridge/src/http/managers/member_manager.dart';
 import 'package:firebridge/src/http/managers/message_manager.dart';
+import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/channel/channel.dart';
 import 'package:firebridge/src/models/channel/guild_channel.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';

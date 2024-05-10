@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/presence.dart';
 import 'package:firebridge/src/builders/voice.dart';
 import 'package:firebridge/src/client_options.dart';
@@ -12,7 +13,6 @@ import 'package:firebridge/src/http/handler.dart';
 import 'package:firebridge/src/http/managers/gateway_manager.dart';
 import 'package:firebridge/src/intents.dart';
 import 'package:firebridge/src/manager_mixin.dart';
-import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/snowflake.dart';
