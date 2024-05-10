@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:firebridge/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:test/test.dart' hide completes;
 
 import '../function_completes.dart';
@@ -118,6 +118,7 @@ void main() {
       await expectLater(message.attachments.first.fetch(), completes);
       await expectLater(message.attachments.first.fetchStreamed().drain(), completes);
 
+      // ignore: unused_local_variable
       late Message message2;
       await expectLater(
         () async => message2 = await channel.sendMessage(MessageBuilder(

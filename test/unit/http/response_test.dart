@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:firebridge/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/request.dart';

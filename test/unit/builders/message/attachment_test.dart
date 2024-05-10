@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebridge/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:test/test.dart';
 
 void main() {

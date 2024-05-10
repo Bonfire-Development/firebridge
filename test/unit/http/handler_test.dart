@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:nock/nock.dart';
-import 'package:firebridge/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/client.dart';

@@ -1,4 +1,3 @@
-import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/user/user.dart';

@@ -1,5 +1,5 @@
 import 'package:matcher/expect.dart';
-import 'package:firebridge/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 
 import '../../../test_manager.dart';
 
