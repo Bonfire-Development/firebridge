@@ -1,7 +1,7 @@
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 /// {@template webhooks_update_event}
 /// Emitted when the webhooks in a channel are updated.

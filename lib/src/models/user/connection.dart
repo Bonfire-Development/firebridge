@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/guild/integration.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/models/guild/integration.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// A link to an account on a service other than Discord.
 ///

@@ -1,17 +1,17 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/guild_channel.dart';
-import 'package:nyxx/src/models/channel/types/forum.dart';
-import 'package:nyxx/src/models/channel/types/guild_announcement.dart';
-import 'package:nyxx/src/models/channel/types/guild_category.dart';
-import 'package:nyxx/src/models/channel/types/guild_stage.dart';
-import 'package:nyxx/src/models/channel/types/guild_text.dart';
-import 'package:nyxx/src/models/channel/types/guild_voice.dart';
-import 'package:nyxx/src/models/channel/voice_channel.dart';
-import 'package:nyxx/src/models/permission_overwrite.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/flags.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/guild_channel.dart';
+import 'package:firebridge/src/models/channel/types/forum.dart';
+import 'package:firebridge/src/models/channel/types/guild_announcement.dart';
+import 'package:firebridge/src/models/channel/types/guild_category.dart';
+import 'package:firebridge/src/models/channel/types/guild_stage.dart';
+import 'package:firebridge/src/models/channel/types/guild_text.dart';
+import 'package:firebridge/src/models/channel/types/guild_voice.dart';
+import 'package:firebridge/src/models/channel/voice_channel.dart';
+import 'package:firebridge/src/models/permission_overwrite.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/flags.dart';
 
 class GuildChannelBuilder<T extends GuildChannel> extends CreateBuilder<T> {
   String name;

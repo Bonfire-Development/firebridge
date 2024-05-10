@@ -1,13 +1,13 @@
-import 'package:nyxx/src/builders/guild/member.dart';
-import 'package:nyxx/src/http/cdn/cdn_asset.dart';
-import 'package:nyxx/src/http/managers/member_manager.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/permissions.dart';
-import 'package:nyxx/src/models/role.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/models/user/user.dart';
-import 'package:nyxx/src/utils/flags.dart';
+import 'package:firebridge/src/builders/guild/member.dart';
+import 'package:firebridge/src/http/cdn/cdn_asset.dart';
+import 'package:firebridge/src/http/managers/member_manager.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/permissions.dart';
+import 'package:firebridge/src/models/role.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/utils/flags.dart';
 
 /// A partial [Member].
 class PartialMember extends WritableSnowflakeEntity<Member> {

@@ -1,4 +1,4 @@
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge/nyxx.dart';
 
 abstract class ThreadsOnlyChannel implements HasThreadsChannel {
   /// The topic of this channel.

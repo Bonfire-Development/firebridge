@@ -1,6 +1,6 @@
 import 'package:http/http.dart';
-import 'package:nyxx/src/http/handler.dart';
-import 'package:nyxx/src/http/request.dart';
+import 'package:firebridge/src/http/handler.dart';
+import 'package:firebridge/src/http/request.dart';
 
 /// A rate limit bucket tracking requests.
 ///

@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:http/http.dart';
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/http/cdn/cdn_asset.dart';
-import 'package:nyxx/src/http/managers/message_manager.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/flags.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/http/cdn/cdn_asset.dart';
+import 'package:firebridge/src/http/managers/message_manager.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/flags.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template attachment}
 /// An attachment in a [Message].

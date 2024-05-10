@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:nyxx/src/builders/entitlement.dart';
-import 'package:nyxx/src/errors.dart';
-import 'package:nyxx/src/http/managers/manager.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/entitlement.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/cache_helpers.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/builders/entitlement.dart';
+import 'package:firebridge/src/errors.dart';
+import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/entitlement.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A [Manager] for [Entitlement]s.
 class EntitlementManager extends ReadOnlyManager<Entitlement> {

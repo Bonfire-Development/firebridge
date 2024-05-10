@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/gateway/opcode.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/gateway/opcode.dart';
 
 /// An internal class which allows the shard runner to parse gateway events
 /// without having a reference to the client's [GatewayManager].

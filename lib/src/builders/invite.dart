@@ -1,7 +1,7 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/models/invite/invite.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/models/invite/invite.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 class InviteBuilder extends CreateBuilder<Invite> {
   Duration? maxAge;

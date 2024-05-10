@@ -1,8 +1,8 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/builders/image.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/utils/flags.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/builders/image.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/utils/flags.dart';
 
 class ApplicationIntegrationTypeConfigurationBuilder extends CreateBuilder<ApplicationIntegrationTypeConfiguration> {
   /// Install params for each installation context's default in-app authorization link.

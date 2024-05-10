@@ -1,23 +1,23 @@
 import 'dart:async';
 
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/gateway/events/application_command.dart';
-import 'package:nyxx/src/models/gateway/events/auto_moderation.dart';
-import 'package:nyxx/src/models/gateway/events/channel.dart';
-import 'package:nyxx/src/models/gateway/events/entitlement.dart';
-import 'package:nyxx/src/models/gateway/events/guild.dart';
-import 'package:nyxx/src/models/gateway/events/integration.dart';
-import 'package:nyxx/src/models/gateway/events/interaction.dart';
-import 'package:nyxx/src/models/gateway/events/invite.dart';
-import 'package:nyxx/src/models/gateway/events/message.dart';
-import 'package:nyxx/src/models/gateway/events/presence.dart';
-import 'package:nyxx/src/models/gateway/events/ready.dart';
-import 'package:nyxx/src/models/gateway/events/stage_instance.dart';
-import 'package:nyxx/src/models/gateway/events/voice.dart';
-import 'package:nyxx/src/models/gateway/events/webhook.dart';
-import 'package:nyxx/src/models/interaction.dart';
-import 'package:nyxx/src/utils/iterable_extension.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/gateway/events/application_command.dart';
+import 'package:firebridge/src/models/gateway/events/auto_moderation.dart';
+import 'package:firebridge/src/models/gateway/events/channel.dart';
+import 'package:firebridge/src/models/gateway/events/entitlement.dart';
+import 'package:firebridge/src/models/gateway/events/guild.dart';
+import 'package:firebridge/src/models/gateway/events/integration.dart';
+import 'package:firebridge/src/models/gateway/events/interaction.dart';
+import 'package:firebridge/src/models/gateway/events/invite.dart';
+import 'package:firebridge/src/models/gateway/events/message.dart';
+import 'package:firebridge/src/models/gateway/events/presence.dart';
+import 'package:firebridge/src/models/gateway/events/ready.dart';
+import 'package:firebridge/src/models/gateway/events/stage_instance.dart';
+import 'package:firebridge/src/models/gateway/events/voice.dart';
+import 'package:firebridge/src/models/gateway/events/webhook.dart';
+import 'package:firebridge/src/models/interaction.dart';
+import 'package:firebridge/src/utils/iterable_extension.dart';
 
 /// An internal mixin to add event streams to a NyxxGateway client.
 mixin EventMixin implements Nyxx {

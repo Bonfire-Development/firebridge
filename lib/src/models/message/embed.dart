@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/discord_color.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/models/discord_color.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template embed}
 /// Rich content that can be embedded into a message, such as a video, image or custom text.

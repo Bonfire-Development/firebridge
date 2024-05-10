@@ -1,12 +1,12 @@
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/text_channel.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/guild/auto_moderation.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/guild/member.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/user/user.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/guild/auto_moderation.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/user/user.dart';
 
 /// {@template auto_moderation_rule_create_event}
 /// Emitted when an auto moderation rule is created.

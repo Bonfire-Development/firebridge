@@ -1,8 +1,8 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/builders/image.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/webhook.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/builders/image.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/webhook.dart';
 
 class WebhookBuilder extends CreateBuilder<Webhook> {
   String name;

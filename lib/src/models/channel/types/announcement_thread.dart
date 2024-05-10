@@ -1,17 +1,17 @@
-import 'package:nyxx/src/builders/invite.dart';
-import 'package:nyxx/src/builders/permission_overwrite.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/text_channel.dart';
-import 'package:nyxx/src/models/channel/thread.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/guild/member.dart';
-import 'package:nyxx/src/models/invite/invite.dart';
-import 'package:nyxx/src/models/invite/invite_metadata.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/permission_overwrite.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/user/user.dart';
-import 'package:nyxx/src/models/webhook.dart';
+import 'package:firebridge/src/builders/invite.dart';
+import 'package:firebridge/src/builders/permission_overwrite.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/channel/thread.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/invite/invite.dart';
+import 'package:firebridge/src/models/invite/invite_metadata.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/permission_overwrite.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/models/webhook.dart';
 
 class AnnouncementThread extends TextChannel implements Thread {
   @override

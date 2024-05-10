@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge/nyxx.dart';
 
 void main() async {
   final client = await Nyxx.connectGateway(

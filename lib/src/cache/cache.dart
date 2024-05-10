@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
 
 /// The configuration for a [Cache] instance.
 class CacheConfig<T> {

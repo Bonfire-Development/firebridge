@@ -1,6 +1,6 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/models/entitlement.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/models/entitlement.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 class TestEntitlementBuilder extends CreateBuilder<Entitlement> {
   Snowflake skuId;

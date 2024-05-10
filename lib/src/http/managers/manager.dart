@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/cache/cache.dart';
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/cache/cache.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
 
 /// A [Manager] that provides only read access to the API.
 abstract class ReadOnlyManager<T extends ManagedSnowflakeEntity<T>> {

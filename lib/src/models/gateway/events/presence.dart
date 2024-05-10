@@ -1,10 +1,10 @@
-import 'package:nyxx/src/models/channel/text_channel.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/guild/member.dart';
-import 'package:nyxx/src/models/presence.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/user/user.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/presence.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/user/user.dart';
 
 /// {@template presence_update_event}
 /// Emitted when a user updates their presence.

@@ -1,37 +1,37 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:nyxx/src/builders/channel/channel_position.dart';
-import 'package:nyxx/src/builders/channel/guild_channel.dart';
-import 'package:nyxx/src/builders/guild/guild.dart';
-import 'package:nyxx/src/builders/guild/template.dart';
-import 'package:nyxx/src/builders/guild/welcome_screen.dart';
-import 'package:nyxx/src/builders/guild/widget.dart';
-import 'package:nyxx/src/builders/image.dart';
-import 'package:nyxx/src/builders/voice.dart';
-import 'package:nyxx/src/http/managers/manager.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/guild_channel.dart';
-import 'package:nyxx/src/models/channel/thread_list.dart';
-import 'package:nyxx/src/models/emoji.dart';
-import 'package:nyxx/src/models/guild/ban.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/guild/guild_preview.dart';
-import 'package:nyxx/src/models/guild/guild_widget.dart';
-import 'package:nyxx/src/models/guild/onboarding.dart';
-import 'package:nyxx/src/models/guild/template.dart';
-import 'package:nyxx/src/models/guild/welcome_screen.dart';
-import 'package:nyxx/src/models/invite/invite.dart';
-import 'package:nyxx/src/models/locale.dart';
-import 'package:nyxx/src/models/permissions.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/user/user.dart';
-import 'package:nyxx/src/models/voice/voice_region.dart';
-import 'package:nyxx/src/utils/cache_helpers.dart';
-import 'package:nyxx/src/utils/flags.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/builders/channel/channel_position.dart';
+import 'package:firebridge/src/builders/channel/guild_channel.dart';
+import 'package:firebridge/src/builders/guild/guild.dart';
+import 'package:firebridge/src/builders/guild/template.dart';
+import 'package:firebridge/src/builders/guild/welcome_screen.dart';
+import 'package:firebridge/src/builders/guild/widget.dart';
+import 'package:firebridge/src/builders/image.dart';
+import 'package:firebridge/src/builders/voice.dart';
+import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/guild_channel.dart';
+import 'package:firebridge/src/models/channel/thread_list.dart';
+import 'package:firebridge/src/models/emoji.dart';
+import 'package:firebridge/src/models/guild/ban.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/guild_preview.dart';
+import 'package:firebridge/src/models/guild/guild_widget.dart';
+import 'package:firebridge/src/models/guild/onboarding.dart';
+import 'package:firebridge/src/models/guild/template.dart';
+import 'package:firebridge/src/models/guild/welcome_screen.dart';
+import 'package:firebridge/src/models/invite/invite.dart';
+import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/permissions.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/models/voice/voice_region.dart';
+import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/flags.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A manager for [Guild]s.
 class GuildManager extends Manager<Guild> {
@@ -436,8 +436,6 @@ class GuildManager extends Manager<Guild> {
       ..threads()
       ..active();
     final request = BasicRequest(route);
-
-    print("SENDING REQUEST TO ROUTE ${route.toString()}");
 
     final response = await client.httpHandler.executeSafe(request);
     final list = client.channels.parseThreadList(response.jsonBody as Map<String, Object?>, guildId: id);

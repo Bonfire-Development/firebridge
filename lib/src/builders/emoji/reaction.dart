@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/emoji.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/models/emoji.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 class ReactionBuilder {
   String name;

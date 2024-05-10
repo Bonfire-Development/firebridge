@@ -1,12 +1,12 @@
-import 'package:nyxx/src/http/cdn/cdn_asset.dart';
-import 'package:nyxx/src/http/managers/user_manager.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/commands/application_command_option.dart';
-import 'package:nyxx/src/models/discord_color.dart';
-import 'package:nyxx/src/models/locale.dart';
-import 'package:nyxx/src/models/message/author.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/utils/flags.dart';
+import 'package:firebridge/src/http/cdn/cdn_asset.dart';
+import 'package:firebridge/src/http/managers/user_manager.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/commands/application_command_option.dart';
+import 'package:firebridge/src/models/discord_color.dart';
+import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/message/author.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/utils/flags.dart';
 
 /// A partial [User] object.
 class PartialUser extends ManagedSnowflakeEntity<User> {

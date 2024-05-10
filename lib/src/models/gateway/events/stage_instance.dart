@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/channel/stage_instance.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/channel/stage_instance.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
 
 /// {@template stage_instance_create_event}
 /// Emitted when a stage instance is created.

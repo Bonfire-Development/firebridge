@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart';
-import 'package:nyxx/src/errors.dart';
-import 'package:nyxx/src/http/request.dart';
+import 'package:firebridge/src/errors.dart';
+import 'package:firebridge/src/http/request.dart';
 
 /// A response to a [HttpRequest] from the Discord API.
 ///

@@ -1,18 +1,18 @@
-import 'package:nyxx/src/builders/channel/thread.dart';
-import 'package:nyxx/src/builders/invite.dart';
-import 'package:nyxx/src/builders/permission_overwrite.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/guild_channel.dart';
-import 'package:nyxx/src/models/channel/thread.dart';
-import 'package:nyxx/src/models/channel/thread_aggregate.dart';
-import 'package:nyxx/src/models/channel/thread_list.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/invite/invite.dart';
-import 'package:nyxx/src/models/invite/invite_metadata.dart';
-import 'package:nyxx/src/models/permission_overwrite.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/webhook.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/builders/channel/thread.dart';
+import 'package:firebridge/src/builders/invite.dart';
+import 'package:firebridge/src/builders/permission_overwrite.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/guild_channel.dart';
+import 'package:firebridge/src/models/channel/thread.dart';
+import 'package:firebridge/src/models/channel/thread_aggregate.dart';
+import 'package:firebridge/src/models/channel/thread_list.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/invite/invite.dart';
+import 'package:firebridge/src/models/invite/invite_metadata.dart';
+import 'package:firebridge/src/models/permission_overwrite.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/webhook.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template forum_channel}
 /// A forum channel.

@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/models/user/user.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/models/user/user.dart';
 
 enum StickerType {
   standard._(1),

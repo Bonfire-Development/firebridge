@@ -1,6 +1,6 @@
 import 'dart:mirrors';
 
-import 'package:nyxx/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/managers/manager.dart';
 import 'package:runtime_type/mirrors.dart';
 import 'package:runtime_type/runtime_type.dart';
 

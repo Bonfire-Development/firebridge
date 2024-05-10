@@ -1,13 +1,13 @@
-import 'package:nyxx/src/builders/invite.dart';
-import 'package:nyxx/src/builders/permission_overwrite.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/guild_channel.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/invite/invite.dart';
-import 'package:nyxx/src/models/invite/invite_metadata.dart';
-import 'package:nyxx/src/models/permission_overwrite.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/webhook.dart';
+import 'package:firebridge/src/builders/invite.dart';
+import 'package:firebridge/src/builders/permission_overwrite.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/guild_channel.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/invite/invite.dart';
+import 'package:firebridge/src/models/invite/invite_metadata.dart';
+import 'package:firebridge/src/models/permission_overwrite.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/webhook.dart';
 
 /// {@template guild_category}
 /// A category for organizing other [Channel]s in a [Guild].

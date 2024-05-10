@@ -1,7 +1,7 @@
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/user/user.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/user/user.dart';
 
 /// {@template ready_event}
 /// Emitted when the client's Gateway session is established.

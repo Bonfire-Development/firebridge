@@ -1,8 +1,8 @@
-import 'package:nyxx/src/builders/message/message.dart';
-import 'package:nyxx/src/http/managers/message_manager.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/builders/message/message.dart';
+import 'package:firebridge/src/http/managers/message_manager.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 /// A partial [TextChannel].
 class PartialTextChannel extends PartialChannel {

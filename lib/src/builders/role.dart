@@ -1,10 +1,10 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/builders/image.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/models/discord_color.dart';
-import 'package:nyxx/src/models/permissions.dart';
-import 'package:nyxx/src/models/role.dart';
-import 'package:nyxx/src/utils/flags.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/builders/image.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/models/discord_color.dart';
+import 'package:firebridge/src/models/permissions.dart';
+import 'package:firebridge/src/models/role.dart';
+import 'package:firebridge/src/utils/flags.dart';
 
 class RoleBuilder extends CreateBuilder<Role> {
   String? name;

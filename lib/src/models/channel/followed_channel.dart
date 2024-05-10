@@ -1,8 +1,8 @@
-import 'package:nyxx/src/http/managers/channel_manager.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/webhook.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/http/managers/channel_manager.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/webhook.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template followed_channel}
 /// Information about a channel which has been followed.

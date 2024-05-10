@@ -1,4 +1,4 @@
-name: nyxx
+name: firebridge
 version: 6.2.2
 description: A complete, robust and efficient wrapper around Discord's API for bots & applications.
 homepage: https://github.com/nyxx-discord/nyxx

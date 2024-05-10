@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:nock/nock.dart';
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge/nyxx.dart';
 import 'package:test/test.dart';
 
 import 'package:nock/src/interceptor.dart';

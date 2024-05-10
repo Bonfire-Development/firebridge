@@ -1,9 +1,9 @@
-import 'package:nyxx/src/http/managers/entitlement_manager.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/models/user/user.dart';
+import 'package:firebridge/src/http/managers/entitlement_manager.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/models/user/user.dart';
 
 /// A partial [Entitlement].
 class PartialEntitlement extends ManagedSnowflakeEntity<Entitlement> {

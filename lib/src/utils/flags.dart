@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// A set of flags that can be either enabled or disabled.
 class Flags<T extends Flags<T>> extends IterableBase<Flag<T>> with ToStringHelper {

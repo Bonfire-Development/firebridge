@@ -1,32 +1,32 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' show MultipartFile;
-import 'package:nyxx/src/builders/emoji/reaction.dart';
-import 'package:nyxx/src/builders/message/message.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/http/managers/manager.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/guild_channel.dart';
-import 'package:nyxx/src/models/channel/thread.dart';
-import 'package:nyxx/src/models/discord_color.dart';
-import 'package:nyxx/src/models/interaction.dart';
-import 'package:nyxx/src/models/message/activity.dart';
-import 'package:nyxx/src/models/message/attachment.dart';
-import 'package:nyxx/src/models/message/author.dart';
-import 'package:nyxx/src/models/message/channel_mention.dart';
-import 'package:nyxx/src/models/message/component.dart';
-import 'package:nyxx/src/models/message/embed.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/message/reaction.dart';
-import 'package:nyxx/src/models/message/reference.dart';
-import 'package:nyxx/src/models/message/role_subscription_data.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/user/user.dart';
-import 'package:nyxx/src/utils/cache_helpers.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/builders/emoji/reaction.dart';
+import 'package:firebridge/src/builders/message/message.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/guild_channel.dart';
+import 'package:firebridge/src/models/channel/thread.dart';
+import 'package:firebridge/src/models/discord_color.dart';
+import 'package:firebridge/src/models/interaction.dart';
+import 'package:firebridge/src/models/message/activity.dart';
+import 'package:firebridge/src/models/message/attachment.dart';
+import 'package:firebridge/src/models/message/author.dart';
+import 'package:firebridge/src/models/message/channel_mention.dart';
+import 'package:firebridge/src/models/message/component.dart';
+import 'package:firebridge/src/models/message/embed.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/message/reaction.dart';
+import 'package:firebridge/src/models/message/reference.dart';
+import 'package:firebridge/src/models/message/role_subscription_data.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A manager for [Message]s in a [TextChannel].
 class MessageManager extends Manager<Message> {

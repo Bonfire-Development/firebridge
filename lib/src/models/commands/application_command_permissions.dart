@@ -1,10 +1,10 @@
-import 'package:nyxx/src/http/managers/application_command_manager.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/commands/application_command.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/http/managers/application_command_manager.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/commands/application_command.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template command_permissions}
 /// The permissions for an [ApplicationCommand] in a guild.

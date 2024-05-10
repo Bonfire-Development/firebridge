@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:nyxx/src/api_options.dart';
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/client_options.dart';
-import 'package:nyxx/src/gateway/message.dart';
-import 'package:nyxx/src/gateway/shard.dart';
-import 'package:nyxx/src/http/handler.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/response.dart';
+import 'package:firebridge/src/api_options.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/client_options.dart';
+import 'package:firebridge/src/gateway/message.dart';
+import 'package:firebridge/src/gateway/shard.dart';
+import 'package:firebridge/src/http/handler.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/response.dart';
 import 'package:runtime_type/runtime_type.dart';
 
 /// Provides access to the connection and closing process for implementing plugins.

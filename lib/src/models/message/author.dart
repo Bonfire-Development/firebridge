@@ -1,5 +1,5 @@
-import 'package:nyxx/src/http/cdn/cdn_asset.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/http/cdn/cdn_asset.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 /// An author of a message.
 ///

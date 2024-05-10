@@ -1,6 +1,6 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/models/gateway/events/presence.dart';
-import 'package:nyxx/src/models/presence.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/models/gateway/events/presence.dart';
+import 'package:firebridge/src/models/presence.dart';
 
 class PresenceBuilder extends CreateBuilder<PresenceUpdateEvent> {
   DateTime? since;

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' hide MultipartRequest;
 import 'package:http/http.dart' as http show MultipartRequest;
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/http/route.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/http/route.dart';
 
 /// An HTTP request to be made against the API.
 ///

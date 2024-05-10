@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/user/user.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/user/user.dart';
 
 class OAuth2Information {
   /// The current application.

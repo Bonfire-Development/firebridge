@@ -2,20 +2,20 @@ import 'dart:convert';
 
 import 'package:http/http.dart' hide MultipartRequest;
 
-import 'package:nyxx/src/builders/message/message.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/builders/webhook.dart';
-import 'package:nyxx/src/http/managers/manager.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/text_channel.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/webhook.dart';
-import 'package:nyxx/src/utils/cache_helpers.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/builders/message/message.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/builders/webhook.dart';
+import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/webhook.dart';
+import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A manager for [Webhook]s.
 class WebhookManager extends Manager<Webhook> {

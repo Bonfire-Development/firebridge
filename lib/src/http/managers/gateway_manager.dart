@@ -1,10 +1,10 @@
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/gateway/gateway.dart';
-import 'package:nyxx/src/models/presence.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/gateway/gateway.dart';
+import 'package:firebridge/src/models/presence.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A [Manager] for gateway information.
 // Use an abstract class so the client getter can be abstract,

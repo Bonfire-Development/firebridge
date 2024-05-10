@@ -1,4 +1,4 @@
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge/nyxx.dart';
 import 'package:test/test.dart';
 
 import '../../../test_manager.dart';

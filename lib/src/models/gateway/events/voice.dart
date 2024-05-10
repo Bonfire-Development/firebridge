@@ -1,7 +1,7 @@
-import 'package:nyxx/src/models/gateway/event.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/voice/voice_state.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/voice/voice_state.dart';
 
 /// {@template voice_state_update_event}
 /// Emitted when a user's voice state is updated.

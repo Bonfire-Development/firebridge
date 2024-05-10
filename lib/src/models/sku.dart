@@ -1,8 +1,8 @@
-import 'package:nyxx/src/http/managers/application_manager.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/flags.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/http/managers/application_manager.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/flags.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template sku}
 /// A premium offering that can be made available to your application's users or guilds.

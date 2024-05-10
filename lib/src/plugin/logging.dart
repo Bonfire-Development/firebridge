@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io' as io;
 
 import 'package:logging/logging.dart';
-import 'package:nyxx/src/api_options.dart';
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/client_options.dart';
-import 'package:nyxx/src/plugin/plugin.dart';
+import 'package:firebridge/src/api_options.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/client_options.dart';
+import 'package:firebridge/src/plugin/plugin.dart';
 
 /// A global instance of the [Logging] plugin.
 final logging = Logging();

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:nyxx/src/http/managers/sticker_manager.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/models/sticker/global_sticker.dart';
+import 'package:firebridge/src/http/managers/sticker_manager.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/models/sticker/global_sticker.dart';
 
 /// {@template sticker_pack}
 /// A Sticker Pack -- group of stickers that are gated behind Nitro.

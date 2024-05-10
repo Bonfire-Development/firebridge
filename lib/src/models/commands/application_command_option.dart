@@ -1,7 +1,7 @@
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/locale.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template command_option}
 /// An option in an [ApplicationCommand] with a type of [ApplicationCommandType.chatInput].

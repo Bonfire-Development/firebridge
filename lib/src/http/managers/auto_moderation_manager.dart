@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:nyxx/src/builders/guild/auto_moderation.dart';
-import 'package:nyxx/src/http/managers/manager.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/guild/auto_moderation.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/cache_helpers.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/builders/guild/auto_moderation.dart';
+import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/guild/auto_moderation.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 class AutoModerationManager extends Manager<AutoModerationRule> {
   final Snowflake guildId;

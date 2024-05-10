@@ -1,7 +1,7 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/models/guild/guild_widget.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/models/guild/guild_widget.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 class WidgetSettingsUpdateBuilder extends UpdateBuilder<WidgetSettings> {
   bool? isEnabled;

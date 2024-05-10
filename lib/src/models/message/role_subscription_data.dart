@@ -1,4 +1,4 @@
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 /// {@template role_subscription_data}
 /// Information about a role subscription.

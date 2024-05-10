@@ -1,6 +1,6 @@
-import 'package:nyxx/src/builders/presence.dart';
-import 'package:nyxx/src/intents.dart';
-import 'package:nyxx/src/utils/flags.dart';
+import 'package:firebridge/src/builders/presence.dart';
+import 'package:firebridge/src/intents.dart';
+import 'package:firebridge/src/utils/flags.dart';
 import 'package:oauth2/oauth2.dart';
 
 /// Options for connecting to the Discord API.

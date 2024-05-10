@@ -1,16 +1,16 @@
-import 'package:nyxx/src/http/cdn/cdn_asset.dart';
-import 'package:nyxx/src/http/managers/application_manager.dart';
-import 'package:nyxx/src/http/managers/entitlement_manager.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/guild/guild.dart';
-import 'package:nyxx/src/models/locale.dart';
-import 'package:nyxx/src/models/permissions.dart';
-import 'package:nyxx/src/models/sku.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/team.dart';
-import 'package:nyxx/src/models/user/user.dart';
-import 'package:nyxx/src/utils/flags.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/http/cdn/cdn_asset.dart';
+import 'package:firebridge/src/http/managers/application_manager.dart';
+import 'package:firebridge/src/http/managers/entitlement_manager.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/permissions.dart';
+import 'package:firebridge/src/models/sku.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/team.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/utils/flags.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// A partial [Application] object.
 // We intentionally do not use SnowflakeEntity as applications do not have the same access in the API as other entities with IDs, so they cannot be thought of

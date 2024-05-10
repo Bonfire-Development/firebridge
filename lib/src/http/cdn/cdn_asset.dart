@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/http/cdn/cdn_request.dart';
-import 'package:nyxx/src/http/response.dart';
-import 'package:nyxx/src/http/route.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/http/cdn/cdn_request.dart';
+import 'package:firebridge/src/http/response.dart';
+import 'package:firebridge/src/http/route.dart';
 
 /// Available formats for CDN endpoints.
 enum CdnFormat {

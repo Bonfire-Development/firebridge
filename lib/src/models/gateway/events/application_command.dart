@@ -1,5 +1,5 @@
-import 'package:nyxx/src/models/commands/application_command_permissions.dart';
-import 'package:nyxx/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/commands/application_command_permissions.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
 
 /// {@template application_command_permissions_update_event}
 /// Emitted when the permissions for an application command are updated.

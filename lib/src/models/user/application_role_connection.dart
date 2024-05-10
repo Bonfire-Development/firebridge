@@ -1,4 +1,4 @@
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// {@template application_role_connection}
 /// A role connection an application has attached to a user.

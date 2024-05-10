@@ -1,6 +1,6 @@
-import 'package:nyxx/src/builders/builder.dart';
-import 'package:nyxx/src/models/channel/types/forum.dart';
-import 'package:nyxx/src/models/snowflake.dart';
+import 'package:firebridge/src/builders/builder.dart';
+import 'package:firebridge/src/models/channel/types/forum.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 class ForumTagBuilder extends CreateBuilder<ForumTag> {
   String name;

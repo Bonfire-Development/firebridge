@@ -1,25 +1,25 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' hide MultipartRequest;
-import 'package:nyxx/src/builders/interaction_response.dart';
-import 'package:nyxx/src/builders/message/message.dart';
-import 'package:nyxx/src/builders/sentinels.dart';
-import 'package:nyxx/src/client.dart';
-import 'package:nyxx/src/http/request.dart';
-import 'package:nyxx/src/http/route.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/text_channel.dart';
-import 'package:nyxx/src/models/commands/application_command.dart';
-import 'package:nyxx/src/models/commands/application_command_option.dart';
-import 'package:nyxx/src/models/interaction.dart';
-import 'package:nyxx/src/models/locale.dart';
-import 'package:nyxx/src/models/message/component.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/permissions.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/utils/cache_helpers.dart';
-import 'package:nyxx/src/utils/parsing_helpers.dart';
+import 'package:firebridge/src/builders/interaction_response.dart';
+import 'package:firebridge/src/builders/message/message.dart';
+import 'package:firebridge/src/builders/sentinels.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/http/request.dart';
+import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/commands/application_command.dart';
+import 'package:firebridge/src/models/commands/application_command_option.dart';
+import 'package:firebridge/src/models/interaction.dart';
+import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/message/component.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/permissions.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A [Manager] for [Interaction]s.
 class InteractionManager {

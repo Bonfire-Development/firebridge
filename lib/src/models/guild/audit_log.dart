@@ -1,13 +1,13 @@
-import 'package:nyxx/src/http/managers/audit_log_manager.dart';
-import 'package:nyxx/src/models/application.dart';
-import 'package:nyxx/src/models/channel/channel.dart';
-import 'package:nyxx/src/models/channel/text_channel.dart';
-import 'package:nyxx/src/models/message/message.dart';
-import 'package:nyxx/src/models/permission_overwrite.dart';
-import 'package:nyxx/src/models/snowflake.dart';
-import 'package:nyxx/src/models/snowflake_entity/snowflake_entity.dart';
-import 'package:nyxx/src/models/user/user.dart';
-import 'package:nyxx/src/utils/to_string_helper/to_string_helper.dart';
+import 'package:firebridge/src/http/managers/audit_log_manager.dart';
+import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/permission_overwrite.dart';
+import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// A partial [AuditLogEntry].
 class PartialAuditLogEntry extends ManagedSnowflakeEntity<AuditLogEntry> {
