@@ -1,3 +1,7 @@
+## 6.2.2
+__05.09.2024__
+- documentation: Changed information to be relevant to firebridge
+
 ## 6.2.1
 __03.04.2024__
 
