@@ -30,9 +30,7 @@ void main() async {
 
 ## Other nyxx packages
 
-- [nyxx_commands](https://pub.dev/packages/nyxx_commands): A command framework for handling both simple & complex commands.
-- [nyxx_extensions](https://pub.dev/packages/nyxx_extensions): Pagination, emoji utilities and other miscellaneous helpers for developing bots using nyxx.
-- [nyxx_lavalink](https://pub.dev/packages/nyxx_lavalink): Lavalink support for playing audio in voice channels.
+- [firebridge_extensions](https://github.com/OpenBonfire/firebridge_extensions): Fork of [nyxx_extensions](https://github.com/nyxx-discord/nyxx_extensions) various extensions on top of firebridge (such as parsing permissions).
 
 ## More examples
 
@@ -46,22 +44,16 @@ The API documentation for the latest stable version can be found on [pub](https:
 ### [Docs and wiki](https://nyxx.l7ssha.xyz)
 Tutorials and wiki articles are hosted here, as well as API documentation for development versions from GitHub.
 
-### [Official nyxx Discord server](https://discord.gg/nyxx)
-Our Discord server is where you can get help for any nyxx packages, as well as release announcements and discussions about the library.
-
 ### [Discord API docs](https://discord.dev/)
 Discord's API documentation details what nyxx implements & provides more detailed explanations of certain topics.
-
-### [Discord API Server](https://discord.gg/discord-api)
-The unofficial guild for Discord Bot developers. To get help with nyxx check `#dart_nyxx` channel.
 
 ### [Pub.dev docs](https://pub.dev/documentation/nyxx)
 The dartdocs page will always have the documentation for the latest release.
 
-## Contributing to Nyxx
+## Contributing to Firebridge
 
-Read the [contributing document](https://github.com/nyxx-discord/nyxx/blob/dev/CONTRIBUTING.md)
+Read the [contributing document](https://github.com/OpenBonfire/firebridge/blob/dev/CONTRIBUTING.md)
 
 ## Credits 
 
-- Thanks to [Hackzzila's](https://github.com/Hackzzila) for [nyx](https://github.com/Hackzzila/nyx), the original project nyxx was forked from.
+- Thanks to [Hackzzila's](https://github.com/Hackzzila) for [nyx](https://github.com/Hackzzila/nyx), the original project nyxx was forked from, as well as [Nyxx](https://github.com/nyxx-discord/nyxx), the project that firebridge is forked from.
