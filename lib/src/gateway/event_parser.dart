@@ -44,6 +44,10 @@ mixin class EventParser {
   }
 
   RawDispatchEvent parseDispatch(Map<String, Object?> raw) {
+    if (raw['d'].runtimeType == List<dynamic>) {
+      print("LIST EVENT!!!");
+      print(raw['d']);
+    }
     return RawDispatchEvent(
       seq: raw['s'] as int,
       name: raw['t'] as String,

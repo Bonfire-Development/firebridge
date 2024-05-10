@@ -437,6 +437,8 @@ class GuildManager extends Manager<Guild> {
       ..active();
     final request = BasicRequest(route);
 
+    print("SENDING REQUEST TO ROUTE ${route.toString()}");
+
     final response = await client.httpHandler.executeSafe(request);
     final list = client.channels.parseThreadList(response.jsonBody as Map<String, Object?>, guildId: id);
 
