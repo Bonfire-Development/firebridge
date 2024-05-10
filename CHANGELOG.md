@@ -1,3 +1,11 @@
+## 6.2.4
+__05.09.2024__
+- feat: Integrate patches from nyxx_self for solve obscure null check error
+
+## 6.2.3
+__05.09.2024__
+- feat: Misc changes
+
 ## 6.2.2
 __05.09.2024__
 - documentation: Changed information to be relevant to firebridge
