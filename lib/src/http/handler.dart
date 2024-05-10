@@ -280,21 +280,3 @@ class HttpHandler {
     _onResponseController.close();
   }
 }
-
-/// An [HttpHandler] that refreshes the OAuth2 access token if needed.
-class Oauth2HttpHandler extends HttpHandler {
-  /// The options containing the credentials that may be refreshed.
-  final OAuth2ApiOptions apiOptions;
-
-  /// Create a new [Oauth2HttpHandler].
-  Oauth2HttpHandler(NyxxOAuth2 super.client) : apiOptions = client.apiOptions;
-
-  @override
-  Future<HttpResponse> _execute(HttpRequest request) async {
-    if (apiOptions.credentials.isExpired && request.authenticated) {
-      apiOptions.credentials = await apiOptions.credentials.refresh();
-    }
-
-    return await super._execute(request);
-  }
-}

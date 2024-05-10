@@ -109,15 +109,3 @@ class HeartbeatAckEvent extends GatewayEvent {
   /// @nodoc
   HeartbeatAckEvent({required this.latency}) : super(opcode: Opcode.heartbeatAck);
 }
-
-/// {@template MessageAckEvent}
-/// Emitted when a message is counted as acknowledged by the server.
-/// {@endtemplate}
-class MessageAckEvent extends GatewayEvent {
-  /// The time taken for this event to be sent in response to the last [Opcode.heartbeat] message.
-  final Map<String, dynamic> data;
-
-  /// {@macro heartbeat_ack_event}
-  /// @nodoc
-  MessageAckEvent({required this.data}) : super(opcode: Opcode.dispatch);
-}
