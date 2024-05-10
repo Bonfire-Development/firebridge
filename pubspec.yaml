@@ -1,5 +1,5 @@
 name: firebridge
-version: 6.2.4
+version: 6.2.5
 description: An experimental package to use the Discord bot API with user accounts, built off of Nyxx.
 homepage: https://github.com/OpenBonfire/firebridge
 repository: https://github.com/OpenBonfire/firebridge
