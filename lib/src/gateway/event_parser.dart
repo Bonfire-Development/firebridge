@@ -1,4 +1,3 @@
-import 'package:firebridge/src/gateway/payload.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/opcode.dart';
 
