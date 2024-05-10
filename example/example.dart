@@ -11,5 +11,8 @@ void main() async {
 
   await for (final MessageCreateEvent(:message) in client.onMessageCreate) {
     print('${message.id} sent by ${message.author.id} in ${message.channelId}!');
+
+    final channel = await client.channels.fetch(message.channelId);
+    print(channel);
   }
 }
