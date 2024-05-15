@@ -31,7 +31,10 @@ enum Opcode {
   hello._(10),
 
   /// Received when the server receives the client's heartbeat.
-  heartbeatAck._(11);
+  heartbeatAck._(11),
+
+  /// Send to lazily request guild members.
+  lazyRequestGuildMembers._(14);
 
   /// The value of this [Opcode].
   final int value;

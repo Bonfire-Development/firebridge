@@ -157,6 +157,9 @@ mixin EventMixin implements Nyxx {
   /// A [Stream] of [GuildScheduledEventUserRemoveEvent]s received by this client.
   Stream<GuildScheduledEventUserRemoveEvent> get onGuildScheduledEventUserRemove => onEvent.whereType<GuildScheduledEventUserRemoveEvent>();
 
+  // A [Stream] of [GuildMemberListUpdateEvent]s received by this client.
+  Stream<GuildMemberListUpdateEvent> get onGuildMemberListUpdate => onEvent.whereType<GuildMemberListUpdateEvent>();
+
   /// A [Stream] of [IntegrationCreateEvent]s received by this client.
   Stream<IntegrationCreateEvent> get onIntegrationCreate => onEvent.whereType<IntegrationCreateEvent>();
 

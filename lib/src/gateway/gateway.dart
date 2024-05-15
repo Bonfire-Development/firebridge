@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -12,7 +13,6 @@ import 'package:firebridge/src/gateway/shard.dart';
 import 'package:firebridge/src/http/managers/gateway_manager.dart';
 import 'package:firebridge/src/http/managers/member_manager.dart';
 import 'package:firebridge/src/http/managers/message_manager.dart';
-import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/channel/channel.dart';
 import 'package:firebridge/src/models/channel/guild_channel.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';
@@ -281,6 +281,7 @@ class Gateway extends GatewayManager with EventParser {
       'ENTITLEMENT_CREATE': parseEntitlementCreate,
       'ENTITLEMENT_UPDATE': parseEntitlementUpdate,
       'ENTITLEMENT_DELETE': parseEntitlementDelete,
+      "GUILD_MEMBER_LIST_UPDATE": parseGuildMembersUpdateEvent,
     };
 
     return mapping[raw.name]?.call(raw.payload) ?? UnknownDispatchEvent(gateway: this, raw: raw);
@@ -644,6 +645,30 @@ class Gateway extends GatewayManager with EventParser {
       notFound: maybeParseMany(raw['not_found'], Snowflake.parse),
       presences: maybeParseMany(raw['presences'], parsePresenceUpdate),
       nonce: raw['nonce'] as String?,
+    );
+  }
+
+  GuildMemberListUpdateEvent parseGuildMembersUpdateEvent(Map<String, Object?> raw) {
+    final guildId = Snowflake.parse(raw['guild_id']!);
+    print(raw.keys);
+    print(json.encode(raw["ops"]));
+
+    /*
+    Idea- member could have an optional param "group"?
+    We can set it via the parser.
+
+    Logically I think client -> guilds -> members -> groups might be reasonable?
+    I don't know if there's a documented thing for that
+    */
+
+    return GuildMemberListUpdateEvent(
+      gateway: this,
+      guildId: guildId,
+      members: parseMany(raw['items'] as List<Object?>, client.guilds[guildId].members.parse),
+      onlineCount: raw["online_count"] as int,
+      memberCount: raw["member_count"] as int,
+      groups: parseMany(raw["groups"] as List<Object?>, client.guilds[guildId].members.groups),
+      id: Snowflake(raw["id"] as int),
     );
   }
 
@@ -1077,45 +1102,28 @@ class Gateway extends GatewayManager with EventParser {
   /// Stream all members in a guild that match [query] or [userIds].
   ///
   /// If neither is provided, all members in the guild are returned.
-  Stream<Member> listGuildMembers(
-    Snowflake guildId, {
-    String? query,
+  Future<void> parseGuildMemberListUpdate(
+    Snowflake guildId, 
+    Snowflake channelId, {
     int? limit,
     List<Snowflake>? userIds,
     bool? includePresences,
     String? nonce,
-  }) async* {
-    if (userIds == null) {
-      query ??= '';
-    }
-
+  }) async {
     limit ??= 0;
     nonce ??= '${Snowflake.now().value.toRadixString(36)}${guildId.value.toRadixString(36)}';
 
     final shard = shardFor(guildId);
-    shard.add(Send(opcode: Opcode.requestGuildMembers, data: {
-      'guild_id': guildId.toString(),
-      if (query != null) 'query': query,
-      'limit': limit,
-      if (includePresences != null) 'presences': includePresences,
-      if (userIds != null) 'user_ids': userIds.map((e) => e.toString()).toList(),
-      'nonce': nonce,
-    }));
-
-    int chunksReceived = 0;
-
-    await for (final event in events) {
-      if (event is! GuildMembersChunkEvent || event.nonce != nonce) {
-        continue;
-      }
-
-      yield* Stream.fromIterable(event.members);
-
-      chunksReceived++;
-      if (chunksReceived == event.chunkCount) {
-        break;
-      }
+    shard.add(Send(opcode: Opcode.lazyRequestGuildMembers,
+    data: {
+      'guild_id': guildId.value.toString(),
+      "typing": true,
+      "threads": false,
+      "activities": true,
+      "members": [],
+      'channels': {channelId.value.toString(): [[0, 99]]},
     }
+    ));
   }
 
   /// Update the client's voice state in the guild with ID [guildId].
