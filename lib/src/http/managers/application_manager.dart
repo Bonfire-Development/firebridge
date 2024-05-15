@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:firebridge/src/builders/application.dart';
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
@@ -162,64 +159,6 @@ class ApplicationManager {
 
     final response = await client.httpHandler.executeSafe(request);
     return parseMany(response.jsonBody as List<Object?>, parseApplicationRoleConnectionMetadata);
-  }
-
-  /// Fetch the current application.
-  Future<Application> fetchCurrentApplication() async {
-    // final route = HttpRoute()..applications(id: '@me');
-    // final request = BasicRequest(route);
-
-    // final response = await client.httpHandler.executeSafe(request);
-    return Application(
-      id: Snowflake.parse(0),
-      manager: this,
-      name: "Application",
-      iconHash: null,
-      description: "Dummy application.",
-      rpcOrigins: null,
-      isBotPublic: false,
-      botRequiresCodeGrant: false,
-      bot: null,
-      termsOfServiceUrl: null,
-      privacyPolicyUrl: null,
-      owner: null,
-      verifyKey: "dummy",
-      team: null,
-      guildId: null,
-      guild: null,
-      primarySkuId: null,
-      slug: null,
-      coverImageHash: null,
-      flags: ApplicationFlags(0),
-      approximateGuildCount: null,
-      redirectUris: null,
-      interactionsEndpointUrl: null,
-      tags: null,
-      installationParameters: null,
-      customInstallUrl: null,
-      integrationTypesConfig: null,
-      roleConnectionsVerificationUrl: null
-      );
-  }
-
-  /// Fetch the current OAuth2 application.
-  Future<Application> fetchOAuth2CurrentApplication() async {
-    final route = HttpRoute()
-      ..oauth2()
-      ..applications(id: '@me');
-    final request = BasicRequest(route);
-
-    final response = await client.httpHandler.executeSafe(request);
-    return parse(response.jsonBody as Map<String, Object?>);
-  }
-
-  /// Update the current application.
-  Future<Application> updateCurrentApplication(ApplicationUpdateBuilder builder) async {
-    final route = HttpRoute()..applications(id: '@me');
-    final request = BasicRequest(route, method: 'PATCH', body: jsonEncode(builder.build()));
-
-    final response = await client.httpHandler.executeSafe(request);
-    return parse(response.jsonBody as Map<String, Object?>);
   }
 
   /// List this application's SKUs.

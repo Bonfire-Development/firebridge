@@ -14,7 +14,6 @@ import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/guild/integration.dart';
 import 'package:firebridge/src/models/guild/member.dart';
 import 'package:firebridge/src/models/locale.dart';
-import 'package:firebridge/src/models/oauth2.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/application_role_connection.dart';
 import 'package:firebridge/src/models/user/connection.dart';
@@ -249,19 +248,5 @@ class UserManager extends ReadOnlyManager<User> {
 
     final response = await client.httpHandler.executeSafe(request);
     return parseApplicationRoleConnection(response.jsonBody as Map<String, Object?>);
-  }
-
-  Future<OAuth2Information> fetchCurrentOAuth2Information() async {
-    final route = HttpRoute()
-      ..oauth2()
-      ..add(HttpRoutePart('@me'));
-    final request = BasicRequest(route);
-    final response = await client.httpHandler.executeSafe(request);
-    final body = response.jsonBody as Map<String, Object?>;
-    return OAuth2Information(
-        application: PartialApplication(manager: client.applications, id: Snowflake.parse((body['application'] as Map<String, Object?>)['id']!)),
-        scopes: (body['scopes'] as List).cast(),
-        expiresOn: DateTime.parse(body['expires'] as String),
-        user: maybeParse(body['user'], client.users.parse));
   }
 }
