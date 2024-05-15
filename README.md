@@ -10,7 +10,7 @@ To get started using nyxx, follow the Nyxx [getting started guide](https://nyxx.
 
 If you're already familiar with Discord's API, here's a quick example to get you started:
 ```dart
-import 'package:firebridge/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 
 void main() async {
   final client = await Nyxx.connectGateway('<TOKEN>', GatewayIntents.allUnprivileged);
