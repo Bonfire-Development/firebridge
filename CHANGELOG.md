@@ -1,3 +1,7 @@
+## 6.2.6
+__05.15.2024__
+- feat: Remove patches from nyxx_self
+
 ## 6.2.5
 __05.09.2024__
 - feat: Integrate more patches
