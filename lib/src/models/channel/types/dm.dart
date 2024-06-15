@@ -9,7 +9,7 @@ import 'package:firebridge/src/models/user/user.dart';
 /// {@endtemplate}
 class DmChannel extends TextChannel {
   /// The recipient of this channel.
-  final User recipient;
+  final List<User> recipients;
 
   @override
   final Snowflake? lastMessageId;
@@ -28,12 +28,13 @@ class DmChannel extends TextChannel {
   DmChannel({
     required super.id,
     required super.manager,
-    required this.recipient,
+    required this.recipients,
     required this.lastMessageId,
     required this.lastPinTimestamp,
     required this.rateLimitPerUser,
   });
 
   @override
-  PartialMessage? get lastMessage => lastMessageId == null ? null : messages[lastMessageId!];
+  PartialMessage? get lastMessage =>
+      lastMessageId == null ? null : messages[lastMessageId!];
 }

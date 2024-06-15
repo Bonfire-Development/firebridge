@@ -57,14 +57,16 @@ extension CacheUpdates on NyxxRest {
 
             updateCacheWith(entity.member);
           }(),
-        StageInstance() => entity.manager.stageInstanceCache[entity.id] = entity,
-        CommandPermissions() => entity.manager.permissionsCache[entity.id] = entity,
+        StageInstance() => entity.manager.stageInstanceCache[entity.id] =
+            entity,
+        CommandPermissions() => entity.manager.permissionsCache[entity.id] =
+            entity,
         AuditLogEntry() => entity.manager.cache[entity.id] = entity,
         Channel() => () {
             entity.manager.cache[entity.id] = entity;
 
-            if (entity case DmChannel(:final recipient)) {
-              updateCacheWith(recipient);
+            if (entity case DmChannel(:final recipients)) {
+              updateCacheWith(recipients);
             }
             if (entity case GroupDmChannel(:final recipients)) {
               recipients.forEach(updateCacheWith);
@@ -137,17 +139,27 @@ extension CacheUpdates on NyxxRest {
             members?.values.forEach(updateCacheWith);
           }(),
         Activity(:final emoji) => updateCacheWith(emoji),
-        Interaction(:final data, :final member, :final user, :final message, :final entitlements) => () {
+        Interaction(
+          :final data,
+          :final member,
+          :final user,
+          :final message,
+          :final entitlements
+        ) =>
+          () {
             updateCacheWith(member);
             updateCacheWith(user);
             updateCacheWith(message);
             entitlements.forEach(updateCacheWith);
 
-            if (data case ApplicationCommandInteractionData(:final resolved) || MessageComponentInteractionData(:final resolved)) {
+            if (data
+                case ApplicationCommandInteractionData(:final resolved) ||
+                    MessageComponentInteractionData(:final resolved)) {
               updateCacheWith(resolved);
             }
           }(),
-        Invite(:final inviter, :final targetUser, :final guildScheduledEvent) => () {
+        Invite(:final inviter, :final targetUser, :final guildScheduledEvent) =>
+          () {
             updateCacheWith(inviter);
             updateCacheWith(targetUser);
             updateCacheWith(guildScheduledEvent);
@@ -169,23 +181,28 @@ extension CacheUpdates on NyxxRest {
 
         ReadyEvent(:final user) => updateCacheWith(user),
         ResumedEvent() => null,
-        ApplicationCommandPermissionsUpdateEvent(:final permissions) => updateCacheWith(permissions),
+        ApplicationCommandPermissionsUpdateEvent(:final permissions) =>
+          updateCacheWith(permissions),
         AutoModerationRuleCreateEvent(:final rule) => updateCacheWith(rule),
         AutoModerationRuleUpdateEvent(:final rule) => updateCacheWith(rule),
-        AutoModerationRuleDeleteEvent(:final rule) => rule.manager.cache.remove(rule.id),
+        AutoModerationRuleDeleteEvent(:final rule) =>
+          rule.manager.cache.remove(rule.id),
         AutoModerationActionExecutionEvent() => null,
         ChannelCreateEvent(:final channel) => updateCacheWith(channel),
         ChannelUpdateEvent(:final channel) => updateCacheWith(channel),
-        ChannelDeleteEvent(:final channel) => channel.manager.cache.remove(channel.id),
+        ChannelDeleteEvent(:final channel) =>
+          channel.manager.cache.remove(channel.id),
         ThreadCreateEvent(:final thread) => updateCacheWith(thread),
         ThreadUpdateEvent(:final thread) => updateCacheWith(thread),
-        ThreadDeleteEvent(:final thread) => thread.manager.cache.remove(thread.id),
+        ThreadDeleteEvent(:final thread) =>
+          thread.manager.cache.remove(thread.id),
         ThreadListSyncEvent(:final threads, :final members) => () {
             threads.forEach(updateCacheWith);
             members.forEach(updateCacheWith);
           }(),
         ThreadMemberUpdateEvent(:final member) => updateCacheWith(member),
-        ThreadMembersUpdateEvent(:final addedMembers) => addedMembers?.forEach(updateCacheWith),
+        ThreadMembersUpdateEvent(:final addedMembers) =>
+          addedMembers?.forEach(updateCacheWith),
         ChannelPinsUpdateEvent() => null,
         UnavailableGuildCreateEvent() => () {
             if (entity
@@ -238,15 +255,20 @@ extension CacheUpdates on NyxxRest {
           }(),
         GuildRoleCreateEvent(:final role) => updateCacheWith(role),
         GuildRoleUpdateEvent(:final role) => updateCacheWith(role),
-        GuildRoleDeleteEvent(:final roleId, :final guild) => guild.roles.cache.remove(roleId),
+        GuildRoleDeleteEvent(:final roleId, :final guild) =>
+          guild.roles.cache.remove(roleId),
         GuildScheduledEventCreateEvent(:final event) => updateCacheWith(event),
         GuildScheduledEventUpdateEvent(:final event) => updateCacheWith(event),
-        GuildScheduledEventDeleteEvent(:final event) => event.manager.cache.remove(event.id),
+        GuildScheduledEventDeleteEvent(:final event) =>
+          event.manager.cache.remove(event.id),
         GuildScheduledEventUserAddEvent() => null,
         GuildScheduledEventUserRemoveEvent() => null,
-        IntegrationCreateEvent(:final integration) => updateCacheWith(integration),
-        IntegrationUpdateEvent(:final integration) => updateCacheWith(integration),
-        IntegrationDeleteEvent(:final id, :final guild) => guild.integrations.cache.remove(id),
+        IntegrationCreateEvent(:final integration) =>
+          updateCacheWith(integration),
+        IntegrationUpdateEvent(:final integration) =>
+          updateCacheWith(integration),
+        IntegrationDeleteEvent(:final id, :final guild) =>
+          guild.integrations.cache.remove(id),
         InviteCreateEvent(:final invite) => updateCacheWith(invite),
         InviteDeleteEvent() => null,
         MessageCreateEvent(:final message, :final mentions) => () {
@@ -258,8 +280,10 @@ extension CacheUpdates on NyxxRest {
             message.manager.cache.remove(message.id);
             mentions?.forEach(updateCacheWith);
           }(),
-        MessageDeleteEvent(:final id, :final channel) => channel.messages.cache.remove(id),
-        MessageBulkDeleteEvent(:final ids, :final channel) => ids.forEach(channel.messages.cache.remove),
+        MessageDeleteEvent(:final id, :final channel) =>
+          channel.messages.cache.remove(id),
+        MessageBulkDeleteEvent(:final ids, :final channel) =>
+          ids.forEach(channel.messages.cache.remove),
         MessageReactionAddEvent(:final emoji, :final member) => () {
             updateCacheWith(emoji);
             updateCacheWith(member);
@@ -267,19 +291,25 @@ extension CacheUpdates on NyxxRest {
         MessageReactionRemoveEvent(:final emoji) => updateCacheWith(emoji),
         MessageReactionRemoveAllEvent() => null,
         MessageReactionRemoveEmojiEvent() => null,
-        PresenceUpdateEvent(:final activities) => activities?.forEach(updateCacheWith),
+        PresenceUpdateEvent(:final activities) =>
+          activities?.forEach(updateCacheWith),
         TypingStartEvent(:final member) => updateCacheWith(member),
         UserUpdateEvent(:final user) => updateCacheWith(user),
         VoiceStateUpdateEvent(:final state) => updateCacheWith(state),
         VoiceServerUpdateEvent() => null,
         WebhooksUpdateEvent() => null,
-        InteractionCreateEvent(:final interaction) => updateCacheWith(interaction),
+        InteractionCreateEvent(:final interaction) =>
+          updateCacheWith(interaction),
         StageInstanceCreateEvent(:final instance) => updateCacheWith(instance),
         StageInstanceUpdateEvent(:final instance) => updateCacheWith(instance),
-        StageInstanceDeleteEvent(:final instance) => instance.manager.cache.remove(instance.id),
-        EntitlementCreateEvent(:final entitlement) => updateCacheWith(entitlement),
-        EntitlementUpdateEvent(:final entitlement) => updateCacheWith(entitlement),
-        EntitlementDeleteEvent(:final entitlement) => entitlement.manager.cache.remove(entitlement.id),
+        StageInstanceDeleteEvent(:final instance) =>
+          instance.manager.cache.remove(instance.id),
+        EntitlementCreateEvent(:final entitlement) =>
+          updateCacheWith(entitlement),
+        EntitlementUpdateEvent(:final entitlement) =>
+          updateCacheWith(entitlement),
+        EntitlementDeleteEvent(:final entitlement) =>
+          entitlement.manager.cache.remove(entitlement.id),
 
         // null and unhandled entity types
         WebhookAuthor() => null,
@@ -288,7 +318,8 @@ extension CacheUpdates on NyxxRest {
         _ => () {
             assert(() {
               logger
-                ..warning('Tried to update cache for ${entity.runtimeType}, but that type was not handled.')
+                ..warning(
+                    'Tried to update cache for ${entity.runtimeType}, but that type was not handled.')
                 ..info(
                     'This is a bug, please report it to https://github.com/nyxx-discord/nyxx/issues or on our Discord server. Your client will still work regardless, so you can also ignore this message.');
               return true;

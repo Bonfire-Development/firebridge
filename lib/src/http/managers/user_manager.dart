@@ -48,11 +48,15 @@ class UserManager extends ReadOnlyManager<User> {
       isSystem: raw['system'] as bool? ?? false,
       hasMfaEnabled: raw['mfa_enabled'] as bool? ?? false,
       bannerHash: raw['banner'] as String?,
-      accentColor: hasAccentColor ? DiscordColor(raw['accent_color'] as int) : null,
+      accentColor:
+          hasAccentColor ? DiscordColor(raw['accent_color'] as int) : null,
       locale: hasLocale ? Locale.parse(raw['locale'] as String) : null,
       flags: hasFlags ? UserFlags(raw['flags'] as int) : null,
-      nitroType: hasPremiumType ? NitroType.parse(raw['premium_type'] as int) : NitroType.none,
-      publicFlags: hasPublicFlags ? UserFlags(raw['public_flags'] as int) : null,
+      nitroType: hasPremiumType
+          ? NitroType.parse(raw['premium_type'] as int)
+          : NitroType.none,
+      publicFlags:
+          hasPublicFlags ? UserFlags(raw['public_flags'] as int) : null,
       avatarDecorationHash: raw['avatar_decoration'] as String?,
     );
   }
@@ -81,7 +85,8 @@ class UserManager extends ReadOnlyManager<User> {
   }
 
   /// Parse a [ApplicationRoleConnection] from [raw].
-  ApplicationRoleConnection parseApplicationRoleConnection(Map<String, Object?> raw) {
+  ApplicationRoleConnection parseApplicationRoleConnection(
+      Map<String, Object?> raw) {
     return ApplicationRoleConnection(
       platformName: raw['platform_name'] as String?,
       platformUsername: raw['platform_username'] as String?,
@@ -130,7 +135,11 @@ class UserManager extends ReadOnlyManager<User> {
   }
 
   /// List the guilds the current user is a member of.
-  Future<List<UserGuild>> listCurrentUserGuilds({Snowflake? after, Snowflake? before, int? limit, bool? withCounts}) async {
+  Future<List<UserGuild>> listCurrentUserGuilds(
+      {Snowflake? after,
+      Snowflake? before,
+      int? limit,
+      bool? withCounts}) async {
     final route = HttpRoute()
       ..users(id: '@me')
       ..guilds();
@@ -157,7 +166,9 @@ class UserManager extends ReadOnlyManager<User> {
     final request = BasicRequest(route);
 
     final response = await client.httpHandler.executeSafe(request);
-    final member = client.guilds[guildId].members.parse(response.jsonBody as Map<String, Object?>, userId: client.user.id);
+    final member = client.guilds[guildId].members.parse(
+        response.jsonBody as Map<String, Object?>,
+        userId: client.user.id);
 
     client.updateCacheWith(member);
     return member;
@@ -178,17 +189,21 @@ class UserManager extends ReadOnlyManager<User> {
     final route = HttpRoute()
       ..users(id: '@me')
       ..channels();
-    final request = BasicRequest(route, method: 'POST', body: jsonEncode({'recipient_id': recipientId.toString()}));
+    final request = BasicRequest(route,
+        method: 'POST',
+        body: jsonEncode({'recipient_id': recipientId.toString()}));
 
     final response = await client.httpHandler.executeSafe(request);
-    final channel = client.channels.parse(response.jsonBody as Map<String, Object?>) as DmChannel;
+    final channel = client.channels
+        .parse(response.jsonBody as Map<String, Object?>) as DmChannel;
 
     client.updateCacheWith(channel);
     return channel;
   }
 
   /// Create a DM channel with multiple other users.
-  Future<GroupDmChannel> createGroupDm(List<String> tokens, Map<Snowflake, String> nicks) async {
+  Future<GroupDmChannel> createGroupDm(
+      List<String> tokens, Map<Snowflake, String> nicks) async {
     final route = HttpRoute()
       ..users(id: '@me')
       ..channels();
@@ -204,7 +219,8 @@ class UserManager extends ReadOnlyManager<User> {
     );
 
     final response = await client.httpHandler.executeSafe(request);
-    final channel = client.channels.parse(response.jsonBody as Map<String, Object?>) as GroupDmChannel;
+    final channel = client.channels
+        .parse(response.jsonBody as Map<String, Object?>) as GroupDmChannel;
 
     client.updateCacheWith(channel);
     return channel;
@@ -227,7 +243,8 @@ class UserManager extends ReadOnlyManager<User> {
   }
 
   /// Fetch the current user's application role connection for an application.
-  Future<ApplicationRoleConnection> fetchCurrentUserApplicationRoleConnection(Snowflake applicationId) async {
+  Future<ApplicationRoleConnection> fetchCurrentUserApplicationRoleConnection(
+      Snowflake applicationId) async {
     final route = HttpRoute()
       ..users(id: '@me')
       ..applications(id: applicationId.toString())
@@ -235,18 +252,23 @@ class UserManager extends ReadOnlyManager<User> {
     final request = BasicRequest(route);
 
     final response = await client.httpHandler.executeSafe(request);
-    return parseApplicationRoleConnection(response.jsonBody as Map<String, Object?>);
+    return parseApplicationRoleConnection(
+        response.jsonBody as Map<String, Object?>);
   }
 
   /// Update the current user's application role connection for an application.
-  Future<ApplicationRoleConnection> updateCurrentUserApplicationRoleConnection(Snowflake applicationId, ApplicationRoleConnectionUpdateBuilder builder) async {
+  Future<ApplicationRoleConnection> updateCurrentUserApplicationRoleConnection(
+      Snowflake applicationId,
+      ApplicationRoleConnectionUpdateBuilder builder) async {
     final route = HttpRoute()
       ..users(id: '@me')
       ..applications(id: applicationId.toString())
       ..roleConnection();
-    final request = BasicRequest(route, method: 'PUT', body: jsonEncode(builder.build()));
+    final request =
+        BasicRequest(route, method: 'PUT', body: jsonEncode(builder.build()));
 
     final response = await client.httpHandler.executeSafe(request);
-    return parseApplicationRoleConnection(response.jsonBody as Map<String, Object?>);
+    return parseApplicationRoleConnection(
+        response.jsonBody as Map<String, Object?>);
   }
 }
