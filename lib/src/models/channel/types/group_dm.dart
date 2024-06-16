@@ -43,6 +43,7 @@ class GroupDmChannel extends TextChannel {
   /// @nodoc
   GroupDmChannel({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.recipients,
@@ -56,11 +57,14 @@ class GroupDmChannel extends TextChannel {
   });
 
   @override
-  PartialMessage? get lastMessage => lastMessageId == null ? null : messages[lastMessageId!];
+  PartialMessage? get lastMessage =>
+      lastMessageId == null ? null : messages[lastMessageId!];
 
   /// This channel's owner.
   PartialUser get owner => manager.client.users[ownerId];
 
   /// The application that created this channel, if it was created by an application.
-  PartialApplication? get application => applicationId == null ? null : manager.client.applications[applicationId!];
+  PartialApplication? get application => applicationId == null
+      ? null
+      : manager.client.applications[applicationId!];
 }

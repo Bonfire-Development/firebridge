@@ -16,15 +16,21 @@ class MemberManager extends Manager<Member> {
   /// The ID of the [Guild] this manager is for.
   final Snowflake guildId;
 
-  MemberManager(super.config, super.client, {required this.guildId}) : super(identifier: '$guildId.members');
+  MemberManager(super.config, super.client, {required this.guildId})
+      : super(identifier: '$guildId.members');
 
   @override
-  PartialMember operator [](Snowflake id) => PartialMember(id: id, manager: this);
+  PartialMember operator [](Snowflake id) =>
+      PartialMember(id: id, json: {}, manager: this);
 
   @override
   Member parse(Map<String, Object?> raw, {Snowflake? userId}) {
     return Member(
-      id: maybeParse((raw['user'] as Map<String, Object?>?)?['id'], Snowflake.parse) ?? userId ?? Snowflake.zero,
+      id: maybeParse(
+              (raw['user'] as Map<String, Object?>?)?['id'], Snowflake.parse) ??
+          userId ??
+          Snowflake.zero,
+      json: raw,
       manager: this,
       user: maybeParse(raw['user'], client.users.parse),
       nick: raw['nick'] as String?,
@@ -36,8 +42,10 @@ class MemberManager extends Manager<Member> {
       isMute: raw['mute'] as bool?,
       flags: MemberFlags(raw['flags'] as int),
       isPending: raw['pending'] as bool? ?? false,
-      permissions: maybeParse(raw['permissions'], (String raw) => Permissions(int.parse(raw))),
-      communicationDisabledUntil: maybeParse(raw['communication_disabled_until'], DateTime.parse),
+      permissions: maybeParse(
+          raw['permissions'], (String raw) => Permissions(int.parse(raw))),
+      communicationDisabledUntil:
+          maybeParse(raw['communication_disabled_until'], DateTime.parse),
     );
   }
 
@@ -77,25 +85,31 @@ class MemberManager extends Manager<Member> {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..members(id: builder.userId.toString());
-    final request = BasicRequest(route, method: 'PUT', body: jsonEncode(builder.build()));
+    final request =
+        BasicRequest(route, method: 'PUT', body: jsonEncode(builder.build()));
 
     final response = await client.httpHandler.executeSafe(request);
     if (response.statusCode == 204) {
       throw MemberAlreadyExistsException(guildId, builder.userId);
     }
 
-    final member = parse(response.jsonBody as Map<String, Object?>, userId: builder.userId);
+    final member = parse(response.jsonBody as Map<String, Object?>,
+        userId: builder.userId);
 
     client.updateCacheWith(member);
     return member;
   }
 
   @override
-  Future<Member> update(Snowflake id, MemberUpdateBuilder builder, {String? auditLogReason}) async {
+  Future<Member> update(Snowflake id, MemberUpdateBuilder builder,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..members(id: id.toString());
-    final request = BasicRequest(route, method: 'PATCH', auditLogReason: auditLogReason, body: jsonEncode(builder.build()));
+    final request = BasicRequest(route,
+        method: 'PATCH',
+        auditLogReason: auditLogReason,
+        body: jsonEncode(builder.build()));
 
     final response = await client.httpHandler.executeSafe(request);
     final member = parse(response.jsonBody as Map<String, Object?>, userId: id);
@@ -110,7 +124,8 @@ class MemberManager extends Manager<Member> {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..members(id: id.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
     cache.remove(id);
@@ -122,7 +137,10 @@ class MemberManager extends Manager<Member> {
       ..guilds(id: guildId.toString())
       ..members()
       ..search();
-    final request = BasicRequest(route, queryParameters: {'query': query, if (limit != null) 'limit': limit.toString()});
+    final request = BasicRequest(route, queryParameters: {
+      'query': query,
+      if (limit != null) 'limit': limit.toString()
+    });
 
     final response = await client.httpHandler.executeSafe(request);
     final members = parseMany(response.jsonBody as List, parse);
@@ -132,37 +150,46 @@ class MemberManager extends Manager<Member> {
   }
 
   /// Update the current member in the guild.
-  Future<Member> updateCurrentMember(CurrentMemberUpdateBuilder builder, {String? auditLogReason}) async {
+  Future<Member> updateCurrentMember(CurrentMemberUpdateBuilder builder,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..members(id: '@me');
-    final request = BasicRequest(route, method: 'PATCH', body: jsonEncode(builder.build()), auditLogReason: auditLogReason);
+    final request = BasicRequest(route,
+        method: 'PATCH',
+        body: jsonEncode(builder.build()),
+        auditLogReason: auditLogReason);
 
     final response = await client.httpHandler.executeSafe(request);
-    final member = parse(response.jsonBody as Map<String, Object?>, userId: client.user.id);
+    final member = parse(response.jsonBody as Map<String, Object?>,
+        userId: client.user.id);
 
     client.updateCacheWith(member);
     return member;
   }
 
   /// Add a role to a member in the guild.
-  Future<void> addRole(Snowflake id, Snowflake roleId, {String? auditLogReason}) async {
+  Future<void> addRole(Snowflake id, Snowflake roleId,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..members(id: id.toString())
       ..roles(id: roleId.toString());
-    final request = BasicRequest(route, method: 'PUT', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'PUT', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
   }
 
   /// Remove a role from a member in the guild.
-  Future<void> removeRole(Snowflake id, Snowflake roleId, {String? auditLogReason}) async {
+  Future<void> removeRole(Snowflake id, Snowflake roleId,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..members(id: id.toString())
       ..roles(id: roleId.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
   }

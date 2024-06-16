@@ -27,7 +27,8 @@ class UserManager extends ReadOnlyManager<User> {
   UserManager(super.config, super.client) : super(identifier: 'users');
 
   @override
-  PartialUser operator [](Snowflake id) => PartialUser(id: id, manager: this);
+  PartialUser operator [](Snowflake id) =>
+      PartialUser(id: id, json: {}, manager: this);
 
   @override
   User parse(Map<String, Object?> raw) {
@@ -40,6 +41,7 @@ class UserManager extends ReadOnlyManager<User> {
     return User(
       manager: this,
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       username: raw['username'] as String,
       discriminator: raw['discriminator'] as String,
       globalName: raw['global_name'] as String?,
@@ -72,6 +74,7 @@ class UserManager extends ReadOnlyManager<User> {
         raw['integrations'],
         (Map<String, Object?> raw) => PartialIntegration(
           id: Snowflake.parse(raw['id']!),
+          json: raw,
           // TODO: Can we know what guild the integrations are from?
           manager: client.guilds[Snowflake.zero].integrations,
         ),

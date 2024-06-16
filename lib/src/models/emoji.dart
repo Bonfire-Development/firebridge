@@ -13,7 +13,7 @@ class PartialEmoji extends WritableSnowflakeEntity<Emoji> {
 
   /// Create a new [PartialEmoji].
   /// @nodoc
-  PartialEmoji({required super.id, required this.manager});
+  PartialEmoji({required super.id, required super.json, required this.manager});
 }
 
 /// An emoji. Either a [TextEmoji] or a [GuildEmoji].
@@ -24,6 +24,7 @@ abstract class Emoji extends PartialEmoji {
   /// @nodoc
   Emoji({
     required super.id,
+    required super.json,
     required super.manager,
   });
 }
@@ -36,6 +37,7 @@ class TextEmoji extends Emoji {
   /// @nodoc
   TextEmoji({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
   });
@@ -71,6 +73,7 @@ class GuildEmoji extends Emoji {
   /// @nodoc
   GuildEmoji({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.roleIds,
@@ -82,7 +85,9 @@ class GuildEmoji extends Emoji {
   });
 
   /// The roles allowed to use this emoji.
-  List<PartialRole>? get roles => roleIds?.map((e) => manager.client.guilds[manager.guildId].roles[e]).toList();
+  List<PartialRole>? get roles => roleIds
+      ?.map((e) => manager.client.guilds[manager.guildId].roles[e])
+      .toList();
 
   /// This emoji's image.
   CdnAsset get image => CdnAsset(

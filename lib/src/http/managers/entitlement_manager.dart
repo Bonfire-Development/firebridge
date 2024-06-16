@@ -16,15 +16,18 @@ class EntitlementManager extends ReadOnlyManager<Entitlement> {
   final Snowflake applicationId;
 
   /// Create a new [EntitlementManager].
-  EntitlementManager(super.config, super.client, {required this.applicationId}) : super(identifier: '$applicationId.entitlements');
+  EntitlementManager(super.config, super.client, {required this.applicationId})
+      : super(identifier: '$applicationId.entitlements');
 
   @override
-  PartialEntitlement operator [](Snowflake id) => PartialEntitlement(manager: this, id: id);
+  PartialEntitlement operator [](Snowflake id) =>
+      PartialEntitlement(manager: this, json: {}, id: id);
 
   @override
   Entitlement parse(Map<String, Object?> raw) {
     return Entitlement(
       manager: this,
+      json: raw,
       id: Snowflake.parse(raw['id']!),
       skuId: Snowflake.parse(raw['sku_id']!),
       userId: maybeParse(raw['user_id'], Snowflake.parse),
@@ -78,11 +81,13 @@ class EntitlementManager extends ReadOnlyManager<Entitlement> {
   }
 
   /// Create a test entitlement that never expires.
-  Future<Entitlement> createTestEntitlement(TestEntitlementBuilder builder) async {
+  Future<Entitlement> createTestEntitlement(
+      TestEntitlementBuilder builder) async {
     final route = HttpRoute()
       ..applications(id: applicationId.toString())
       ..entitlements();
-    final request = BasicRequest(route, method: 'POST', body: jsonEncode(builder.build()));
+    final request =
+        BasicRequest(route, method: 'POST', body: jsonEncode(builder.build()));
 
     final response = await client.httpHandler.executeSafe(request);
     final entitlement = parse(response.jsonBody as Map<String, Object?>);

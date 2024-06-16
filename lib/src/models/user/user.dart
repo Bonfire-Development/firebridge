@@ -15,7 +15,7 @@ class PartialUser extends ManagedSnowflakeEntity<User> {
 
   /// Create a new [PartialUser].
   /// @nodoc
-  PartialUser({required super.id, required this.manager});
+  PartialUser({required super.id, required super.json, required this.manager});
 }
 
 /// {@template user}
@@ -27,7 +27,8 @@ class PartialUser extends ManagedSnowflakeEntity<User> {
 /// External references:
 /// * Discord API Reference: https://discord.com/developers/docs/resources/user#users-resource
 /// {@endtemplate}
-class User extends PartialUser implements MessageAuthor, CommandOptionMentionable<User> {
+class User extends PartialUser
+    implements MessageAuthor, CommandOptionMentionable<User> {
   /// The user's username.
   @override
   final String username;
@@ -76,6 +77,7 @@ class User extends PartialUser implements MessageAuthor, CommandOptionMentionabl
   /// @nodoc
   User({
     required super.manager,
+    required super.json,
     required super.id,
     required this.username,
     required this.discriminator,

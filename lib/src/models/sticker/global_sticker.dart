@@ -9,7 +9,8 @@ class PartialGlobalSticker extends ManagedSnowflakeEntity<GlobalSticker> {
   final GlobalStickerManager manager;
 
   /// @nodoc
-  PartialGlobalSticker({required super.id, required this.manager});
+  PartialGlobalSticker(
+      {required super.id, required super.json, required this.manager});
 }
 
 /// {@template global_sticker}
@@ -55,6 +56,7 @@ class GlobalSticker extends PartialGlobalSticker with Sticker {
   /// @nodoc
   GlobalSticker({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.description,

@@ -7,14 +7,19 @@ import '../../../mocks/client.dart';
 class TestFetchException implements Exception {}
 
 class MockManager extends Manager<MockSnowflakeEntity> with Fake {
-  MockManager(super.config, super.client) : super(identifier: 'MOCK_IDENTIFIER');
+  MockManager(super.config, super.client)
+      : super(identifier: 'MOCK_IDENTIFIER');
 
   @override
   Future<MockSnowflakeEntity> fetch(Snowflake id) => throw TestFetchException();
 }
 
-class MockSnowflakeEntity extends WritableSnowflakeEntity<MockSnowflakeEntity> with Fake {
-  MockSnowflakeEntity({required super.id});
+class MockSnowflakeEntity extends WritableSnowflakeEntity<MockSnowflakeEntity>
+    with Fake {
+  MockSnowflakeEntity({
+    required super.id,
+    required super.json,
+  });
 }
 
 void main() {
@@ -22,7 +27,8 @@ void main() {
     test('get only calls API when entity is not cached', () {
       final manager = MockManager(CacheConfig(), MockNyxx());
 
-      manager.cache[Snowflake.zero] = MockSnowflakeEntity(id: Snowflake.zero);
+      manager.cache[Snowflake.zero] =
+          MockSnowflakeEntity(id: Snowflake.zero, json: {});
 
       expect(() => manager.get(Snowflake.zero), returnsNormally);
     });
@@ -30,7 +36,8 @@ void main() {
     test('calls API when entity is not cached', () {
       final manager = MockManager(CacheConfig(), MockNyxx());
 
-      expect(() => manager.get(Snowflake.zero), throwsA(isA<TestFetchException>()));
+      expect(() => manager.get(Snowflake.zero),
+          throwsA(isA<TestFetchException>()));
     });
   });
 }

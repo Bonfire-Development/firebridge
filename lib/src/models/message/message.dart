@@ -35,10 +35,12 @@ class PartialMessage extends WritableSnowflakeEntity<Message> {
 
   /// {@macro partial_message}
   /// @nodoc
-  PartialMessage({required super.id, required this.manager});
+  PartialMessage(
+      {required super.id, required super.json, required this.manager});
 
   /// The channel this message was sent in.
-  PartialTextChannel get channel => manager.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      manager.client.channels[channelId] as PartialTextChannel;
 
   /// Update this message.
   // An often-used alias to update
@@ -48,10 +50,12 @@ class PartialMessage extends WritableSnowflakeEntity<Message> {
   Future<void> crosspost() => manager.crosspost(id);
 
   /// Pin this message.
-  Future<void> pin({String? auditLogReason}) => manager.pin(id, auditLogReason: auditLogReason);
+  Future<void> pin({String? auditLogReason}) =>
+      manager.pin(id, auditLogReason: auditLogReason);
 
   /// Unpin this message.
-  Future<void> unpin({String? auditLogReason}) => manager.unpin(id, auditLogReason: auditLogReason);
+  Future<void> unpin({String? auditLogReason}) =>
+      manager.unpin(id, auditLogReason: auditLogReason);
 
   /// Creates a reaction on this message.
   /// ```dart
@@ -67,16 +71,21 @@ class PartialMessage extends WritableSnowflakeEntity<Message> {
   /// Deletes a reaction by a user, if specified on this message.
   /// Otherwise deletes reactions by [emoji].
   Future<void> deleteReaction(ReactionBuilder emoji, {Snowflake? userId}) =>
-      userId == null ? manager.deleteReaction(id, emoji) : manager.deleteReactionForUser(id, userId, emoji);
+      userId == null
+          ? manager.deleteReaction(id, emoji)
+          : manager.deleteReactionForUser(id, userId, emoji);
 
   /// Deletes all reactions on this message.
   Future<void> deleteAllReactions() => manager.deleteAllReactions(id);
 
   /// Deletes reaction the current user has made on this message.
-  Future<void> deleteOwnReaction(ReactionBuilder emoji) => manager.deleteOwnReaction(id, emoji);
+  Future<void> deleteOwnReaction(ReactionBuilder emoji) =>
+      manager.deleteOwnReaction(id, emoji);
 
   /// Get a list of users that reacted with a given emoji on a message.
-  Future<List<User>> fetchReactions(ReactionBuilder emoji, {Snowflake? after, int? limit}) => manager.fetchReactions(id, emoji, after: after, limit: limit);
+  Future<List<User>> fetchReactions(ReactionBuilder emoji,
+          {Snowflake? after, int? limit}) =>
+      manager.fetchReactions(id, emoji, after: after, limit: limit);
 }
 
 /// {@template message}
@@ -198,6 +207,7 @@ class Message extends PartialMessage {
   /// @nodoc
   Message({
     required super.id,
+    required super.json,
     required super.manager,
     required this.author,
     required this.content,
@@ -232,7 +242,8 @@ class Message extends PartialMessage {
   });
 
   /// The webhook that sent this message if it was sent by a webhook, `null` otherwise.
-  PartialWebhook? get webhook => webhookId == null ? null : manager.client.webhooks[webhookId!];
+  PartialWebhook? get webhook =>
+      webhookId == null ? null : manager.client.webhooks[webhookId!];
 
   // Cannot provide roleMentions as we do not have access to the guild.
 }
@@ -325,7 +336,8 @@ class MessageFlags extends Flags<MessageFlags> {
   static const loading = Flag<MessageFlags>.fromOffset(7);
 
   /// This message failed to mention some roles and add their members to the thread.
-  static const failedToMentionSomeRolesInThread = Flag<MessageFlags>.fromOffset(8);
+  static const failedToMentionSomeRolesInThread =
+      Flag<MessageFlags>.fromOffset(8);
 
   /// This message will not trigger push and desktop notifications.
   static const suppressNotifications = Flag<MessageFlags>.fromOffset(12);
@@ -358,7 +370,8 @@ class MessageFlags extends Flags<MessageFlags> {
   bool get isLoading => has(loading);
 
   /// Whether this set of flags has the [failedToMentionSomeRolesInThread] flag set.
-  bool get didFailToMentionSomeRolesInThread => has(failedToMentionSomeRolesInThread);
+  bool get didFailToMentionSomeRolesInThread =>
+      has(failedToMentionSomeRolesInThread);
 
   /// Whether this set of flags has the [suppressNotifications] flag set.
   bool get suppressesNotifications => has(suppressNotifications);

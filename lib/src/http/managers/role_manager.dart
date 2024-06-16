@@ -18,15 +18,18 @@ class RoleManager extends Manager<Role> {
   final Snowflake guildId;
 
   /// Create a new [RoleManager].
-  RoleManager(super.config, super.client, {required this.guildId}) : super(identifier: '$guildId.roles');
+  RoleManager(super.config, super.client, {required this.guildId})
+      : super(identifier: '$guildId.roles');
 
   @override
-  PartialRole operator [](Snowflake id) => PartialRole(id: id, manager: this);
+  PartialRole operator [](Snowflake id) =>
+      PartialRole(id: id, json: {}, manager: this);
 
   @override
   Role parse(Map<String, Object?> raw) {
     return Role(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       name: raw['name'] as String,
       color: DiscordColor(raw['color'] as int),
@@ -47,7 +50,8 @@ class RoleManager extends Manager<Role> {
       botId: maybeParse(raw['bot_id'], Snowflake.parse),
       integrationId: maybeParse(raw['integration_id'], Snowflake.parse),
       isPremiumSubscriber: raw.containsKey('premium_subscriber'),
-      subscriptionListingId: maybeParse(raw['subscription_listing_id'], Snowflake.parse),
+      subscriptionListingId:
+          maybeParse(raw['subscription_listing_id'], Snowflake.parse),
       isAvailableForPurchase: raw.containsKey('available_for_purchase'),
       isLinkedRole: raw.containsKey('guild_connections'),
     );
@@ -84,7 +88,10 @@ class RoleManager extends Manager<Role> {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..roles();
-    final request = BasicRequest(route, method: 'POST', auditLogReason: auditLogReason, body: jsonEncode(builder.build()));
+    final request = BasicRequest(route,
+        method: 'POST',
+        auditLogReason: auditLogReason,
+        body: jsonEncode(builder.build()));
 
     final response = await client.httpHandler.executeSafe(request);
     final role = parse(response.jsonBody as Map<String, Object?>);
@@ -94,11 +101,15 @@ class RoleManager extends Manager<Role> {
   }
 
   @override
-  Future<Role> update(Snowflake id, RoleUpdateBuilder builder, {String? auditLogReason}) async {
+  Future<Role> update(Snowflake id, RoleUpdateBuilder builder,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..roles(id: id.toString());
-    final request = BasicRequest(route, method: 'PATCH', auditLogReason: auditLogReason, body: jsonEncode(builder.build()));
+    final request = BasicRequest(route,
+        method: 'PATCH',
+        auditLogReason: auditLogReason,
+        body: jsonEncode(builder.build()));
 
     final response = await client.httpHandler.executeSafe(request);
     final role = parse(response.jsonBody as Map<String, Object?>);
@@ -112,14 +123,16 @@ class RoleManager extends Manager<Role> {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..roles(id: id.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
     cache.remove(id);
   }
 
   /// Update the positions of the roles in this guild.
-  Future<List<Role>> updatePositions(Map<Snowflake, int> positions, {String? auditLogReason}) async {
+  Future<List<Role>> updatePositions(Map<Snowflake, int> positions,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..roles();
@@ -127,7 +140,9 @@ class RoleManager extends Manager<Role> {
       route,
       method: 'PATCH',
       auditLogReason: auditLogReason,
-      body: jsonEncode(positions.entries.map((e) => {'id': e.key.toString(), 'position': e.value}).toList()),
+      body: jsonEncode(positions.entries
+          .map((e) => {'id': e.key.toString(), 'position': e.value})
+          .toList()),
     );
 
     final response = await client.httpHandler.executeSafe(request);

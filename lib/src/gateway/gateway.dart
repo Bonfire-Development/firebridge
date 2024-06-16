@@ -314,7 +314,7 @@ class Gateway extends GatewayManager with EventParser {
       guilds: parseMany(
         raw['guilds'] as List<Object?>,
         (Map<String, Object?> raw) => PartialGuild(
-            id: Snowflake.parse(raw['id']!), manager: client.guilds),
+            id: Snowflake.parse(raw['id']!), json: raw, manager: client.guilds),
       ),
       sessionId: raw['session_id'] as String,
       gatewayResumeUrl: Uri.parse(raw['resume_gateway_url'] as String),
@@ -453,6 +453,7 @@ class Gateway extends GatewayManager with EventParser {
   ThreadDeleteEvent parseThreadDelete(Map<String, Object?> raw) {
     final thread = PartialChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: client.channels,
     );
 
@@ -528,7 +529,9 @@ class Gateway extends GatewayManager with EventParser {
       return UnavailableGuildCreateEvent(
           gateway: this,
           guild: PartialGuild(
-              id: Snowflake.parse(raw['id']!), manager: client.guilds));
+              id: Snowflake.parse(raw['id']!),
+              json: raw,
+              manager: client.guilds));
     }
 
     final guild = client.guilds.parse(raw);
@@ -580,7 +583,7 @@ class Gateway extends GatewayManager with EventParser {
 
     return GuildDeleteEvent(
       gateway: this,
-      guild: PartialGuild(id: id, manager: client.guilds),
+      guild: PartialGuild(id: id, json: raw, manager: client.guilds),
       isUnavailable: raw['unavailable'] as bool? ?? false,
       deletedGuild: client.guilds.cache[id],
     );
@@ -900,6 +903,7 @@ class Gateway extends GatewayManager with EventParser {
         raw['member'],
         (Map<String, Object?> raw) => PartialMember(
           id: message.author.id,
+          json: raw,
           manager: MemberManager(client.options.memberCacheConfig, client,
               guildId: guildId!),
         ),
@@ -922,6 +926,7 @@ class Gateway extends GatewayManager with EventParser {
         raw['member'],
         (Map<String, Object?> _) => PartialMember(
           id: Snowflake.parse((raw['author'] as Map<String, Object?>)['id']!),
+          json: raw,
           manager: client.guilds[guildId!].members,
         ),
       ),
@@ -1034,8 +1039,8 @@ class Gateway extends GatewayManager with EventParser {
       gateway: this,
       user: maybeParse(
         raw['user'],
-        (Map<String, Object?> raw) =>
-            PartialUser(id: Snowflake.parse(raw['id']!), manager: client.users),
+        (Map<String, Object?> raw) => PartialUser(
+            id: Snowflake.parse(raw['id']!), json: raw, manager: client.users),
       ),
       guildId: maybeParse(raw['guild_id'], Snowflake.parse),
       status: maybeParse(raw['status'], UserStatus.parse),

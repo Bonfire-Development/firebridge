@@ -17,11 +17,17 @@ class PartialScheduledEvent extends WritableSnowflakeEntity<ScheduledEvent> {
 
   /// Create a new [PartialScheduledEvent].
   /// @nodoc
-  PartialScheduledEvent({required super.id, required this.manager});
+  PartialScheduledEvent(
+      {required super.id, required super.json, required this.manager});
 
   /// List the users that have followed this event.
-  Future<List<ScheduledEventUser>> listUsers({int? limit, bool? withMembers, Snowflake? before, Snowflake? after}) =>
-      manager.listEventUsers(id, withMembers: withMembers, after: after, before: before, limit: limit);
+  Future<List<ScheduledEventUser>> listUsers(
+          {int? limit,
+          bool? withMembers,
+          Snowflake? before,
+          Snowflake? after}) =>
+      manager.listEventUsers(id,
+          withMembers: withMembers, after: after, before: before, limit: limit);
 }
 
 /// {@template scheduled_event}
@@ -79,6 +85,7 @@ class ScheduledEvent extends PartialScheduledEvent {
   /// @nodoc
   ScheduledEvent({
     required super.id,
+    required super.json,
     required super.manager,
     required this.guildId,
     required this.channelId,
@@ -101,10 +108,12 @@ class ScheduledEvent extends PartialScheduledEvent {
   PartialGuild get guild => manager.client.guilds[guildId];
 
   /// The channel this event will be hosted in.
-  PartialChannel? get channel => channelId == null ? null : manager.client.channels[channelId!];
+  PartialChannel? get channel =>
+      channelId == null ? null : manager.client.channels[channelId!];
 
   /// The member for the user that created this event.
-  PartialMember? get creatorMember => creatorId == null ? null : guild.members[creatorId!];
+  PartialMember? get creatorMember =>
+      creatorId == null ? null : guild.members[creatorId!];
 
   /// This scheduled event's cover image.
   CdnAsset? get coverImage => coverImageHash == null
@@ -154,9 +163,11 @@ enum ScheduledEntityType {
   /// Parse a [ScheduledEntityType] from an [int].
   ///
   /// The [value] must be a valid scheduled entity type.
-  factory ScheduledEntityType.parse(int value) => ScheduledEntityType.values.firstWhere(
+  factory ScheduledEntityType.parse(int value) =>
+      ScheduledEntityType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown scheduled entity type', value),
+        orElse: () =>
+            throw FormatException('Unknown scheduled entity type', value),
       );
 
   @override

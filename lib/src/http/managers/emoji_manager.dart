@@ -14,10 +14,12 @@ import 'manager.dart';
 class EmojiManager extends Manager<Emoji> {
   final Snowflake guildId;
 
-  EmojiManager(super.config, super.client, {required this.guildId}) : super(identifier: '$guildId.emojis');
+  EmojiManager(super.config, super.client, {required this.guildId})
+      : super(identifier: '$guildId.emojis');
 
   @override
-  PartialEmoji operator [](Snowflake id) => PartialEmoji(id: id, manager: this);
+  PartialEmoji operator [](Snowflake id) =>
+      PartialEmoji(id: id, json: {}, manager: this);
 
   @override
   Emoji parse(Map<String, Object?> raw) {
@@ -25,14 +27,15 @@ class EmojiManager extends Manager<Emoji> {
 
     if (isUnicode) {
       return TextEmoji(
-        name: raw['name'] as String,
-        manager: this,
-        id: Snowflake.zero,
-      );
+          name: raw['name'] as String,
+          manager: this,
+          id: Snowflake.zero,
+          json: raw);
     }
 
     return GuildEmoji(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       user: maybeParse(raw['user'], client.users.parse),
       isAnimated: raw['animated'] as bool?,
@@ -46,16 +49,19 @@ class EmojiManager extends Manager<Emoji> {
 
   void _checkIsConcrete([Snowflake? id]) {
     if (guildId == Snowflake.zero) {
-      throw UnsupportedError('Cannot fetch, create, update or delete emoji received without a guild');
+      throw UnsupportedError(
+          'Cannot fetch, create, update or delete emoji received without a guild');
     }
 
     if (id == Snowflake.zero) {
-      throw UnsupportedError('Cannot fetch, create, update or delete a text emoji by ID');
+      throw UnsupportedError(
+          'Cannot fetch, create, update or delete a text emoji by ID');
     }
   }
 
   @override
-  Future<GuildEmoji> get(Snowflake id) async => await super.get(id) as GuildEmoji;
+  Future<GuildEmoji> get(Snowflake id) async =>
+      await super.get(id) as GuildEmoji;
 
   @override
   Future<GuildEmoji> fetch(Snowflake id) async {
@@ -67,7 +73,8 @@ class EmojiManager extends Manager<Emoji> {
     final request = BasicRequest(route);
 
     final response = await client.httpHandler.executeSafe(request);
-    final emoji = parse(response.jsonBody as Map<String, Object?>) as GuildEmoji;
+    final emoji =
+        parse(response.jsonBody as Map<String, Object?>) as GuildEmoji;
 
     client.updateCacheWith(emoji);
     return emoji;
@@ -83,39 +90,50 @@ class EmojiManager extends Manager<Emoji> {
     final request = BasicRequest(route);
 
     final response = await client.httpHandler.executeSafe(request);
-    final emojis = parseMany(response.jsonBody as List<Object?>, (Map<String, Object?> raw) => parse(raw) as GuildEmoji);
+    final emojis = parseMany(response.jsonBody as List<Object?>,
+        (Map<String, Object?> raw) => parse(raw) as GuildEmoji);
 
     emojis.forEach(client.updateCacheWith);
     return emojis;
   }
 
   @override
-  Future<GuildEmoji> create(EmojiBuilder builder, {String? auditLogReason}) async {
+  Future<GuildEmoji> create(EmojiBuilder builder,
+      {String? auditLogReason}) async {
     _checkIsConcrete();
 
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..emojis();
-    final request = BasicRequest(route, method: 'POST', body: jsonEncode(builder.build()), auditLogReason: auditLogReason);
+    final request = BasicRequest(route,
+        method: 'POST',
+        body: jsonEncode(builder.build()),
+        auditLogReason: auditLogReason);
 
     final response = await client.httpHandler.executeSafe(request);
-    final emoji = parse(response.jsonBody as Map<String, Object?>) as GuildEmoji;
+    final emoji =
+        parse(response.jsonBody as Map<String, Object?>) as GuildEmoji;
 
     client.updateCacheWith(emoji);
     return emoji;
   }
 
   @override
-  Future<GuildEmoji> update(Snowflake id, EmojiUpdateBuilder builder, {String? auditLogReason}) async {
+  Future<GuildEmoji> update(Snowflake id, EmojiUpdateBuilder builder,
+      {String? auditLogReason}) async {
     _checkIsConcrete(id);
 
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..emojis(id: id.toString());
-    final request = BasicRequest(route, method: 'PATCH', body: jsonEncode(builder.build()), auditLogReason: auditLogReason);
+    final request = BasicRequest(route,
+        method: 'PATCH',
+        body: jsonEncode(builder.build()),
+        auditLogReason: auditLogReason);
 
     final response = await client.httpHandler.executeSafe(request);
-    final emoji = parse(response.jsonBody as Map<String, Object?>) as GuildEmoji;
+    final emoji =
+        parse(response.jsonBody as Map<String, Object?>) as GuildEmoji;
 
     client.updateCacheWith(emoji);
     return emoji;
@@ -128,7 +146,8 @@ class EmojiManager extends Manager<Emoji> {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..emojis(id: id.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
     cache.remove(id);

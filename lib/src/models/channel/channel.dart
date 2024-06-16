@@ -11,21 +11,24 @@ class PartialChannel extends ManagedSnowflakeEntity<Channel> {
 
   /// Create a new [PartialChannel].
   /// @nodoc
-  PartialChannel({required super.id, required this.manager});
+  PartialChannel(
+      {required super.id, required super.json, required this.manager});
 
   /// Update this channel.
   ///
   /// External references:
   /// * [ChannelManager.update]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/channel#modify-channel
-  Future<Channel> update(UpdateBuilder<Channel> builder) => manager.update(id, builder);
+  Future<Channel> update(UpdateBuilder<Channel> builder) =>
+      manager.update(id, builder);
 
   /// Delete this channel.
   ///
   /// External references:
   /// * [ChannelManager.delete]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/channel#deleteclose-channel
-  Future<void> delete({String? auditLogReason}) => manager.delete(id, auditLogReason: auditLogReason);
+  Future<void> delete({String? auditLogReason}) =>
+      manager.delete(id, auditLogReason: auditLogReason);
 
   /// Follow another channel's announcement messages in this channel.
   ///
@@ -44,7 +47,7 @@ abstract class Channel extends PartialChannel {
 
   /// {@macro channel}
   /// @nodoc
-  Channel({required super.id, required super.manager});
+  Channel({required super.id, required super.json, required super.manager});
 }
 
 /// The type of a channel.

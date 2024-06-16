@@ -16,19 +16,26 @@ class PartialMember extends WritableSnowflakeEntity<Member> {
 
   /// Create a new [PartialMember].
   /// @nodoc
-  PartialMember({required super.id, required this.manager});
+  PartialMember(
+      {required super.id, required super.json, required this.manager});
 
   /// Add a role to this member.
-  Future<void> addRole(Snowflake roleId, {String? auditLogReason}) => manager.addRole(id, roleId, auditLogReason: auditLogReason);
+  Future<void> addRole(Snowflake roleId, {String? auditLogReason}) =>
+      manager.addRole(id, roleId, auditLogReason: auditLogReason);
 
   /// Remove a role from this member.
-  Future<void> removeRole(Snowflake roleId, {String? auditLogReason}) => manager.removeRole(id, roleId);
+  Future<void> removeRole(Snowflake roleId, {String? auditLogReason}) =>
+      manager.removeRole(id, roleId);
 
   /// Ban this member.
-  Future<void> ban({String? auditLogReason}) => manager.client.guilds[manager.guildId].createBan(id, auditLogReason: auditLogReason);
+  Future<void> ban({String? auditLogReason}) =>
+      manager.client.guilds[manager.guildId]
+          .createBan(id, auditLogReason: auditLogReason);
 
   /// Unban this member.
-  Future<void> unban({String? auditLogReason}) => manager.client.guilds[manager.guildId].deleteBan(id, auditLogReason: auditLogReason);
+  Future<void> unban({String? auditLogReason}) =>
+      manager.client.guilds[manager.guildId]
+          .deleteBan(id, auditLogReason: auditLogReason);
 
   /// Update this member, returning the updated member.
   ///
@@ -36,7 +43,9 @@ class PartialMember extends WritableSnowflakeEntity<Member> {
   /// * [MemberManager.update]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/guild#modify-guild-member
   @override
-  Future<Member> update(MemberUpdateBuilder builder, {String? auditLogReason}) => manager.update(id, builder, auditLogReason: auditLogReason);
+  Future<Member> update(MemberUpdateBuilder builder,
+          {String? auditLogReason}) =>
+      manager.update(id, builder, auditLogReason: auditLogReason);
 
   /// Kick this member.
   ///
@@ -44,7 +53,8 @@ class PartialMember extends WritableSnowflakeEntity<Member> {
   /// * [MemberManager.delete]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/guild#remove-guild-member
   @override
-  Future<void> delete({String? auditLogReason}) => manager.delete(id, auditLogReason: auditLogReason);
+  Future<void> delete({String? auditLogReason}) =>
+      manager.delete(id, auditLogReason: auditLogReason);
 }
 
 /// {@template member}
@@ -91,6 +101,7 @@ class Member extends PartialMember {
   /// @nodoc
   Member({
     required super.id,
+    required super.json,
     required super.manager,
     required this.user,
     required this.nick,
@@ -107,7 +118,9 @@ class Member extends PartialMember {
   });
 
   /// The roles this member has.
-  List<PartialRole> get roles => roleIds.map((e) => manager.client.guilds[manager.guildId].roles[e]).toList();
+  List<PartialRole> get roles => roleIds
+      .map((e) => manager.client.guilds[manager.guildId].roles[e])
+      .toList();
 
   /// This member's avatar.
   CdnAsset? get avatar => avatarHash == null

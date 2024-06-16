@@ -4,16 +4,18 @@ import 'package:test/test.dart';
 
 import '../../mocks/client.dart';
 
-class MockSnowflakeEntity extends ManagedSnowflakeEntity<MockSnowflakeEntity> with Fake {
-  MockSnowflakeEntity({required super.id});
+class MockSnowflakeEntity extends ManagedSnowflakeEntity<MockSnowflakeEntity>
+    with Fake {
+  MockSnowflakeEntity({required super.id, required super.json});
 }
 
 void main() {
   group('Cache', () {
     test('stores entities', () async {
-      final cache = Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
+      final cache =
+          Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
 
-      final entity = MockSnowflakeEntity(id: Snowflake.zero);
+      final entity = MockSnowflakeEntity(id: Snowflake.zero, json: {});
 
       cache[entity.id] = entity;
 
@@ -26,13 +28,14 @@ void main() {
     });
 
     test('respects maximum size', () async {
-      final cache = Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig(maxSize: 3));
+      final cache = Cache<MockSnowflakeEntity>(
+          MockNyxx(), 'test', CacheConfig(maxSize: 3));
 
-      final entity1 = MockSnowflakeEntity(id: Snowflake(1));
-      final entity2 = MockSnowflakeEntity(id: Snowflake(2));
-      final entity3 = MockSnowflakeEntity(id: Snowflake(3));
-      final entity4 = MockSnowflakeEntity(id: Snowflake(4));
-      final entity5 = MockSnowflakeEntity(id: Snowflake(5));
+      final entity1 = MockSnowflakeEntity(id: Snowflake(1), json: {});
+      final entity2 = MockSnowflakeEntity(id: Snowflake(2), json: {});
+      final entity3 = MockSnowflakeEntity(id: Snowflake(3), json: {});
+      final entity4 = MockSnowflakeEntity(id: Snowflake(4), json: {});
+      final entity5 = MockSnowflakeEntity(id: Snowflake(5), json: {});
 
       for (final entity in [entity1, entity2, entity3, entity4, entity5]) {
         cache[entity.id] = entity;
@@ -44,13 +47,14 @@ void main() {
     });
 
     test('keeps most used items', () async {
-      final cache = Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig(maxSize: 3));
+      final cache = Cache<MockSnowflakeEntity>(
+          MockNyxx(), 'test', CacheConfig(maxSize: 3));
 
-      final entity1 = MockSnowflakeEntity(id: Snowflake(1));
-      final entity2 = MockSnowflakeEntity(id: Snowflake(2));
-      final entity3 = MockSnowflakeEntity(id: Snowflake(3));
-      final entity4 = MockSnowflakeEntity(id: Snowflake(4));
-      final entity5 = MockSnowflakeEntity(id: Snowflake(5));
+      final entity1 = MockSnowflakeEntity(id: Snowflake(1), json: {});
+      final entity2 = MockSnowflakeEntity(id: Snowflake(2), json: {});
+      final entity3 = MockSnowflakeEntity(id: Snowflake(3), json: {});
+      final entity4 = MockSnowflakeEntity(id: Snowflake(4), json: {});
+      final entity5 = MockSnowflakeEntity(id: Snowflake(5), json: {});
 
       for (final entity in [entity1, entity2, entity3, entity4, entity5]) {
         cache[entity.id] = entity;
@@ -74,13 +78,14 @@ void main() {
     });
 
     test("doesn't cache items if a filter is provided", () {
-      final cache = Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig(shouldCache: (e) => e.id.value > 3));
+      final cache = Cache<MockSnowflakeEntity>(
+          MockNyxx(), 'test', CacheConfig(shouldCache: (e) => e.id.value > 3));
 
-      final entity1 = MockSnowflakeEntity(id: Snowflake(1));
-      final entity2 = MockSnowflakeEntity(id: Snowflake(2));
-      final entity3 = MockSnowflakeEntity(id: Snowflake(3));
-      final entity4 = MockSnowflakeEntity(id: Snowflake(4));
-      final entity5 = MockSnowflakeEntity(id: Snowflake(5));
+      final entity1 = MockSnowflakeEntity(id: Snowflake(1), json: {});
+      final entity2 = MockSnowflakeEntity(id: Snowflake(2), json: {});
+      final entity3 = MockSnowflakeEntity(id: Snowflake(3), json: {});
+      final entity4 = MockSnowflakeEntity(id: Snowflake(4), json: {});
+      final entity5 = MockSnowflakeEntity(id: Snowflake(5), json: {});
 
       for (final entity in [entity1, entity2, entity3, entity4, entity5]) {
         cache[entity.id] = entity;
@@ -100,17 +105,19 @@ void main() {
       final cache1 = Cache<MockSnowflakeEntity>(client, 'test', CacheConfig());
       final cache2 = Cache<MockSnowflakeEntity>(client, 'test', CacheConfig());
 
-      final entity = MockSnowflakeEntity(id: Snowflake.zero);
+      final entity = MockSnowflakeEntity(id: Snowflake.zero, json: {});
 
       cache1[entity.id] = entity;
       expect(cache2[entity.id], equals(entity));
     });
 
     test("doesn't share resources across clients", () {
-      final cache1 = Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
-      final cache2 = Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
+      final cache1 =
+          Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
+      final cache2 =
+          Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
 
-      final entity = MockSnowflakeEntity(id: Snowflake.zero);
+      final entity = MockSnowflakeEntity(id: Snowflake.zero, json: {});
 
       cache1[entity.id] = entity;
       expect(cache2.containsKey(entity.id), isFalse);

@@ -25,18 +25,21 @@ class CommandPermissions extends SnowflakeEntity<CommandPermissions> {
   /// {@macro command_permissions}
   /// @nodoc
   CommandPermissions({
-    required this.manager,
     required super.id,
+    required super.json,
+    required this.manager,
     required this.applicationId,
     required this.guildId,
     required this.permissions,
   });
 
   /// The command these permissions apply to, or `null` if these permissions apply to the entire application.
-  PartialApplicationCommand? get command => id == applicationId ? null : manager.client.guilds[guildId].commands[id];
+  PartialApplicationCommand? get command =>
+      id == applicationId ? null : manager.client.guilds[guildId].commands[id];
 
   /// The application these permissions apply to.
-  PartialApplication get application => manager.client.applications[applicationId];
+  PartialApplication get application =>
+      manager.client.applications[applicationId];
 
   /// The guild these permissions apply in.
   PartialGuild get guild => manager.client.guilds[guildId];
@@ -52,7 +55,8 @@ class CommandPermissions extends SnowflakeEntity<CommandPermissions> {
   }
 
   @override
-  Future<CommandPermissions> get() async => manager.permissionsCache[id] ?? await fetch();
+  Future<CommandPermissions> get() async =>
+      manager.permissionsCache[id] ?? await fetch();
 }
 
 /// {@template command_permission}
@@ -70,7 +74,8 @@ class CommandPermission with ToStringHelper {
 
   /// {@macro command_permission}
   /// @nodoc
-  CommandPermission({required this.id, required this.type, required this.hasPermission});
+  CommandPermission(
+      {required this.id, required this.type, required this.hasPermission});
 }
 
 /// The type of a [CommandPermission].
@@ -87,9 +92,11 @@ enum CommandPermissionType {
   /// Parse a [CommandPermissionType] from an [int].
   ///
   /// The [value] must be a valid command permission type.
-  factory CommandPermissionType.parse(int value) => CommandPermissionType.values.firstWhere(
+  factory CommandPermissionType.parse(int value) =>
+      CommandPermissionType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown command permission type', value),
+        orElse: () =>
+            throw FormatException('Unknown command permission type', value),
       );
 
   @override

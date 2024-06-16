@@ -27,6 +27,7 @@ class DmChannel extends TextChannel {
   /// @nodoc
   DmChannel({
     required super.id,
+    required super.json,
     required super.manager,
     required this.recipients,
     required this.lastMessageId,

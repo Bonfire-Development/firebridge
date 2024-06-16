@@ -10,7 +10,8 @@ class PartialGuildSticker extends WritableSnowflakeEntity<GuildSticker> {
   final GuildStickerManager manager;
 
   /// @nodoc
-  PartialGuildSticker({required super.id, required this.manager});
+  PartialGuildSticker(
+      {required super.id, required super.json, required this.manager});
 
   /// Update this sticker, returning the updated sticker.
   ///
@@ -18,7 +19,9 @@ class PartialGuildSticker extends WritableSnowflakeEntity<GuildSticker> {
   /// * [StickerManager.update]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/sticker#modify-guild-sticker
   @override
-  Future<GuildSticker> update(StickerUpdateBuilder builder, {String? auditLogReason}) => manager.update(id, builder, auditLogReason: auditLogReason);
+  Future<GuildSticker> update(StickerUpdateBuilder builder,
+          {String? auditLogReason}) =>
+      manager.update(id, builder, auditLogReason: auditLogReason);
 
   /// Delete this sticker.
   ///
@@ -26,7 +29,8 @@ class PartialGuildSticker extends WritableSnowflakeEntity<GuildSticker> {
   /// * [StickerManager.delete]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/sticker#delete-guild-sticker
   @override
-  Future<void> delete({String? auditLogReason}) => manager.delete(id, auditLogReason: auditLogReason);
+  Future<void> delete({String? auditLogReason}) =>
+      manager.delete(id, auditLogReason: auditLogReason);
 }
 
 /// {@template guild_sticker}
@@ -72,6 +76,7 @@ class GuildSticker extends PartialGuildSticker with Sticker {
   /// @nodoc
   GuildSticker({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.description,

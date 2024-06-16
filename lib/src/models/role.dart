@@ -17,7 +17,7 @@ class PartialRole extends WritableSnowflakeEntity<Role> {
 
   /// Create a new [PartialRole].
   /// @nodoc
-  PartialRole({required super.id, required this.manager});
+  PartialRole({required super.id, required super.json, required this.manager});
 
   /// Update this role, returning the updated role.
   ///
@@ -25,7 +25,8 @@ class PartialRole extends WritableSnowflakeEntity<Role> {
   /// * [RoleManager.update]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/guild#modify-guild-role
   @override
-  Future<Role> update(RoleUpdateBuilder builder, {String? auditLogReason}) => manager.update(id, builder, auditLogReason: auditLogReason);
+  Future<Role> update(RoleUpdateBuilder builder, {String? auditLogReason}) =>
+      manager.update(id, builder, auditLogReason: auditLogReason);
 
   /// Delete this role.
   ///
@@ -33,7 +34,8 @@ class PartialRole extends WritableSnowflakeEntity<Role> {
   /// * [RoleManager.delete]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/guild#delete-guild-role
   @override
-  Future<void> delete({String? auditLogReason}) => manager.delete(id, auditLogReason: auditLogReason);
+  Future<void> delete({String? auditLogReason}) =>
+      manager.delete(id, auditLogReason: auditLogReason);
 }
 
 /// {@template role}
@@ -79,6 +81,7 @@ class Role extends PartialRole implements CommandOptionMentionable<Role> {
   /// @nodoc
   Role({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.color,

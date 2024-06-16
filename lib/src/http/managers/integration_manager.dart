@@ -13,15 +13,18 @@ class IntegrationManager extends ReadOnlyManager<Integration> {
   final Snowflake guildId;
 
   /// Create a new [IntegrationManager].
-  IntegrationManager(super.config, super.client, {required this.guildId}) : super(identifier: '$guildId.integrations');
+  IntegrationManager(super.config, super.client, {required this.guildId})
+      : super(identifier: '$guildId.integrations');
 
   @override
-  PartialIntegration operator [](Snowflake id) => PartialIntegration(id: id, manager: this);
+  PartialIntegration operator [](Snowflake id) =>
+      PartialIntegration(id: id, json: {}, manager: this);
 
   @override
   Integration parse(Map<String, Object?> raw) {
     return Integration(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       name: raw['name'] as String,
       type: raw['type'] as String,
@@ -29,8 +32,10 @@ class IntegrationManager extends ReadOnlyManager<Integration> {
       isSyncing: raw['syncing'] as bool?,
       roleId: maybeParse(raw['role_id'], Snowflake.parse),
       enableEmoticons: raw['enable_emoticons'] as bool?,
-      expireBehavior: maybeParse(raw['expire_behavior'], IntegrationExpireBehavior.parse),
-      expireGracePeriod: maybeParse(raw['expire_grace_period'], (int value) => Duration(days: value)),
+      expireBehavior:
+          maybeParse(raw['expire_behavior'], IntegrationExpireBehavior.parse),
+      expireGracePeriod: maybeParse(
+          raw['expire_grace_period'], (int value) => Duration(days: value)),
       user: maybeParse(raw['user'], client.users.parse),
       account: parseIntegrationAccount(raw['account'] as Map<String, Object?>),
       syncedAt: maybeParse(raw['synced_at'], DateTime.parse),
@@ -89,7 +94,8 @@ class IntegrationManager extends ReadOnlyManager<Integration> {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..integrations(id: id.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
 

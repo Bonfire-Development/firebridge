@@ -10,16 +10,19 @@ import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
 
 /// A partial [ApplicationCommand].
-class PartialApplicationCommand extends WritableSnowflakeEntity<ApplicationCommand> {
+class PartialApplicationCommand
+    extends WritableSnowflakeEntity<ApplicationCommand> {
   @override
   final ApplicationCommandManager manager;
 
   /// Create a new [PartialApplicationCommand].
   /// @nodoc
-  PartialApplicationCommand({required super.id, required this.manager});
+  PartialApplicationCommand(
+      {required super.id, required super.json, required this.manager});
 
   /// Fetch the permissions for this command in a given guild.
-  Future<CommandPermissions> fetchPermissions(Snowflake guildId) => manager.client.guilds[guildId].commands.fetchPermissions(id);
+  Future<CommandPermissions> fetchPermissions(Snowflake guildId) =>
+      manager.client.guilds[guildId].commands.fetchPermissions(id);
 }
 
 /// {@template application_command}
@@ -75,6 +78,7 @@ class ApplicationCommand extends PartialApplicationCommand {
   /// @nodoc
   ApplicationCommand({
     required super.id,
+    required super.json,
     required super.manager,
     required this.type,
     required this.applicationId,
@@ -93,10 +97,12 @@ class ApplicationCommand extends PartialApplicationCommand {
   });
 
   /// The application this command belongs to.
-  PartialApplication get application => manager.client.applications[applicationId];
+  PartialApplication get application =>
+      manager.client.applications[applicationId];
 
   /// The guild this command belongs to.
-  PartialGuild? get guild => guildId == null ? null : manager.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : manager.client.guilds[guildId!];
 }
 
 /// The type of an [ApplicationCommand].
@@ -113,9 +119,11 @@ enum ApplicationCommandType {
   /// Parse an [ApplicationCommandType] from an [int].
   ///
   /// The [value] must be a valid application command type.
-  factory ApplicationCommandType.parse(int value) => ApplicationCommandType.values.firstWhere(
+  factory ApplicationCommandType.parse(int value) =>
+      ApplicationCommandType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown application command type', value),
+        orElse: () =>
+            throw FormatException('Unknown application command type', value),
       );
 
   @override

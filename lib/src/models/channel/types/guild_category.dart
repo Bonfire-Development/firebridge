@@ -38,6 +38,7 @@ class GuildCategory extends Channel implements GuildChannel {
   /// @nodoc
   GuildCategory({
     required super.id,
+    required super.json,
     required super.manager,
     required this.guildId,
     required this.isNsfw,
@@ -51,20 +52,26 @@ class GuildCategory extends Channel implements GuildChannel {
   PartialGuild get guild => manager.client.guilds[guildId];
 
   @override
-  PartialChannel? get parent => parentId == null ? null : manager.client.channels[parentId!];
+  PartialChannel? get parent =>
+      parentId == null ? null : manager.client.channels[parentId!];
 
   @override
-  Future<void> deletePermissionOverwrite(Snowflake id) => manager.deletePermissionOverwrite(this.id, id);
+  Future<void> deletePermissionOverwrite(Snowflake id) =>
+      manager.deletePermissionOverwrite(this.id, id);
 
   @override
-  Future<void> updatePermissionOverwrite(PermissionOverwriteBuilder builder) => manager.updatePermissionOverwrite(id, builder);
+  Future<void> updatePermissionOverwrite(PermissionOverwriteBuilder builder) =>
+      manager.updatePermissionOverwrite(id, builder);
 
   @override
-  Future<List<Webhook>> fetchWebhooks() => throw UnsupportedError('Cannot fetch webhooks in guild category');
+  Future<List<Webhook>> fetchWebhooks() =>
+      throw UnsupportedError('Cannot fetch webhooks in guild category');
 
   @override
   Future<List<InviteWithMetadata>> listInvites() => manager.listInvites(id);
 
   @override
-  Future<Invite> createInvite(InviteBuilder builder, {String? auditLogReason}) => manager.createInvite(id, builder, auditLogReason: auditLogReason);
+  Future<Invite> createInvite(InviteBuilder builder,
+          {String? auditLogReason}) =>
+      manager.createInvite(id, builder, auditLogReason: auditLogReason);
 }

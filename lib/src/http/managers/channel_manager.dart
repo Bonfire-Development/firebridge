@@ -63,7 +63,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   /// be cast to a [PartialTextChannel] to access the channel's messages.
   @override
   PartialChannel operator [](Snowflake id) =>
-      PartialTextChannel(id: id, manager: this);
+      PartialTextChannel(id: id, json: {}, manager: this);
 
   @override
   Channel parse(Map<String, Object?> raw, {Snowflake? guildId}) {
@@ -95,6 +95,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GuildTextChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       topic: raw['topic'] as String?,
       // Discord doesn't seem to include this field if the default 3 day expiration is used (3 days = 4320 minutes)
@@ -123,6 +124,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return DmChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       recipients: parseMany(raw['recipients'] as List, client.users.parse),
       lastMessageId: maybeParse(raw['last_message_id'], Snowflake.parse),
@@ -139,6 +141,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GuildVoiceChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       bitrate: raw['bitrate'] as int,
       guildId: guildId ?? Snowflake.parse(raw['guild_id']!),
@@ -168,6 +171,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GroupDmChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       name: raw['name'] as String,
       recipients: parseMany(raw['recipients'] as List, client.users.parse),
@@ -189,6 +193,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GuildCategory(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       guildId: guildId ?? Snowflake.parse(raw['guild_id']!),
       isNsfw: raw['nsfw'] as bool? ?? false,
@@ -209,6 +214,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GuildAnnouncementChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       topic: raw['topic'] as String?,
       // Discord doesn't seem to include this field if the default 3 day expiration is used (3 days = 4320 minutes)
@@ -239,6 +245,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return AnnouncementThread(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       appliedTags: maybeParse<List<Snowflake>, List<dynamic>>(
           raw['applied_tags'], (tags) => parseMany(tags, Snowflake.parse)),
@@ -279,6 +286,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return PublicThread(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       appliedTags: maybeParse<List<Snowflake>, List<dynamic>>(
           raw['applied_tags'], (tags) => parseMany(tags, Snowflake.parse)),
@@ -319,6 +327,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return PrivateThread(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       isInvitable: (raw['thread_metadata'] as Map)['invitable'] as bool,
       appliedTags: maybeParse<List<Snowflake>, List<dynamic>>(
@@ -360,6 +369,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GuildStageChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       bitrate: raw['bitrate'] as int,
       guildId: guildId ?? Snowflake.parse(raw['guild_id']!),
@@ -389,6 +399,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return DirectoryChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
     );
   }
@@ -400,6 +411,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return ForumChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       defaultLayout: maybeParse(raw['default_forum_layout'], ForumLayout.parse),
       topic: raw['topic'] as String?,
@@ -436,6 +448,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
     return GuildMediaChannel(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       topic: raw['topic'] as String?,
       rateLimitPerUser: maybeParse<Duration?, int>(raw['rate_limit_per_user'],
@@ -531,6 +544,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   StageInstance parseStageInstance(Map<String, Object?> raw) {
     return StageInstance(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       guildId: Snowflake.parse(raw['guild_id']!),
       channelId: Snowflake.parse(raw['channel_id']!),
@@ -899,7 +913,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     return threadList;
   }
 
-  /// List the DM channels the current user is in.
+  /// List the user's DM channels.
   Future<List<DmChannel>> listDmChannels() async {
     final route = HttpRoute()
       ..users(id: '@me')

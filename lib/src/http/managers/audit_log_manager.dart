@@ -11,15 +11,18 @@ import 'package:firebridge/src/utils/parsing_helpers.dart';
 class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
   final Snowflake guildId;
 
-  AuditLogManager(super.config, super.client, {required this.guildId}) : super(identifier: '$guildId.auditLogEntries');
+  AuditLogManager(super.config, super.client, {required this.guildId})
+      : super(identifier: '$guildId.auditLogEntries');
 
   @override
-  PartialAuditLogEntry operator [](Snowflake id) => PartialAuditLogEntry(id: id, manager: this);
+  PartialAuditLogEntry operator [](Snowflake id) =>
+      PartialAuditLogEntry(id: id, json: {}, manager: this);
 
   @override
   AuditLogEntry parse(Map<String, Object?> raw) {
     return AuditLogEntry(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       targetId: maybeParse(raw['target_id'], Snowflake.parse),
       changes: maybeParseMany(raw['changes'], parseAuditLogChange),
@@ -45,7 +48,8 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
       manager: this,
       applicationId: maybeParse(raw['application_id'], Snowflake.parse),
       autoModerationRuleName: raw['auto_moderation_rule_name'] as String?,
-      autoModerationTriggerType: raw['auto_moderation_rule_trigger_type'] as String?,
+      autoModerationTriggerType:
+          raw['auto_moderation_rule_trigger_type'] as String?,
       channelId: maybeParse(raw['channel_id'], Snowflake.parse),
       count: raw['count'] as String?,
       deleteMemberDays: raw['delete_member_days'] as String?,
@@ -53,7 +57,8 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
       membersRemoved: raw['members_removed'] as String?,
       messageId: maybeParse(raw['message_id'], Snowflake.parse),
       roleName: raw['role_name'] as String?,
-      overwriteType: maybeParse(raw['type'], (String raw) => PermissionOverwriteType.parse(int.parse(raw))),
+      overwriteType: maybeParse(raw['type'],
+          (String raw) => PermissionOverwriteType.parse(int.parse(raw))),
       integrationType: raw['integration_type'] as String?,
     );
   }
@@ -70,7 +75,12 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
   }
 
   // List the audit log in the guild.
-  Future<List<AuditLogEntry>> list({Snowflake? userId, AuditLogEvent? type, Snowflake? before, Snowflake? after, int? limit}) async {
+  Future<List<AuditLogEntry>> list(
+      {Snowflake? userId,
+      AuditLogEvent? type,
+      Snowflake? before,
+      Snowflake? after,
+      int? limit}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..auditLogs();
@@ -84,9 +94,12 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
 
     final response = await client.httpHandler.executeSafe(request);
     final responseBody = response.jsonBody as Map<String, Object?>;
-    final entries = parseMany(responseBody['audit_log_entries'] as List<Object?>, parse);
+    final entries =
+        parseMany(responseBody['audit_log_entries'] as List<Object?>, parse);
 
-    final applicationCommands = parseMany(responseBody['application_commands'] as List<Object?>, (Map<String, Object?> raw) {
+    final applicationCommands =
+        parseMany(responseBody['application_commands'] as List<Object?>,
+            (Map<String, Object?> raw) {
       final guildId = maybeParse(raw['guild_id'], Snowflake.parse);
 
       if (guildId == null) {
@@ -97,19 +110,26 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
     });
     applicationCommands.forEach(client.updateCacheWith);
 
-    final autoModerationRules = parseMany(responseBody['auto_moderation_rules'] as List<Object?>, client.guilds[guildId].autoModerationRules.parse);
+    final autoModerationRules = parseMany(
+        responseBody['auto_moderation_rules'] as List<Object?>,
+        client.guilds[guildId].autoModerationRules.parse);
     autoModerationRules.forEach(client.updateCacheWith);
 
-    final scheduledEvents = parseMany(responseBody['guild_scheduled_events'] as List<Object?>, client.guilds[guildId].scheduledEvents.parse);
+    final scheduledEvents = parseMany(
+        responseBody['guild_scheduled_events'] as List<Object?>,
+        client.guilds[guildId].scheduledEvents.parse);
     scheduledEvents.forEach(client.updateCacheWith);
 
-    final threads = parseMany(responseBody['threads'] as List<Object?>, client.channels.parse);
+    final threads = parseMany(
+        responseBody['threads'] as List<Object?>, client.channels.parse);
     threads.forEach(client.updateCacheWith);
 
-    final users = parseMany(responseBody['users'] as List<Object?>, client.users.parse);
+    final users =
+        parseMany(responseBody['users'] as List<Object?>, client.users.parse);
     users.forEach(client.updateCacheWith);
 
-    final webhooks = parseMany(responseBody['webhooks'] as List<Object?>, client.webhooks.parse);
+    final webhooks = parseMany(
+        responseBody['webhooks'] as List<Object?>, client.webhooks.parse);
     webhooks.forEach(client.updateCacheWith);
 
     entries.forEach(client.updateCacheWith);

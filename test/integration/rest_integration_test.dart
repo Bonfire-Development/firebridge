@@ -12,17 +12,20 @@ void main() {
   final testTextChannel = Platform.environment['TEST_TEXT_CHANNEL'];
   final testGuild = Platform.environment['TEST_GUILD'];
 
-  test('Nyxx.connectRest', skip: testToken != null ? false : 'No test token provided', () async {
+  test('Nyxx.connectRest',
+      skip: testToken != null ? false : 'No test token provided', () async {
     late NyxxRest client;
 
-    await expectLater(() async => client = await Nyxx.connectRest(testToken!), completes);
+    await expectLater(
+        () async => client = await Nyxx.connectRest(testToken!), completes);
     await expectLater(client.close(), completes);
   });
 
   group('HttpHandler', () {
     test('latency & realLatency', () async {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions)
+          .thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
 
       final handler = HttpHandler(client);
@@ -37,7 +40,8 @@ void main() {
     });
   });
 
-  group('NyxxRest', skip: testToken != null ? false : 'No test token provided', () {
+  group('NyxxRest', skip: testToken != null ? false : 'No test token provided',
+      () {
     late NyxxRest client;
 
     // package:test doesn't seem to re-run the body of the group for each test, so
@@ -62,13 +66,17 @@ void main() {
       await expectLater(client.users.fetchCurrentUserConnections(), completes);
     });
 
-    test('channels', skip: testTextChannel != null ? false : 'No test channel provided', () async {
+    test('channels',
+        skip: testTextChannel != null ? false : 'No test channel provided',
+        () async {
       final channelId = Snowflake.parse(testTextChannel!);
 
       await expectLater(client.channels.fetch(channelId), completes);
     });
 
-    test('messages', skip: testTextChannel != null ? false : 'No test channel provided', () async {
+    test('messages',
+        skip: testTextChannel != null ? false : 'No test channel provided',
+        () async {
       final channelId = Snowflake.parse(testTextChannel!);
       final channel = await client.channels.get(channelId) as TextChannel;
 
@@ -85,14 +93,16 @@ void main() {
 
       late Message message;
       await expectLater(
-        () async => message = await channel.sendMessage(MessageBuilder(content: 'Test message')),
+        () async => message =
+            await channel.sendMessage(MessageBuilder(content: 'Test message')),
         completes,
       );
 
       expect(message.content, equals('Test message'));
 
       await expectLater(
-        () async => message = await message.update(MessageUpdateBuilder(content: 'New content')),
+        () async => message =
+            await message.update(MessageUpdateBuilder(content: 'New content')),
         completes,
       );
 
@@ -116,7 +126,8 @@ void main() {
       expect(message.attachments.first.fileName, equals('1.png'));
 
       await expectLater(message.attachments.first.fetch(), completes);
-      await expectLater(message.attachments.first.fetchStreamed().drain(), completes);
+      await expectLater(
+          message.attachments.first.fetchStreamed().drain(), completes);
 
       // ignore: unused_local_variable
       late Message message2;
@@ -138,18 +149,51 @@ void main() {
             content: 'Components test',
             components: [
               ActionRowBuilder(components: [
-                ButtonBuilder(style: ButtonStyle.primary, label: 'Primary', customId: 'a'),
-                ButtonBuilder(style: ButtonStyle.secondary, label: 'Secondary', customId: 'b'),
-                ButtonBuilder(style: ButtonStyle.success, label: 'Success', customId: 'c'),
-                ButtonBuilder(style: ButtonStyle.danger, label: 'Danger', customId: 'd'),
-                ButtonBuilder(style: ButtonStyle.link, label: 'Primary', url: Uri.https('pub.dev', '/packages/nyxx')),
+                ButtonBuilder(
+                    style: ButtonStyle.primary,
+                    label: 'Primary',
+                    customId: 'a'),
+                ButtonBuilder(
+                    style: ButtonStyle.secondary,
+                    label: 'Secondary',
+                    customId: 'b'),
+                ButtonBuilder(
+                    style: ButtonStyle.success,
+                    label: 'Success',
+                    customId: 'c'),
+                ButtonBuilder(
+                    style: ButtonStyle.danger, label: 'Danger', customId: 'd'),
+                ButtonBuilder(
+                    style: ButtonStyle.link,
+                    label: 'Primary',
+                    url: Uri.https('pub.dev', '/packages/nyxx')),
               ]),
               ActionRowBuilder(components: [
-                ButtonBuilder(style: ButtonStyle.primary, label: 'Primary', customId: 'e', isDisabled: true),
-                ButtonBuilder(style: ButtonStyle.secondary, label: 'Secondary', customId: 'f', isDisabled: true),
-                ButtonBuilder(style: ButtonStyle.success, label: 'Success', customId: 'g', isDisabled: true),
-                ButtonBuilder(style: ButtonStyle.danger, label: 'Danger', customId: 'h', isDisabled: true),
-                ButtonBuilder(style: ButtonStyle.link, label: 'Primary', url: Uri.https('pub.dev', '/packages/nyxx'), isDisabled: true),
+                ButtonBuilder(
+                    style: ButtonStyle.primary,
+                    label: 'Primary',
+                    customId: 'e',
+                    isDisabled: true),
+                ButtonBuilder(
+                    style: ButtonStyle.secondary,
+                    label: 'Secondary',
+                    customId: 'f',
+                    isDisabled: true),
+                ButtonBuilder(
+                    style: ButtonStyle.success,
+                    label: 'Success',
+                    customId: 'g',
+                    isDisabled: true),
+                ButtonBuilder(
+                    style: ButtonStyle.danger,
+                    label: 'Danger',
+                    customId: 'h',
+                    isDisabled: true),
+                ButtonBuilder(
+                    style: ButtonStyle.link,
+                    label: 'Primary',
+                    url: Uri.https('pub.dev', '/packages/nyxx'),
+                    isDisabled: true),
               ]),
               ActionRowBuilder(components: [
                 SelectMenuBuilder(
@@ -164,6 +208,7 @@ void main() {
                         id: Snowflake.zero,
                         manager: client.guilds[Snowflake.zero].emojis,
                         name: '❤️',
+                        json: {},
                       ),
                     ),
                     SelectMenuOptionBuilder(label: 'Three', value: '3'),
@@ -179,7 +224,9 @@ void main() {
       await expectLater(message.delete(), completes);
     });
 
-    test('webhooks', skip: testTextChannel != null ? false : 'No test channel provided', () async {
+    test('webhooks',
+        skip: testTextChannel != null ? false : 'No test channel provided',
+        () async {
       final channelId = Snowflake.parse(testTextChannel!);
 
       late Webhook webhook;
@@ -195,7 +242,8 @@ void main() {
       expect(webhook.token, isNotNull);
 
       await expectLater(
-        () async => webhook = await webhook.update(WebhookUpdateBuilder(name: 'New name')),
+        () async => webhook =
+            await webhook.update(WebhookUpdateBuilder(name: 'New name')),
         completes,
       );
 
@@ -206,7 +254,10 @@ void main() {
 
       late Message message;
       await expectLater(
-        () async => message = (await webhook.execute(token: token, wait: true, MessageBuilder(content: 'Test webhook message')))!,
+        () async => message = (await webhook.execute(
+            token: token,
+            wait: true,
+            MessageBuilder(content: 'Test webhook message')))!,
         completes,
       );
 
@@ -214,7 +265,10 @@ void main() {
       expect(message.author.id, equals(webhook.id));
 
       await expectLater(
-        () async => message = await webhook.updateMessage(message.id, token: token, MessageUpdateBuilder(content: 'New webhook content')),
+        () async => message = await webhook.updateMessage(
+            message.id,
+            token: token,
+            MessageUpdateBuilder(content: 'New webhook content')),
         completes,
       );
 
@@ -235,11 +289,13 @@ void main() {
       await expectLater(client.voice.listRegions(), completes);
     });
 
-    test('guilds', skip: testGuild != null ? false : 'No test guild provided', () async {
+    test('guilds', skip: testGuild != null ? false : 'No test guild provided',
+        () async {
       final guildId = Snowflake.parse(testGuild!);
 
       late Guild guild;
-      await expectLater(() async => guild = await client.guilds.fetch(guildId), completes);
+      await expectLater(
+          () async => guild = await client.guilds.fetch(guildId), completes);
 
       await expectLater(guild.fetchPreview(), completes);
       await expectLater(guild.fetchChannels(), completes);
@@ -258,14 +314,17 @@ void main() {
       await expectLater(guild.fetchOnboarding(), completes);
     });
 
-    test('members', skip: testGuild != null ? false : 'No test guild provided', () async {
+    test('members', skip: testGuild != null ? false : 'No test guild provided',
+        () async {
       final guildId = Snowflake.parse(testGuild!);
 
       final user = await client.users.fetchCurrentUser();
-      await expectLater(client.guilds[guildId].members.fetch(user.id), completes);
+      await expectLater(
+          client.guilds[guildId].members.fetch(user.id), completes);
     });
 
-    test('roles', skip: testGuild != null ? false : 'No test guild provided', () async {
+    test('roles', skip: testGuild != null ? false : 'No test guild provided',
+        () async {
       final guildId = Snowflake.parse(testGuild!);
 
       await expectLater(client.guilds[guildId].roles.list(), completes);
@@ -276,14 +335,16 @@ void main() {
       await expectLater(client.gateway.fetchGatewayConfiguration(), completes);
     });
 
-    test('scheduledEvents', skip: testGuild != null ? false : 'No test guild provided', () async {
+    test('scheduledEvents',
+        skip: testGuild != null ? false : 'No test guild provided', () async {
       final guildId = Snowflake.parse(testGuild!);
       final guild = client.guilds[guildId];
 
       await expectLater(guild.scheduledEvents.list(), completes);
     });
 
-    test('emojis', skip: testGuild != null ? false : 'No test guild provided', () async {
+    test('emojis', skip: testGuild != null ? false : 'No test guild provided',
+        () async {
       final guildId = Snowflake.parse(testGuild!);
 
       await expectLater(client.guilds[guildId].emojis.list(), completes);
@@ -339,16 +400,24 @@ void main() {
       late ApplicationCommand command;
 
       await expectLater(
-        () async => command = await client.commands.create(ApplicationCommandBuilder.chatInput(name: 'test', description: 'A test command', options: [])),
+        () async => command = await client.commands.create(
+            ApplicationCommandBuilder.chatInput(
+                name: 'test', description: 'A test command', options: [])),
         completes,
       );
 
       await expectLater(command.fetch(), completes);
-      await expectLater(command.update(ApplicationCommandUpdateBuilder.chatInput(name: 'new_name')), completes);
+      await expectLater(
+          command.update(
+              ApplicationCommandUpdateBuilder.chatInput(name: 'new_name')),
+          completes);
       await expectLater(client.commands.list(), completion(isNotEmpty));
       await expectLater(
-        () async => command =
-            (await client.commands.bulkOverride([ApplicationCommandBuilder.chatInput(name: 'test_2', description: 'A test command', options: [])])).single,
+        () async => command = (await client.commands.bulkOverride([
+          ApplicationCommandBuilder.chatInput(
+              name: 'test_2', description: 'A test command', options: [])
+        ]))
+            .single,
         completes,
       );
 
@@ -357,7 +426,8 @@ void main() {
         final guild = client.guilds[testGuildId];
 
         await expectLater(guild.commands.listPermissions(), completes);
-        await expectLater(guild.commands.fetchPermissions(command.id), completes);
+        await expectLater(
+            guild.commands.fetchPermissions(command.id), completes);
       }
 
       await expectLater(command.delete(), completes);

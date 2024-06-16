@@ -7,11 +7,14 @@ import 'package:firebridge/src/models/snowflake.dart';
 /// A partial [TextChannel].
 class PartialTextChannel extends PartialChannel {
   /// A [Manager] for the [Message]s of this channel.
-  MessageManager get messages => MessageManager(manager.client.options.messageCacheConfig, manager.client, channelId: id);
+  MessageManager get messages =>
+      MessageManager(manager.client.options.messageCacheConfig, manager.client,
+          channelId: id);
 
   /// Create a new [PartialTextChannel].
   /// @nodoc
-  PartialTextChannel({required super.id, required super.manager});
+  PartialTextChannel(
+      {required super.id, required super.json, required super.manager});
 
   /// Send a message to this channel.
   ///
@@ -20,7 +23,8 @@ class PartialTextChannel extends PartialChannel {
   /// External references:
   /// * [MessageManager.create]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/channel#create-message
-  Future<Message> sendMessage(MessageBuilder builder) => messages.create(builder);
+  Future<Message> sendMessage(MessageBuilder builder) =>
+      messages.create(builder);
 
   /// Trigger a typing indicator in this channel from the current user.
   ///
@@ -48,7 +52,7 @@ abstract class TextChannel extends PartialTextChannel implements Channel {
   DateTime? get lastPinTimestamp;
 
   /// @nodoc
-  TextChannel({required super.id, required super.manager});
+  TextChannel({required super.id, required super.json, required super.manager});
 
   /// The last message sent in this channel, or `null` if no messages have been sent.
   PartialMessage? get lastMessage;

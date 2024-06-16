@@ -16,7 +16,8 @@ class PartialAuditLogEntry extends ManagedSnowflakeEntity<AuditLogEntry> {
 
   /// Create a new [PartialAuditLogEntry].
   /// @nodoc
-  PartialAuditLogEntry({required super.id, required this.manager});
+  PartialAuditLogEntry(
+      {required super.id, required super.json, required this.manager});
 }
 
 /// {@template audit_log_entry}
@@ -45,6 +46,7 @@ class AuditLogEntry extends PartialAuditLogEntry {
   /// @nodoc
   AuditLogEntry({
     required super.id,
+    required super.json,
     required super.manager,
     required this.targetId,
     required this.changes,
@@ -55,7 +57,8 @@ class AuditLogEntry extends PartialAuditLogEntry {
   });
 
   /// The user that triggered the action.
-  PartialUser? get user => userId == null ? null : manager.client.users[userId!];
+  PartialUser? get user =>
+      userId == null ? null : manager.client.users[userId!];
 }
 
 /// {@template audit_log_change}
@@ -218,11 +221,16 @@ class AuditLogEntryInfo with ToStringHelper {
   });
 
   /// The application whose permissions were targeted.
-  PartialApplication? get application => applicationId == null ? null : manager.client.applications[applicationId!];
+  PartialApplication? get application => applicationId == null
+      ? null
+      : manager.client.applications[applicationId!];
 
   /// The channel in which entities were targeted.
-  PartialChannel? get channel => channelId == null ? null : manager.client.channels[channelId!];
+  PartialChannel? get channel =>
+      channelId == null ? null : manager.client.channels[channelId!];
 
   /// The targeted message.
-  PartialMessage? get message => messageId == null ? null : (channel as PartialTextChannel?)?.messages[messageId!];
+  PartialMessage? get message => messageId == null
+      ? null
+      : (channel as PartialTextChannel?)?.messages[messageId!];
 }

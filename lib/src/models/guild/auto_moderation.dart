@@ -11,13 +11,15 @@ import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 /// A partial [AutoModerationRule].
-class PartialAutoModerationRule extends WritableSnowflakeEntity<AutoModerationRule> {
+class PartialAutoModerationRule
+    extends WritableSnowflakeEntity<AutoModerationRule> {
   @override
   final AutoModerationManager manager;
 
   /// Create a new [PartialAutoModerationRule].
   /// @nodoc
-  PartialAutoModerationRule({required super.id, required this.manager});
+  PartialAutoModerationRule(
+      {required super.id, required super.json, required this.manager});
 }
 
 /// {@template auto_moderation_rule}
@@ -58,6 +60,7 @@ class AutoModerationRule extends PartialAutoModerationRule {
   /// @nodoc
   AutoModerationRule({
     required super.id,
+    required super.json,
     required super.manager,
     required this.guildId,
     required this.name,
@@ -77,9 +80,11 @@ class AutoModerationRule extends PartialAutoModerationRule {
 
   PartialMember get creatorMember => guild.members[creatorId];
 
-  List<PartialRole> get exemptRoles => exemptRoleIds.map((e) => guild.roles[e]).toList();
+  List<PartialRole> get exemptRoles =>
+      exemptRoleIds.map((e) => guild.roles[e]).toList();
 
-  List<PartialChannel> get exemptChannels => exemptChannelIds.map((e) => manager.client.channels[e]).toList();
+  List<PartialChannel> get exemptChannels =>
+      exemptChannelIds.map((e) => manager.client.channels[e]).toList();
 }
 
 /// The type of event on which an [AutoModerationRule] triggers.
@@ -94,9 +99,11 @@ enum AutoModerationEventType {
   /// Parse an [AutoModerationEventType] from an [int].
   ///
   /// The [value] must be a valid auto moderation event type.
-  factory AutoModerationEventType.parse(int value) => AutoModerationEventType.values.firstWhere(
+  factory AutoModerationEventType.parse(int value) =>
+      AutoModerationEventType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown auto moderation event type', value),
+        orElse: () =>
+            throw FormatException('Unknown auto moderation event type', value),
       );
 
   @override
@@ -188,9 +195,11 @@ enum KeywordPresetType {
   /// Parse an [KeywordPresetType] from an [int].
   ///
   /// The [value] must be a valid keyword preset type.
-  factory KeywordPresetType.parse(int value) => KeywordPresetType.values.firstWhere(
+  factory KeywordPresetType.parse(int value) =>
+      KeywordPresetType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown keyword preset type', value),
+        orElse: () =>
+            throw FormatException('Unknown keyword preset type', value),
       );
 
   @override
@@ -201,7 +210,9 @@ enum KeywordPresetType {
 /// Describes an action to take when an [AutoModerationRule] is triggered.
 /// {@endtemplate}
 // TODO(abitofevrything): Remove `implements AutoModerationActionBuilder`
-class AutoModerationAction with ToStringHelper implements AutoModerationActionBuilder {
+class AutoModerationAction
+    with ToStringHelper
+    implements AutoModerationActionBuilder {
   @override
   final ActionType type;
 
@@ -272,7 +283,9 @@ class ActionMetadata with ToStringHelper implements ActionMetadataBuilder {
   });
 
   /// The channel to send the alert message to.
-  PartialTextChannel? get channel => channelId == null ? null : manager.client.channels[channelId!] as PartialTextChannel?;
+  PartialTextChannel? get channel => channelId == null
+      ? null
+      : manager.client.channels[channelId!] as PartialTextChannel?;
 
   @override
   @Deprecated('Use ActionMetadataBuilder instead')

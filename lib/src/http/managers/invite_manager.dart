@@ -22,25 +22,33 @@ class InviteManager {
   Invite parse(Map<String, Object?> raw) {
     final guild = maybeParse(
       raw['guild'],
-      (Map<String, Object?> raw) => PartialGuild(id: Snowflake.parse(raw['id']!), manager: client.guilds),
+      (Map<String, Object?> raw) => PartialGuild(
+          id: Snowflake.parse(raw['id']!), json: raw, manager: client.guilds),
     );
 
     return Invite(
       code: raw['code'] as String,
       guild: guild,
-      channel: PartialChannel(id: Snowflake.parse((raw['channel'] as Map<String, Object?>)['id']!), manager: client.channels),
+      channel: PartialChannel(
+          id: Snowflake.parse((raw['channel'] as Map<String, Object?>)['id']!),
+          json: raw,
+          manager: client.channels),
       inviter: maybeParse(raw['inviter'], client.users.parse),
       targetType: maybeParse(raw['target_type'], TargetType.parse),
       targetUser: maybeParse(raw['target_user'], client.users.parse),
       targetApplication: maybeParse(
         raw['target_application'],
-        (Map<String, Object?> raw) => PartialApplication(id: Snowflake.parse(raw['id']!), manager: client.applications),
+        (Map<String, Object?> raw) => PartialApplication(
+            id: Snowflake.parse(raw['id']!), manager: client.applications),
       ),
       approximatePresenceCount: raw['approximate_presence_count'] as int?,
       approximateMemberCount: raw['approximate_member_count'] as int?,
       expiresAt: maybeParse(raw['expires_at'], DateTime.parse),
       // Don't use a tearoff so we don't evaluate `guild!.id` unless guild_scheduled_event is set.
-      guildScheduledEvent: maybeParse(raw['guild_scheduled_event'], (Map<String, Object?> raw) => client.guilds[guild!.id].scheduledEvents.parse(raw)),
+      guildScheduledEvent: maybeParse(
+          raw['guild_scheduled_event'],
+          (Map<String, Object?> raw) =>
+              client.guilds[guild!.id].scheduledEvents.parse(raw)),
     );
   }
 
@@ -68,12 +76,16 @@ class InviteManager {
     );
   }
 
-  Future<Invite> fetch(String code, {bool? withCounts, bool? withExpiration, Snowflake? scheduledEventId}) async {
+  Future<Invite> fetch(String code,
+      {bool? withCounts,
+      bool? withExpiration,
+      Snowflake? scheduledEventId}) async {
     final route = HttpRoute()..invites(id: code);
     final request = BasicRequest(route, queryParameters: {
       if (withCounts != null) 'with_counts': withCounts.toString(),
       if (withExpiration != null) 'with_expiration': withExpiration.toString(),
-      if (scheduledEventId != null) 'guild_scheduled_event_id': scheduledEventId.toString(),
+      if (scheduledEventId != null)
+        'guild_scheduled_event_id': scheduledEventId.toString(),
     });
 
     final response = await client.httpHandler.executeSafe(request);
@@ -86,7 +98,8 @@ class InviteManager {
   /// Delete an invite.
   Future<Invite> delete(String code, {String? auditLogReason}) async {
     final route = HttpRoute()..invites(id: code);
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     final response = await client.httpHandler.executeSafe(request);
     final invite = parse(response.jsonBody as Map<String, Object?>);

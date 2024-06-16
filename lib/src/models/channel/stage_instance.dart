@@ -33,6 +33,7 @@ class StageInstance extends SnowflakeEntity<StageInstance> {
   /// @nodoc
   StageInstance({
     required super.id,
+    required super.json,
     required this.manager,
     required this.guildId,
     required this.channelId,
@@ -48,13 +49,16 @@ class StageInstance extends SnowflakeEntity<StageInstance> {
   PartialChannel get channel => manager.client.channels[channelId];
 
   /// The scheduled event associated with this instance.
-  PartialScheduledEvent? get scheduledEvent => scheduledEventId == null ? null : guild.scheduledEvents[scheduledEventId!];
+  PartialScheduledEvent? get scheduledEvent => scheduledEventId == null
+      ? null
+      : guild.scheduledEvents[scheduledEventId!];
 
   @override
   Future<StageInstance> fetch() => manager.fetchStageInstance(channelId);
 
   @override
-  Future<StageInstance> get() async => manager.stageInstanceCache[channelId] ?? await fetch();
+  Future<StageInstance> get() async =>
+      manager.stageInstanceCache[channelId] ?? await fetch();
 }
 
 /// The privacy level of a [StageInstance].

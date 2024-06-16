@@ -1,3 +1,7 @@
+## 6.2.8
+__06.15.2024__
+- feat: Add support for retrieving DMS
+
 ## 6.2.6
 __05.15.2024__
 - feat: Remove patches from nyxx_self

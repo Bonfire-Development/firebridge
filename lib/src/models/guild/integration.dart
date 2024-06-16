@@ -12,10 +12,12 @@ class PartialIntegration extends ManagedSnowflakeEntity<Integration> {
 
   /// Create a new [PartialIntegration].
   /// @nodoc
-  PartialIntegration({required super.id, required this.manager});
+  PartialIntegration(
+      {required super.id, required super.json, required this.manager});
 
   /// Delete this integration.
-  Future<void> delete({String? auditLogReason}) => manager.delete(id, auditLogReason: auditLogReason);
+  Future<void> delete({String? auditLogReason}) =>
+      manager.delete(id, auditLogReason: auditLogReason);
 }
 
 /// {@template integration}
@@ -71,6 +73,7 @@ class Integration extends PartialIntegration {
   /// @nodoc
   Integration({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.type,
@@ -90,7 +93,9 @@ class Integration extends PartialIntegration {
   });
 
   /// The role this integration uses for subscribers.
-  PartialRole? get role => roleId == null ? null : manager.client.guilds[manager.guildId].roles[roleId!];
+  PartialRole? get role => roleId == null
+      ? null
+      : manager.client.guilds[manager.guildId].roles[roleId!];
 }
 
 /// The behavior of an integration when a member's subscription expires.
@@ -106,9 +111,11 @@ enum IntegrationExpireBehavior {
   /// Parse an [IntegrationExpireBehavior] from an [int].
   ///
   /// The [value] must be a valid integration expire behavior.
-  factory IntegrationExpireBehavior.parse(int value) => IntegrationExpireBehavior.values.firstWhere(
+  factory IntegrationExpireBehavior.parse(int value) =>
+      IntegrationExpireBehavior.values.firstWhere(
         (behavior) => behavior.value == value,
-        orElse: () => throw FormatException('Unknown integration expire behavior', value),
+        orElse: () =>
+            throw FormatException('Unknown integration expire behavior', value),
       );
 
   @override

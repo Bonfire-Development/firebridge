@@ -36,9 +36,11 @@ enum StickerFormatType {
   /// Parse a [StickerFormatType] from a [value].
   ///
   /// The [value] must be a valid sticker format type
-  factory StickerFormatType.parse(int value) => StickerFormatType.values.firstWhere(
+  factory StickerFormatType.parse(int value) =>
+      StickerFormatType.values.firstWhere(
         (state) => state.value == value,
-        orElse: () => throw FormatException('Unknown sticker format type', value),
+        orElse: () =>
+            throw FormatException('Unknown sticker format type', value),
       );
 
   @override
@@ -87,7 +89,11 @@ class StickerItem extends SnowflakeEntity<StickerItem> {
 
   /// {@macro sticker_item}
   /// @nodoc
-  StickerItem({required super.id, required this.name, required this.formatType});
+  StickerItem(
+      {required super.id,
+      required super.json,
+      required this.name,
+      required this.formatType});
 
   @override
   Future<StickerItem> fetch() => get();

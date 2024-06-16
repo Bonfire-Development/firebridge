@@ -76,6 +76,7 @@ class ForumChannel extends Channel implements GuildChannel, ThreadsOnlyChannel {
   /// @nodoc
   ForumChannel({
     required super.id,
+    required super.json,
     required super.manager,
     required this.defaultLayout,
     required this.topic,
@@ -100,42 +101,58 @@ class ForumChannel extends Channel implements GuildChannel, ThreadsOnlyChannel {
   PartialGuild get guild => manager.client.guilds[guildId];
 
   @override
-  PartialChannel? get parent => parentId == null ? null : manager.client.channels[parentId!];
+  PartialChannel? get parent =>
+      parentId == null ? null : manager.client.channels[parentId!];
 
   @override
-  Future<Thread> createForumThread(ForumThreadBuilder builder) => manager.createForumThread(id, builder);
+  Future<Thread> createForumThread(ForumThreadBuilder builder) =>
+      manager.createForumThread(id, builder);
 
   @override
-  Future<Thread> createThread(ThreadBuilder builder) => throw UnsupportedError('Cannot create a non forum thread in a forum channel');
+  Future<Thread> createThread(ThreadBuilder builder) => throw UnsupportedError(
+      'Cannot create a non forum thread in a forum channel');
 
   @override
-  Future<Thread> createThreadFromMessage(Snowflake messageId, ThreadFromMessageBuilder builder) =>
-      throw UnsupportedError('Cannot create a non forum thread in a forum channel');
+  Future<Thread> createThreadFromMessage(
+          Snowflake messageId, ThreadFromMessageBuilder builder) =>
+      throw UnsupportedError(
+          'Cannot create a non forum thread in a forum channel');
 
   @override
-  Future<void> deletePermissionOverwrite(Snowflake id) => manager.deletePermissionOverwrite(this.id, id);
+  Future<void> deletePermissionOverwrite(Snowflake id) =>
+      manager.deletePermissionOverwrite(this.id, id);
 
   @override
-  Future<ThreadList> listPrivateArchivedThreads({DateTime? before, int? limit}) => manager.listPrivateArchivedThreads(id, before: before, limit: limit);
+  Future<ThreadList> listPrivateArchivedThreads(
+          {DateTime? before, int? limit}) =>
+      manager.listPrivateArchivedThreads(id, before: before, limit: limit);
 
   @override
-  Future<ThreadList> listPublicArchivedThreads({DateTime? before, int? limit}) => manager.listPublicArchivedThreads(id, before: before, limit: limit);
+  Future<ThreadList> listPublicArchivedThreads(
+          {DateTime? before, int? limit}) =>
+      manager.listPublicArchivedThreads(id, before: before, limit: limit);
 
   @override
-  Future<ThreadList> listJoinedPrivateArchivedThreads({DateTime? before, int? limit}) =>
-      manager.listJoinedPrivateArchivedThreads(id, before: before, limit: limit);
+  Future<ThreadList> listJoinedPrivateArchivedThreads(
+          {DateTime? before, int? limit}) =>
+      manager.listJoinedPrivateArchivedThreads(id,
+          before: before, limit: limit);
 
   @override
-  Future<void> updatePermissionOverwrite(PermissionOverwriteBuilder builder) => manager.updatePermissionOverwrite(id, builder);
+  Future<void> updatePermissionOverwrite(PermissionOverwriteBuilder builder) =>
+      manager.updatePermissionOverwrite(id, builder);
 
   @override
-  Future<List<Webhook>> fetchWebhooks() => manager.client.webhooks.fetchChannelWebhooks(id);
+  Future<List<Webhook>> fetchWebhooks() =>
+      manager.client.webhooks.fetchChannelWebhooks(id);
 
   @override
   Future<List<InviteWithMetadata>> listInvites() => manager.listInvites(id);
 
   @override
-  Future<Invite> createInvite(InviteBuilder builder, {String? auditLogReason}) => manager.createInvite(id, builder, auditLogReason: auditLogReason);
+  Future<Invite> createInvite(InviteBuilder builder,
+          {String? auditLogReason}) =>
+      manager.createInvite(id, builder, auditLogReason: auditLogReason);
 }
 
 /// {@template forum_tag}

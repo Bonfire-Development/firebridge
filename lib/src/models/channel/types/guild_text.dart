@@ -18,7 +18,8 @@ import 'package:firebridge/src/models/webhook.dart';
 /// {@template guild_text_channel}
 /// A [TextChannel] in a [Guild].
 /// {@endtemplate}
-class GuildTextChannel extends TextChannel implements GuildChannel, HasThreadsChannel {
+class GuildTextChannel extends TextChannel
+    implements GuildChannel, HasThreadsChannel {
   /// The topic of this channel.
   final String? topic;
 
@@ -62,6 +63,7 @@ class GuildTextChannel extends TextChannel implements GuildChannel, HasThreadsCh
   /// @nodoc
   GuildTextChannel({
     required super.id,
+    required super.json,
     required super.manager,
     required this.topic,
     required this.defaultAutoArchiveDuration,
@@ -81,39 +83,55 @@ class GuildTextChannel extends TextChannel implements GuildChannel, HasThreadsCh
   PartialGuild get guild => manager.client.guilds[guildId];
 
   @override
-  PartialMessage? get lastMessage => lastMessageId == null ? null : messages[lastMessageId!];
+  PartialMessage? get lastMessage =>
+      lastMessageId == null ? null : messages[lastMessageId!];
 
   @override
-  PartialChannel? get parent => parentId == null ? null : manager.client.channels[parentId!];
+  PartialChannel? get parent =>
+      parentId == null ? null : manager.client.channels[parentId!];
 
   @override
-  Future<Thread> createThread(ThreadBuilder builder) => manager.createThread(id, builder);
+  Future<Thread> createThread(ThreadBuilder builder) =>
+      manager.createThread(id, builder);
 
   @override
-  Future<Thread> createThreadFromMessage(Snowflake messageId, ThreadFromMessageBuilder builder) => manager.createThreadFromMessage(id, messageId, builder);
+  Future<Thread> createThreadFromMessage(
+          Snowflake messageId, ThreadFromMessageBuilder builder) =>
+      manager.createThreadFromMessage(id, messageId, builder);
 
   @override
-  Future<void> deletePermissionOverwrite(Snowflake id) => manager.deletePermissionOverwrite(this.id, id);
+  Future<void> deletePermissionOverwrite(Snowflake id) =>
+      manager.deletePermissionOverwrite(this.id, id);
 
   @override
-  Future<ThreadList> listPrivateArchivedThreads({DateTime? before, int? limit}) => manager.listPrivateArchivedThreads(id, before: before, limit: limit);
+  Future<ThreadList> listPrivateArchivedThreads(
+          {DateTime? before, int? limit}) =>
+      manager.listPrivateArchivedThreads(id, before: before, limit: limit);
 
   @override
-  Future<ThreadList> listPublicArchivedThreads({DateTime? before, int? limit}) => manager.listPublicArchivedThreads(id, before: before, limit: limit);
+  Future<ThreadList> listPublicArchivedThreads(
+          {DateTime? before, int? limit}) =>
+      manager.listPublicArchivedThreads(id, before: before, limit: limit);
 
   @override
-  Future<ThreadList> listJoinedPrivateArchivedThreads({DateTime? before, int? limit}) =>
-      manager.listJoinedPrivateArchivedThreads(id, before: before, limit: limit);
+  Future<ThreadList> listJoinedPrivateArchivedThreads(
+          {DateTime? before, int? limit}) =>
+      manager.listJoinedPrivateArchivedThreads(id,
+          before: before, limit: limit);
 
   @override
-  Future<void> updatePermissionOverwrite(PermissionOverwriteBuilder builder) => manager.updatePermissionOverwrite(id, builder);
+  Future<void> updatePermissionOverwrite(PermissionOverwriteBuilder builder) =>
+      manager.updatePermissionOverwrite(id, builder);
 
   @override
-  Future<List<Webhook>> fetchWebhooks() => manager.client.webhooks.fetchChannelWebhooks(id);
+  Future<List<Webhook>> fetchWebhooks() =>
+      manager.client.webhooks.fetchChannelWebhooks(id);
 
   @override
   Future<List<InviteWithMetadata>> listInvites() => manager.listInvites(id);
 
   @override
-  Future<Invite> createInvite(InviteBuilder builder, {String? auditLogReason}) => manager.createInvite(id, builder, auditLogReason: auditLogReason);
+  Future<Invite> createInvite(InviteBuilder builder,
+          {String? auditLogReason}) =>
+      manager.createInvite(id, builder, auditLogReason: auditLogReason);
 }

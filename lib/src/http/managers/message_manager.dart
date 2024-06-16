@@ -34,14 +34,17 @@ class MessageManager extends Manager<Message> {
   final Snowflake channelId;
 
   /// Create a new [MessageManager].
-  MessageManager(super.config, super.client, {required this.channelId}) : super(identifier: '$channelId.messages');
+  MessageManager(super.config, super.client, {required this.channelId})
+      : super(identifier: '$channelId.messages');
 
   @override
-  PartialMessage operator [](Snowflake id) => PartialMessage(id: id, manager: this);
+  PartialMessage operator [](Snowflake id) =>
+      PartialMessage(id: id, json: {}, manager: this);
 
   @override
   Message parse(Map<String, Object?> raw, {Snowflake? guildId}) {
-    if (client.channels.cache[channelId] case GuildChannel(guildId: final guildIdFromChannel)) {
+    if (client.channels.cache[channelId]
+        case GuildChannel(guildId: final guildIdFromChannel)) {
       guildId ??= guildIdFromChannel;
     }
 
@@ -49,10 +52,13 @@ class MessageManager extends Manager<Message> {
 
     return Message(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       author: (webhookId == null
-          ? client.users.parse(raw['author'] as Map<String, Object?>)
-          : client.webhooks.parseWebhookAuthor(raw['author'] as Map<String, Object?>)) as MessageAuthor,
+              ? client.users.parse(raw['author'] as Map<String, Object?>)
+              : client.webhooks
+                  .parseWebhookAuthor(raw['author'] as Map<String, Object?>))
+          as MessageAuthor,
       content: raw['content'] as String,
       timestamp: DateTime.parse(raw['timestamp'] as String),
       editedTimestamp: maybeParse(raw['edited_timestamp'], DateTime.parse),
@@ -60,7 +66,8 @@ class MessageManager extends Manager<Message> {
       mentionsEveryone: raw['mention_everyone'] as bool,
       mentions: parseMany(raw['mentions'] as List, client.users.parse),
       roleMentionIds: parseMany(raw['mention_roles'] as List, Snowflake.parse),
-      channelMentions: maybeParseMany(raw['mention_channels'], parseChannelMention) ?? [],
+      channelMentions:
+          maybeParseMany(raw['mention_channels'], parseChannelMention) ?? [],
       attachments: parseMany(raw['attachments'] as List, parseAttachment),
       embeds: parseMany(raw['embeds'] as List, parseEmbed),
       reactions: maybeParseMany(raw['reactions'], parseReaction) ?? [],
@@ -71,7 +78,8 @@ class MessageManager extends Manager<Message> {
       activity: maybeParse(raw['activity'], parseMessageActivity),
       application: maybeParse(
         raw['application'],
-        (Map<String, Object?> raw) => PartialApplication(id: Snowflake.parse(raw['id']!), manager: client.applications),
+        (Map<String, Object?> raw) => PartialApplication(
+            id: Snowflake.parse(raw['id']!), manager: client.applications),
       ),
       applicationId: maybeParse(raw['application_id'], Snowflake.parse),
       reference: maybeParse(raw['message_reference'], parseMessageReference),
@@ -79,7 +87,8 @@ class MessageManager extends Manager<Message> {
       referencedMessage: maybeParse(raw['referenced_message'], parse),
       interaction: maybeParse(
         raw['interaction'],
-        (Map<String, Object?> raw) => parseMessageInteraction(raw, guildId: guildId),
+        (Map<String, Object?> raw) =>
+            parseMessageInteraction(raw, guildId: guildId),
       ),
       interactionMetadata: maybeParse(
         raw['interaction_metadata'],
@@ -88,15 +97,21 @@ class MessageManager extends Manager<Message> {
       thread: maybeParse(raw['thread'], client.channels.parse) as Thread?,
       components: maybeParseMany(raw['components'], parseMessageComponent),
       position: raw['position'] as int?,
-      roleSubscriptionData: maybeParse(raw['role_subscription_data'], parseRoleSubscriptionData),
-      stickers: parseMany(raw['sticker_items'] as List? ?? [], client.stickers.parseStickerItem),
-      resolved: maybeParse(raw['resolved'], (Map<String, Object?> raw) => client.interactions.parseResolvedData(raw, guildId: guildId, channelId: channelId)),
+      roleSubscriptionData:
+          maybeParse(raw['role_subscription_data'], parseRoleSubscriptionData),
+      stickers: parseMany(raw['sticker_items'] as List? ?? [],
+          client.stickers.parseStickerItem),
+      resolved: maybeParse(
+          raw['resolved'],
+          (Map<String, Object?> raw) => client.interactions
+              .parseResolvedData(raw, guildId: guildId, channelId: channelId)),
     );
   }
 
   ChannelMention parseChannelMention(Map<String, Object?> raw) {
     return ChannelMention(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: client.channels,
       guildId: Snowflake.parse(raw['guild_id']!),
       type: ChannelType.parse(raw['type'] as int),
@@ -117,7 +132,10 @@ class MessageManager extends Manager<Message> {
       height: raw['height'] as int?,
       width: raw['width'] as int?,
       isEphemeral: raw['ephemeral'] as bool? ?? false,
-      duration: maybeParse(raw['duration_secs'], (double value) => Duration(microseconds: (value * Duration.microsecondsPerSecond).floor())),
+      duration: maybeParse(
+          raw['duration_secs'],
+          (double value) => Duration(
+              microseconds: (value * Duration.microsecondsPerSecond).floor())),
       waveform: maybeParse(raw['waveform'], base64.decode),
       flags: maybeParse(raw['flags'], AttachmentFlags.new),
     );
@@ -202,11 +220,14 @@ class MessageManager extends Manager<Message> {
   Reaction parseReaction(Map<String, Object?> raw) {
     return Reaction(
       count: raw['count'] as int,
-      countDetails: parseReactionCountDetails(raw['count_details'] as Map<String, Object?>),
+      countDetails: parseReactionCountDetails(
+          raw['count_details'] as Map<String, Object?>),
       me: raw['me'] as bool,
       meBurst: raw['me_burst'] as bool,
-      emoji: client.guilds[Snowflake.zero].emojis.parse(raw['emoji'] as Map<String, Object?>),
-      burstColors: parseMany(raw['burst_colors'] as List, DiscordColor.parseHexString),
+      emoji: client.guilds[Snowflake.zero].emojis
+          .parse(raw['emoji'] as Map<String, Object?>),
+      burstColors:
+          parseMany(raw['burst_colors'] as List, DiscordColor.parseHexString),
     );
   }
 
@@ -247,12 +268,14 @@ class MessageManager extends Manager<Message> {
 
     return switch (type) {
       MessageComponentType.actionRow => ActionRowComponent(
-          components: parseMany(raw['components'] as List, parseMessageComponent),
+          components:
+              parseMany(raw['components'] as List, parseMessageComponent),
         ),
       MessageComponentType.button => ButtonComponent(
           style: ButtonStyle.parse(raw['style'] as int),
           label: raw['label'] as String?,
-          emoji: maybeParse(raw['emoji'], client.guilds[Snowflake.zero].emojis.parse),
+          emoji: maybeParse(
+              raw['emoji'], client.guilds[Snowflake.zero].emojis.parse),
           customId: raw['custom_id'] as String?,
           url: maybeParse(raw['url'], Uri.parse),
           isDisabled: raw['disabled'] as bool?,
@@ -278,7 +301,8 @@ class MessageManager extends Manager<Message> {
           options: maybeParseMany(raw['options'], parseSelectMenuOption),
           channelTypes: maybeParseMany(raw['channel_types'], ChannelType.parse),
           placeholder: raw['placeholder'] as String?,
-          defaultValues: maybeParseMany(raw['default_values'], parseSelectMenuDefaultValue),
+          defaultValues: maybeParseMany(
+              raw['default_values'], parseSelectMenuDefaultValue),
           minValues: raw['min_values'] as int?,
           maxValues: raw['max_values'] as int?,
           isDisabled: raw['disabled'] as bool?,
@@ -291,7 +315,8 @@ class MessageManager extends Manager<Message> {
       label: raw['label'] as String,
       value: raw['value'] as String,
       description: raw['description'] as String?,
-      emoji: maybeParse(raw['emoji'], client.guilds[Snowflake.zero].emojis.parse),
+      emoji:
+          maybeParse(raw['emoji'], client.guilds[Snowflake.zero].emojis.parse),
       isDefault: raw['default'] as bool?,
     );
   }
@@ -304,7 +329,8 @@ class MessageManager extends Manager<Message> {
   }
 
   // ignore: deprecated_member_use_from_same_package
-  MessageInteraction parseMessageInteraction(Map<String, Object?> raw, {Snowflake? guildId}) {
+  MessageInteraction parseMessageInteraction(Map<String, Object?> raw,
+      {Snowflake? guildId}) {
     final user = client.users.parse(raw['user'] as Map<String, Object?>);
 
     // ignore: deprecated_member_use_from_same_package
@@ -315,23 +341,32 @@ class MessageManager extends Manager<Message> {
       user: user,
       member: maybeParse(
         raw['member'],
-        (Map<String, Object?> raw) => client.guilds[guildId ?? Snowflake.zero].members[user.id],
+        (Map<String, Object?> raw) =>
+            client.guilds[guildId ?? Snowflake.zero].members[user.id],
       ),
     );
   }
 
-  MessageInteractionMetadata parseMessageInteractionMetadata(Map<String, Object?> raw) {
+  MessageInteractionMetadata parseMessageInteractionMetadata(
+      Map<String, Object?> raw) {
     return MessageInteractionMetadata(
       id: Snowflake.parse(raw['id']!),
       type: InteractionType.parse(raw['type'] as int),
       userId: Snowflake.parse(raw['user_id']!),
       authorizingIntegrationOwners: {
-        for (final MapEntry(:key, :value) in (raw['authorizing_integration_owners'] as Map<String, Object?>).entries)
-          ApplicationIntegrationType.parse(int.parse(key)): Snowflake.parse(value!),
+        for (final MapEntry(:key, :value)
+            in (raw['authorizing_integration_owners'] as Map<String, Object?>)
+                .entries)
+          ApplicationIntegrationType.parse(int.parse(key)):
+              Snowflake.parse(value!),
       },
-      originalResponseMessageId: maybeParse(raw['original_response_message_id'], Snowflake.parse),
-      interactedMessageId: maybeParse(raw['interacted_message_id'], Snowflake.parse),
-      triggeringInteractionMetadata: maybeParse(raw['triggering_interaction_metadata'], parseMessageInteractionMetadata),
+      originalResponseMessageId:
+          maybeParse(raw['original_response_message_id'], Snowflake.parse),
+      interactedMessageId:
+          maybeParse(raw['interacted_message_id'], Snowflake.parse),
+      triggeringInteractionMetadata: maybeParse(
+          raw['triggering_interaction_metadata'],
+          parseMessageInteractionMetadata),
     );
   }
 
@@ -342,7 +377,8 @@ class MessageManager extends Manager<Message> {
       ..messages();
 
     final HttpRequest request;
-    if (!identical(builder.attachments, sentinelList) && builder.attachments?.isNotEmpty == true) {
+    if (!identical(builder.attachments, sentinelList) &&
+        builder.attachments?.isNotEmpty == true) {
       final attachments = builder.attachments!;
       final payload = builder.build();
 
@@ -364,7 +400,8 @@ class MessageManager extends Manager<Message> {
         files: files,
       );
     } else {
-      request = BasicRequest(route, method: 'POST', body: jsonEncode(builder.build()));
+      request = BasicRequest(route,
+          method: 'POST', body: jsonEncode(builder.build()));
     }
 
     final response = await client.httpHandler.executeSafe(request);
@@ -395,7 +432,8 @@ class MessageManager extends Manager<Message> {
       ..messages(id: id.toString());
 
     final HttpRequest request;
-    if (!identical(builder.attachments, sentinelList) && builder.attachments?.isNotEmpty == true) {
+    if (!identical(builder.attachments, sentinelList) &&
+        builder.attachments?.isNotEmpty == true) {
       final attachments = builder.attachments!;
       final payload = builder.build();
 
@@ -417,7 +455,8 @@ class MessageManager extends Manager<Message> {
         files: files,
       );
     } else {
-      request = BasicRequest(route, method: 'PATCH', body: jsonEncode(builder.build()));
+      request = BasicRequest(route,
+          method: 'PATCH', body: jsonEncode(builder.build()));
     }
 
     final response = await client.httpHandler.executeSafe(request);
@@ -440,7 +479,11 @@ class MessageManager extends Manager<Message> {
   }
 
   /// Fetch multiple messages in this channel.
-  Future<List<Message>> fetchMany({Snowflake? around, Snowflake? before, Snowflake? after, int? limit}) async {
+  Future<List<Message>> fetchMany(
+      {Snowflake? around,
+      Snowflake? before,
+      Snowflake? after,
+      int? limit}) async {
     final route = HttpRoute()
       ..channels(id: channelId.toString())
       ..messages();
@@ -479,7 +522,8 @@ class MessageManager extends Manager<Message> {
   /// Bulk delete many messages at once
   ///
   /// This will throw an error if any of [ids] is not a valid message ID or if any of the messages are from before [Snowflake.bulkDeleteLimit].
-  Future<void> bulkDelete(Iterable<Snowflake> ids, {String? auditLogReason}) async {
+  Future<void> bulkDelete(Iterable<Snowflake> ids,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..channels(id: channelId.toString())
       ..messages()
@@ -513,7 +557,8 @@ class MessageManager extends Manager<Message> {
     final route = HttpRoute()
       ..channels(id: channelId.toString())
       ..pins(id: id.toString());
-    final request = BasicRequest(route, method: 'PUT', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'PUT', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
   }
@@ -523,7 +568,8 @@ class MessageManager extends Manager<Message> {
     final route = HttpRoute()
       ..channels(id: channelId.toString())
       ..pins(id: id.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
   }
@@ -564,7 +610,8 @@ class MessageManager extends Manager<Message> {
   }
 
   /// Deletes all reactions for a given emoji on a message.
-  Future<void> deleteReactionForUser(Snowflake id, Snowflake userId, ReactionBuilder emoji) async {
+  Future<void> deleteReactionForUser(
+      Snowflake id, Snowflake userId, ReactionBuilder emoji) async {
     final route = HttpRoute()
       ..channels(id: channelId.toString())
       ..messages(id: id.toString())
@@ -588,7 +635,8 @@ class MessageManager extends Manager<Message> {
   }
 
   /// Get a list of users that reacted with a given emoji on a message.
-  Future<List<User>> fetchReactions(Snowflake id, ReactionBuilder emoji, {Snowflake? after, int? limit}) async {
+  Future<List<User>> fetchReactions(Snowflake id, ReactionBuilder emoji,
+      {Snowflake? after, int? limit}) async {
     final route = HttpRoute()
       ..channels(id: channelId.toString())
       ..messages(id: id.toString())

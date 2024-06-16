@@ -12,26 +12,33 @@ import 'package:firebridge/src/utils/parsing_helpers.dart';
 class AutoModerationManager extends Manager<AutoModerationRule> {
   final Snowflake guildId;
 
-  AutoModerationManager(super.config, super.client, {required this.guildId}) : super(identifier: '$guildId.autoModerationRules');
+  AutoModerationManager(super.config, super.client, {required this.guildId})
+      : super(identifier: '$guildId.autoModerationRules');
 
   @override
-  PartialAutoModerationRule operator [](Snowflake id) => PartialAutoModerationRule(id: id, manager: this);
+  PartialAutoModerationRule operator [](Snowflake id) =>
+      PartialAutoModerationRule(id: id, json: {}, manager: this);
 
   @override
   AutoModerationRule parse(Map<String, Object?> raw) {
     return AutoModerationRule(
       id: Snowflake.parse(raw['id']!),
+      json: raw,
       manager: this,
       guildId: Snowflake.parse(raw['guild_id']!),
       name: raw['name'] as String,
       creatorId: Snowflake.parse(raw['creator_id']!),
       eventType: AutoModerationEventType.parse(raw['event_type'] as int),
       triggerType: TriggerType.parse(raw['trigger_type'] as int),
-      metadata: parseTriggerMetadata(raw['trigger_metadata'] as Map<String, Object?>),
-      actions: parseMany(raw['actions'] as List<Object?>, parseAutoModerationAction),
+      metadata:
+          parseTriggerMetadata(raw['trigger_metadata'] as Map<String, Object?>),
+      actions:
+          parseMany(raw['actions'] as List<Object?>, parseAutoModerationAction),
       isEnabled: raw['enabled'] as bool,
-      exemptRoleIds: parseMany(raw['exempt_roles'] as List<Object?>, Snowflake.parse),
-      exemptChannelIds: parseMany(raw['exempt_channels'] as List<Object?>, Snowflake.parse),
+      exemptRoleIds:
+          parseMany(raw['exempt_roles'] as List<Object?>, Snowflake.parse),
+      exemptChannelIds:
+          parseMany(raw['exempt_channels'] as List<Object?>, Snowflake.parse),
     );
   }
 
@@ -43,7 +50,8 @@ class AutoModerationManager extends Manager<AutoModerationRule> {
       presets: maybeParseMany(raw['presets'], KeywordPresetType.parse),
       allowList: maybeParseMany(raw['allow_list']),
       mentionTotalLimit: raw['mention_total_limit'] as int?,
-      isMentionRaidProtectionEnabled: raw['mention_raid_protection_enabled'] as bool?,
+      isMentionRaidProtectionEnabled:
+          raw['mention_raid_protection_enabled'] as bool?,
     );
   }
 
@@ -60,7 +68,8 @@ class AutoModerationManager extends Manager<AutoModerationRule> {
     return ActionMetadata(
       manager: this,
       channelId: maybeParse(raw['channel_id'], Snowflake.parse),
-      duration: maybeParse(raw['duration_seconds'], (int seconds) => Duration(seconds: seconds)),
+      duration: maybeParse(
+          raw['duration_seconds'], (int seconds) => Duration(seconds: seconds)),
       customMessage: raw['custom_message'] as String?,
     );
   }
@@ -95,12 +104,16 @@ class AutoModerationManager extends Manager<AutoModerationRule> {
   }
 
   @override
-  Future<AutoModerationRule> create(AutoModerationRuleBuilder builder, {String? auditLogReason}) async {
+  Future<AutoModerationRule> create(AutoModerationRuleBuilder builder,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..autoModeration()
       ..rules();
-    final request = BasicRequest(route, method: 'POST', body: jsonEncode(builder.build()), auditLogReason: auditLogReason);
+    final request = BasicRequest(route,
+        method: 'POST',
+        body: jsonEncode(builder.build()),
+        auditLogReason: auditLogReason);
 
     final response = await client.httpHandler.executeSafe(request);
     final rule = parse(response.jsonBody as Map<String, Object?>);
@@ -110,12 +123,17 @@ class AutoModerationManager extends Manager<AutoModerationRule> {
   }
 
   @override
-  Future<AutoModerationRule> update(Snowflake id, AutoModerationRuleUpdateBuilder builder, {String? auditLogReason}) async {
+  Future<AutoModerationRule> update(
+      Snowflake id, AutoModerationRuleUpdateBuilder builder,
+      {String? auditLogReason}) async {
     final route = HttpRoute()
       ..guilds(id: guildId.toString())
       ..autoModeration()
       ..rules(id: id.toString());
-    final request = BasicRequest(route, method: 'PATCH', body: jsonEncode(builder.build()), auditLogReason: auditLogReason);
+    final request = BasicRequest(route,
+        method: 'PATCH',
+        body: jsonEncode(builder.build()),
+        auditLogReason: auditLogReason);
 
     final response = await client.httpHandler.executeSafe(request);
     final rule = parse(response.jsonBody as Map<String, Object?>);
@@ -130,7 +148,8 @@ class AutoModerationManager extends Manager<AutoModerationRule> {
       ..guilds(id: guildId.toString())
       ..autoModeration()
       ..rules(id: id.toString());
-    final request = BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
+    final request =
+        BasicRequest(route, method: 'DELETE', auditLogReason: auditLogReason);
 
     await client.httpHandler.executeSafe(request);
 

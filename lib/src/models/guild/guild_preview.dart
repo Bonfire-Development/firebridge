@@ -40,6 +40,7 @@ class GuildPreview extends PartialGuild {
   /// @nodoc
   GuildPreview({
     required super.id,
+    required super.json,
     required super.manager,
     required this.name,
     required this.iconHash,
