@@ -1,3 +1,7 @@
+## 6.2.9
+__06.15.2024__
+- feat: Add serialization support
+
 ## 6.2.8
 __06.15.2024__
 - feat: Add support for retrieving DMS
