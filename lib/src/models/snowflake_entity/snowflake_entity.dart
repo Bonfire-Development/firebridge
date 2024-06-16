@@ -10,7 +10,7 @@ abstract class SnowflakeEntity<T extends SnowflakeEntity<T>>
     with ToStringHelper {
   /// The id of this entity.
   final Snowflake id;
-  Map<String, Object?> json;
+  final Map<String, Object?> json;
 
   /// Create a new [SnowflakeEntity].
   /// @nodoc
