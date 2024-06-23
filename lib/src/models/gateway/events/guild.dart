@@ -1,3 +1,4 @@
+import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/models/channel/guild_channel.dart';
 import 'package:firebridge/src/models/channel/stage_instance.dart';
 import 'package:firebridge/src/models/channel/thread.dart';
@@ -565,15 +566,4 @@ class GuildSubscriptionsBulkEvent extends DispatchEvent {
     required super.gateway,
     required this.subscriptions,
   });
-}
-
-enum MemberListUpdateType {
-  sync._("SYNC"),
-  update._("UPDATE"),
-  unknown._("UNKNOWN"),
-  delete._("DELETE");
-
-  final String value;
-
-  const MemberListUpdateType._(this.value);
 }

@@ -33,10 +33,13 @@ void main() async {
   );
 
   client.onMessageCreate.listen((event) async {
-    print(event.message.content);
+    // print(event.message.content);
   });
 
   client.onGuildMemberListUpdate.listen((event) async {
-    print(event.eventType);
+    // print(event);
+    if (event.eventType == MemberListUpdateType.sync) {
+      print(event.memberList);
+    }
   });
 }

@@ -294,6 +294,7 @@ export 'src/models/guild/guild.dart'
         NsfwLevel,
         PremiumTier,
         VerificationLevel,
+        GuildMember,
         UserGuild;
 export 'src/models/guild/guild_subscription.dart' show GuildSubscription;
 export 'src/models/guild/guild_member_range.dart' show GuildMemberRange;
@@ -365,7 +366,7 @@ export 'src/models/gateway/event.dart'
         RawDispatchEvent,
         ReconnectEvent,
         UnknownDispatchEvent;
-export 'src/models/gateway/opcode.dart' show Opcode;
+export 'src/models/gateway/opcode.dart' show Opcode, MemberListUpdateType;
 export 'src/models/gateway/events/application_command.dart'
     show ApplicationCommandPermissionsUpdateEvent;
 export 'src/models/gateway/events/auto_moderation.dart'

@@ -729,8 +729,7 @@ class Gateway extends GatewayManager with EventParser {
       eventType: eventType,
       memberList: (ops["op"] == "SYNC")
           ? parseMany(
-              (raw["ops"]! as List<dynamic>)[0]["items"] as List<dynamic>,
-              client.guilds[guildId].members.parseGuildMemberGroups)
+              items, client.guilds[guildId].members.parseGuildMemberGroups)
           : items,
       onlineCount: raw["online_count"] as int,
       memberCount: raw["member_count"] as int,

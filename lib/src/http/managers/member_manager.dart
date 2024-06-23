@@ -62,30 +62,28 @@ class MemberManager extends Manager<Member> {
     return GuildMemberListGroup(
       id: (name != null) ? Snowflake.parse(raw['id']!) : null,
       name: name,
-      count: raw['count'] as int,
+      count: raw['count'] as int?,
     );
   }
 
   List<dynamic> parseGuildMemberGroups(Map<String, dynamic> raw) {
     List<dynamic> items = [];
-    // for (var item in raw) {
-    //   if (item.containsKey("group")) {
-    //     items.add(parseGuildMemberListGroup(item));
-    //   } else if (item.containsKey("member")) {
-    //     items.add(parseMany(item['member'] as List, client.users.parse));
-    //   }
-    // }
-    // print(items[0]);
 
     raw.forEach((key, item) {
       item = (item as Map<String, dynamic>);
-      if (item.containsKey("group")) {
+      print(item.keys);
+      if (item.containsKey("id")) {
+        // is a group
         items.add(parseGuildMemberListGroup(item));
-      } else if (item.containsKey("member")) {
-        items.add(parseMany(item['member'] as List, client.users.parse));
+      } else if (item.containsKey("user")) {
+        // is a member
+        // print(item);
+        items.add(client.guilds[guildId].members.parse(
+          item,
+        ));
       }
     });
-
+    // print(items);
     return items;
   }
 
