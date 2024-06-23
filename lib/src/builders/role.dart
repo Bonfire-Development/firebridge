@@ -74,8 +74,10 @@ class RoleUpdateBuilder extends UpdateBuilder<Role> {
         if (permissions != null) 'permissions': permissions!.value.toString(),
         if (color != null) 'color': color!.value,
         if (isHoisted != null) 'hoist': isHoisted,
-        if (!identical(icon, sentinelImageBuilder)) 'icon': icon?.buildDataString(),
-        if (!identical(unicodeEmoji, sentinelString)) 'unicode_emoji': unicodeEmoji,
+        if (!identical(icon, sentinelImageBuilder))
+          'icon': icon?.buildDataString(),
+        if (!identical(unicodeEmoji, sentinelString))
+          'unicode_emoji': unicodeEmoji,
         if (isMentionable != null) 'mentionable': isMentionable,
       };
 }

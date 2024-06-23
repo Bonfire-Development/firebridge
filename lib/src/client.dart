@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
+import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -263,7 +263,7 @@ class NyxxGateway with ManagerMixin, EventMixin implements NyxxRest {
 
   /// Update the client's guild subscriptions.
   void updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) =>
-      gateway.updateguildSubscriptionsBulk(builder);
+      gateway.updateGuildSubscriptionsBulk(builder);
 
   @override
   Future<void> close() {

@@ -1,4 +1,3 @@
-import 'package:firebridge/src/models/guild/guild_member_range.dart';
 import 'package:firebridge/src/models/channel/guild_subscription_channel.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';

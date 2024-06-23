@@ -1,21 +1,15 @@
-// import 'package:firebridge/firebridge.dart';
-// import 'package:firebridge/src/http/managers/member_list_group_manager.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
-// /// {@template martial_member_list_group}
-// /// A partial [MemberListGroup] object.
-// /// {@endtemplate}
-// class PartialMemberListGroupManager
-//     extends WritableSnowflakeEntity<MemberListGroup> {
-//   @override
-//   final MemberListGroupManager manager;
+class GuildMemberListGroup {
+  final Snowflake? id;
 
-//   PartialMemberListGroupManager({required super.id, required this.manager});
-// }
+  /// The name of the group, if applicable. (Ex: "online")
+  final String? name;
+  final int? count;
 
-// class MemberListGroup extends PartialMemberListGroupManager {
-//   final String name;
-//   final List<Member> members;
-
-//   MemberListGroup(
-//       {required this.name, required this.members, required super.id});
-// }
+  GuildMemberListGroup({
+    this.id,
+    this.name,
+    this.count,
+  });
+}

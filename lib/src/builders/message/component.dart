@@ -20,7 +20,8 @@ abstract class MessageComponentBuilder extends CreateBuilder<MessageComponent> {
 class ActionRowBuilder extends MessageComponentBuilder {
   List<MessageComponentBuilder> components;
 
-  ActionRowBuilder({required this.components}) : super(type: MessageComponentType.actionRow);
+  ActionRowBuilder({required this.components})
+      : super(type: MessageComponentType.actionRow);
 
   @override
   Map<String, Object?> build() => {
@@ -100,7 +101,8 @@ class ButtonBuilder extends MessageComponentBuilder {
           'emoji': {
             'id': emoji!.id == Snowflake.zero ? null : emoji!.id.toString(),
             'name': emoji!.name,
-            if (emoji is GuildEmoji) 'animated': (emoji as GuildEmoji).isAnimated == true,
+            if (emoji is GuildEmoji)
+              'animated': (emoji as GuildEmoji).isAnimated == true,
           },
         if (customId != null) 'custom_id': customId,
         if (url != null) 'url': url!.toString(),
@@ -188,9 +190,11 @@ class SelectMenuBuilder extends MessageComponentBuilder {
         ...super.build(),
         'custom_id': customId,
         if (options != null) 'options': options?.map((e) => e.build()).toList(),
-        if (channelTypes != null) 'channel_types': channelTypes?.map((e) => e.value).toList(),
+        if (channelTypes != null)
+          'channel_types': channelTypes?.map((e) => e.value).toList(),
         if (placeholder != null) 'placeholder': placeholder,
-        if (defaultValues != null) 'default_values': defaultValues!.map((e) => e.build()).toList(),
+        if (defaultValues != null)
+          'default_values': defaultValues!.map((e) => e.build()).toList(),
         if (minValues != null) 'min_values': minValues,
         if (maxValues != null) 'max_values': maxValues,
         if (isDisabled != null) 'disabled': isDisabled,
@@ -225,13 +229,15 @@ class SelectMenuOptionBuilder extends CreateBuilder<SelectMenuOption> {
           'emoji': {
             'id': emoji!.id.toString(),
             'name': emoji!.name,
-            'animated': emoji is GuildEmoji && (emoji as GuildEmoji).isAnimated == true,
+            'animated':
+                emoji is GuildEmoji && (emoji as GuildEmoji).isAnimated == true,
           },
         if (isDefault != null) 'default': isDefault,
       };
 }
 
-class DefaultValue<T extends SnowflakeEntity<T>> extends CreateBuilder<DefaultValue<T>> {
+class DefaultValue<T extends SnowflakeEntity<T>>
+    extends CreateBuilder<DefaultValue<T>> {
   Snowflake id;
 
   String type;
@@ -241,11 +247,14 @@ class DefaultValue<T extends SnowflakeEntity<T>> extends CreateBuilder<DefaultVa
     required this.type,
   });
 
-  static DefaultValue<User> user({required Snowflake id}) => DefaultValue(id: id, type: 'user');
+  static DefaultValue<User> user({required Snowflake id}) =>
+      DefaultValue(id: id, type: 'user');
 
-  static DefaultValue<Role> role({required Snowflake id}) => DefaultValue(id: id, type: 'role');
+  static DefaultValue<Role> role({required Snowflake id}) =>
+      DefaultValue(id: id, type: 'role');
 
-  static DefaultValue<Channel> channel({required Snowflake id}) => DefaultValue(id: id, type: 'channel');
+  static DefaultValue<Channel> channel({required Snowflake id}) =>
+      DefaultValue(id: id, type: 'channel');
 
   @override
   Map<String, Object?> build() => {

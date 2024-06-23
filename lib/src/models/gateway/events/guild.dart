@@ -347,20 +347,22 @@ class GuildMembersChunkEvent extends DispatchEvent {
 /// {@endtemplate}
 class GuildMemberListUpdateEvent extends DispatchEvent {
   final Snowflake guildId;
-  final List<Member> members;
   final int onlineCount;
   final int memberCount;
   final Snowflake id;
   final List<dynamic> groups;
+  final MemberListUpdateType eventType;
+  final List<dynamic>? memberList;
 
   GuildMemberListUpdateEvent({
     required super.gateway,
     required this.guildId,
-    required this.members,
     required this.onlineCount,
     required this.memberCount,
     required this.id,
     required this.groups,
+    required this.eventType,
+    this.memberList,
   });
 
   PartialGuild get guild => gateway.client.guilds[guildId];
@@ -563,4 +565,15 @@ class GuildSubscriptionsBulkEvent extends DispatchEvent {
     required super.gateway,
     required this.subscriptions,
   });
+}
+
+enum MemberListUpdateType {
+  sync._("SYNC"),
+  update._("UPDATE"),
+  unknown._("UNKNOWN"),
+  delete._("DELETE");
+
+  final String value;
+
+  const MemberListUpdateType._(this.value);
 }

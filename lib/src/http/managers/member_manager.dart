@@ -6,6 +6,7 @@ import 'package:firebridge/src/http/managers/manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
 import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/guild/member_list_group.dart';
 import 'package:firebridge/src/models/permissions.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';
@@ -47,6 +48,45 @@ class MemberManager extends Manager<Member> {
       communicationDisabledUntil:
           maybeParse(raw['communication_disabled_until'], DateTime.parse),
     );
+  }
+
+  /// Parse a [GuildMemberListGroup] from [raw].
+  GuildMemberListGroup parseGuildMemberListGroup(Map<String, Object?> raw) {
+    // check if the id is alphanum
+    var id = raw['id']! as String?;
+    String? name;
+    if (double.tryParse(id!) != null) {
+      name = id;
+    }
+
+    return GuildMemberListGroup(
+      id: (name != null) ? Snowflake.parse(raw['id']!) : null,
+      name: name,
+      count: raw['count'] as int,
+    );
+  }
+
+  List<dynamic> parseGuildMemberGroups(Map<String, dynamic> raw) {
+    List<dynamic> items = [];
+    // for (var item in raw) {
+    //   if (item.containsKey("group")) {
+    //     items.add(parseGuildMemberListGroup(item));
+    //   } else if (item.containsKey("member")) {
+    //     items.add(parseMany(item['member'] as List, client.users.parse));
+    //   }
+    // }
+    // print(items[0]);
+
+    raw.forEach((key, item) {
+      item = (item as Map<String, dynamic>);
+      if (item.containsKey("group")) {
+        items.add(parseGuildMemberListGroup(item));
+      } else if (item.containsKey("member")) {
+        items.add(parseMany(item['member'] as List, client.users.parse));
+      }
+    });
+
+    return items;
   }
 
   @override

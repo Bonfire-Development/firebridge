@@ -710,30 +710,32 @@ class Gateway extends GatewayManager with EventParser {
   GuildMemberListUpdateEvent parseGuildMembersUpdateEvent(
       Map<String, Object?> raw) {
     final guildId = Snowflake.parse(raw['guild_id']!);
-    // print(raw.keys);
-    // print(json.encode(raw["ops"]));
+    var ops = (raw["ops"]! as List<dynamic>)[0] as Map<String, Object?>;
 
-    /*
-    Idea- member could have an optional param "group"?
-    We can set it via the parser.
+    List<dynamic> items = [];
 
-    Logically I think client -> guilds -> members -> groups might be reasonable?
-    I don't know if there's a documented thing for that
-    */
+    if (ops["op"] == "SYNC") {
+      items = ops["items"] as List<dynamic>;
+    }
 
-    // print(raw);
-    // json encode raw
-    // print(json.encode(raw));
+    MemberListUpdateType eventType =
+        MemberListUpdateType.values.firstWhere((e) {
+      return e.value == ops["op"];
+    }, orElse: () => MemberListUpdateType.unknown);
 
     return GuildMemberListUpdateEvent(
       gateway: this,
       guildId: guildId,
-      members:
-          // TODO: Add member groups and stuff
-          parseMany([] as List<Object?>, client.guilds[guildId].members.parse),
+      eventType: eventType,
+      memberList: (ops["op"] == "SYNC")
+          ? parseMany(
+              (raw["ops"]! as List<dynamic>)[0]["items"] as List<dynamic>,
+              client.guilds[guildId].members.parseGuildMemberGroups)
+          : items,
       onlineCount: raw["online_count"] as int,
       memberCount: raw["member_count"] as int,
-      groups: [], // parseMany(raw["groups"] as List<Object?>, client.guilds[guildId].members.groups),
+      groups: parseMany(raw["groups"] as List<Object?>,
+          client.guilds[guildId].members.parseGuildMemberListGroup),
       id: Snowflake(int.parse(raw["id"] as String)),
     );
   }
@@ -1259,8 +1261,8 @@ class Gateway extends GatewayManager with EventParser {
           Snowflake guildId, ChannelStatusesBuilder builder) =>
       shardFor(guildId).updateChannelStatusesGuild(guildId, builder);
 
-  /// Update the current guild subscription with [guildId].
-  void updateguildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) {
+  /// Update the current guild subscription
+  void updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) {
     for (final shard in shards) {
       shard.add(
           Send(opcode: Opcode.guildSubscriptionsBulk, data: builder.build()));
