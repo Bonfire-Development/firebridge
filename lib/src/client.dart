@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -22,12 +24,17 @@ import 'package:firebridge/src/utils/flags.dart';
 import 'package:runtime_type/runtime_type.dart';
 
 /// A helper function to nest and execute calls to plugin connect methods.
-Future<T> _doConnect<T extends Nyxx>(ApiOptions apiOptions, ClientOptions clientOptions, Future<T> Function() connect, List<NyxxPlugin> plugins) {
+Future<T> _doConnect<T extends Nyxx>(
+    ApiOptions apiOptions,
+    ClientOptions clientOptions,
+    Future<T> Function() connect,
+    List<NyxxPlugin> plugins) {
   final actualClientType = RuntimeType<T>();
 
   for (final plugin in plugins) {
     if (!actualClientType.isSubtypeOf(plugin.clientType)) {
-      throw PluginError('Unsupported client type: plugin needs ${plugin.clientType.internalType}, client was ${actualClientType.internalType}');
+      throw PluginError(
+          'Unsupported client type: plugin needs ${plugin.clientType.internalType}, client was ${actualClientType.internalType}');
     }
   }
 
@@ -36,14 +43,16 @@ Future<T> _doConnect<T extends Nyxx>(ApiOptions apiOptions, ClientOptions client
   connect = plugins.fold(
     () async => await originalConnect()
       .._initializedCompleter.complete(),
-    (previousConnect, plugin) => () async => actualClientType.castInstance(await plugin.doConnect(apiOptions, clientOptions, previousConnect)),
+    (previousConnect, plugin) => () async => actualClientType.castInstance(
+        await plugin.doConnect(apiOptions, clientOptions, previousConnect)),
   );
 
   return connect();
 }
 
 /// A helper function to nest and execute calls to plugin close methods.
-Future<void> _doClose(Nyxx client, Future<void> Function() close, List<NyxxPlugin> plugins) {
+Future<void> _doClose(
+    Nyxx client, Future<void> Function() close, List<NyxxPlugin> plugins) {
   close = plugins.fold(
     close,
     (previousClose, plugin) => () => plugin.doClose(client, previousClose),
@@ -76,14 +85,19 @@ abstract class Nyxx {
 
   /// Create an instance of [NyxxRest] that can perform requests to the HTTP API and is
   /// authenticated with a bot token.
-  static Future<NyxxRest> connectRest(String token, {RestClientOptions options = const RestClientOptions()}) => connectRestWithOptions(RestApiOptions(token: token), options);
+  static Future<NyxxRest> connectRest(String token,
+          {RestClientOptions options = const RestClientOptions()}) =>
+      connectRestWithOptions(RestApiOptions(token: token), options);
 
   /// Create an instance of [NyxxRest] using the provided options.
-  static Future<NyxxRest> connectRestWithOptions(RestApiOptions apiOptions, [RestClientOptions clientOptions = const RestClientOptions()]) async {
+  static Future<NyxxRest> connectRestWithOptions(RestApiOptions apiOptions,
+      [RestClientOptions clientOptions = const RestClientOptions()]) async {
     clientOptions.logger
       ..info('Connecting to the REST API')
-      ..fine('Token: ${apiOptions.token}, Authorization: ${apiOptions.authorizationHeader}, User-Agent: ${apiOptions.userAgent}')
-      ..fine('Plugins: ${clientOptions.plugins.map((plugin) => plugin.name).join(', ')}');
+      ..fine(
+          'Token: ${apiOptions.token}, Authorization: ${apiOptions.authorizationHeader}, User-Agent: ${apiOptions.userAgent}')
+      ..fine(
+          'Plugins: ${clientOptions.plugins.map((plugin) => plugin.name).join(', ')}');
 
     return _doConnect(apiOptions, clientOptions, () async {
       final client = NyxxRest._(apiOptions, clientOptions);
@@ -94,8 +108,11 @@ abstract class Nyxx {
 
   /// Create an instance of [NyxxGateway] that can perform requests to the HTTP API, connects
   /// to the gateway and is authenticated with a bot token.
-  static Future<NyxxGateway> connectGateway(String token, Flags<GatewayIntents> intents, {GatewayClientOptions options = const GatewayClientOptions()}) =>
-      connectGatewayWithOptions(GatewayApiOptions(token: token, intents: intents), options);
+  static Future<NyxxGateway> connectGateway(
+          String token, Flags<GatewayIntents> intents,
+          {GatewayClientOptions options = const GatewayClientOptions()}) =>
+      connectGatewayWithOptions(
+          GatewayApiOptions(token: token, intents: intents), options);
 
   /// Create an instance of [NyxxGateway] using the provided options.
   static Future<NyxxGateway> connectGatewayWithOptions(
@@ -109,7 +126,8 @@ abstract class Nyxx {
         ' Intents: ${apiOptions.intents.value}, Payloads: ${apiOptions.payloadFormat.value}, Compression: ${apiOptions.compression.name},'
         ' Shards: ${apiOptions.shards?.join(', ')}, Total shards: ${apiOptions.totalShards}, Large threshold: ${apiOptions.largeThreshold}',
       )
-      ..fine('Plugins: ${clientOptions.plugins.map((plugin) => plugin.name).join(', ')}');
+      ..fine(
+          'Plugins: ${clientOptions.plugins.map((plugin) => plugin.name).join(', ')}');
 
     return _doConnect(apiOptions, clientOptions, () async {
       final client = NyxxGateway._(apiOptions, clientOptions);
@@ -172,7 +190,9 @@ class NyxxRest with ManagerMixin implements Nyxx {
   Future<void> leaveThread(Snowflake id) => channels.leaveThread(id);
 
   /// List the guilds the current user is a member of.
-  Future<List<UserGuild>> listGuilds({Snowflake? before, Snowflake? after, int? limit}) => users.listCurrentUserGuilds(before: before, after: after, limit: limit);
+  Future<List<UserGuild>> listGuilds(
+          {Snowflake? before, Snowflake? after, int? limit}) =>
+      users.listCurrentUserGuilds(before: before, after: after, limit: limit);
 
   @override
   Future<void> close() {
@@ -224,13 +244,27 @@ class NyxxGateway with ManagerMixin, EventMixin implements NyxxRest {
   Future<void> leaveThread(Snowflake id) => channels.leaveThread(id);
 
   @override
-  Future<List<UserGuild>> listGuilds({Snowflake? before, Snowflake? after, int? limit}) => users.listCurrentUserGuilds(before: before, after: after, limit: limit);
+  Future<List<UserGuild>> listGuilds(
+          {Snowflake? before, Snowflake? after, int? limit}) =>
+      users.listCurrentUserGuilds(before: before, after: after, limit: limit);
 
   /// Update the client's voice state in the guild with the ID [guildId].
-  void updateVoiceState(Snowflake guildId, GatewayVoiceStateBuilder builder) => gateway.updateVoiceState(guildId, builder);
+  void updateVoiceState(Snowflake guildId, GatewayVoiceStateBuilder builder) =>
+      gateway.updateVoiceState(guildId, builder);
 
   /// Update the client's presence on all shards.
-  void updatePresence(PresenceBuilder builder) => gateway.updatePresence(builder);
+  void updatePresence(PresenceBuilder builder) =>
+      gateway.updatePresence(builder);
+
+  /// Update the client's guild subscription on the shard with the ID [shardId].
+  void updateChannelStatuses(
+          Snowflake guildId, ChannelStatusesBuilder builder) =>
+      gateway.updateChannelStatuses(guildId, builder);
+
+  /// Update the client's guild subscriptions.
+  void updateGuildSubscriptionsBulk(
+          Snowflake guildId, GuildSubscriptionsBulkBuilder builder) =>
+      gateway.updateguildSubscriptionsBulk(guildId, builder);
 
   @override
   Future<void> close() {

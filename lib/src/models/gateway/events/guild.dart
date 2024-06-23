@@ -6,6 +6,7 @@ import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/events/presence.dart';
 import 'package:firebridge/src/models/guild/audit_log.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/guild_subscription.dart';
 import 'package:firebridge/src/models/guild/member.dart';
 import 'package:firebridge/src/models/guild/scheduled_event.dart';
 import 'package:firebridge/src/models/role.dart';
@@ -542,4 +543,24 @@ class GuildScheduledEventUserRemoveEvent extends DispatchEvent {
 
   /// The member that was removed.
   PartialMember get member => guild.members[userId];
+}
+
+class ChannelStatusesEvent extends DispatchEvent {
+  final Snowflake guildId;
+
+  ChannelStatusesEvent({
+    required super.gateway,
+    required this.guildId,
+  });
+
+  PartialGuild get guild => gateway.client.guilds[guildId];
+}
+
+class GuildSubscriptionsBulkEvent extends DispatchEvent {
+  final Map<Snowflake, GuildSubscription> subscriptions;
+
+  GuildSubscriptionsBulkEvent({
+    required super.gateway,
+    required this.subscriptions,
+  });
 }

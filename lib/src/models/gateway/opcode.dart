@@ -34,7 +34,64 @@ enum Opcode {
   heartbeatAck._(11),
 
   /// Send to lazily request guild members.
-  lazyRequestGuildMembers._(14);
+  lazyRequestGuildMembers._(14),
+
+  /// Sent when creating a stream.
+  streamCreate._(18),
+
+  /// Sent when deleting a stream.
+  streamDelete._(19),
+
+  /// Sent when watching a stream.
+  streamWatch._(20),
+
+  /// Sent to ping a stream.
+  streamPing._(21),
+
+  /// Sent to set a stream as paused.
+  streamSetPaused._(22),
+
+  /// Sent to request guild application commands.
+  requestGuildApplicationCommands._(24),
+
+  /// Sent to launch an embedded activity.
+  embeddedActivityLaunch._(25),
+
+  /// Sent to close an embedded activity.
+  embeddedActivityClose._(26),
+
+  /// Sent to update an embedded activity.
+  embeddedActivityUpdate._(27),
+
+  /// Sent to request forum unread messages.
+  requestForumUnreads._(28),
+
+  /// Sent for a remote command.
+  remoteCommand._(29),
+
+  /// Sent to get deleted entity IDs not matching a hash.
+  getDeletedEntityIdsNotMatchingHash._(30),
+
+  /// Sent to request soundboard sounds.
+  requestSoundboardSounds._(31),
+
+  /// Sent to create a speed test.
+  speedTestCreate._(32),
+
+  /// Sent to delete a speed test.
+  speedTestDelete._(33),
+
+  /// Sent to request last messages.
+  requestLastMessages._(34),
+
+  /// Sent to search recent members.
+  searchRecentMembers._(35),
+
+  /// Sent to request channel statuses.
+  requestChannelStatuses._(36),
+
+  /// Sent for bulk guild subscriptions.
+  guildSubscriptionsBulk._(37);
 
   /// The value of this [Opcode].
   final int value;

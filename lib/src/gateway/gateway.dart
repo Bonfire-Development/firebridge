@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebridge/src/builders/guild/channel_statuses.dart';
+import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/presence.dart';
@@ -473,12 +475,12 @@ class Gateway extends GatewayManager with EventParser {
       guildId: guildId,
       channelIds: maybeParseMany(raw['channel_ids'], Snowflake.parse),
       threads: parseMany(
-        raw['threads'] as List<Object?>,
+        [], // raw['threads'] as List<Object?>,
         (Map<String, Object?> raw) =>
             client.channels.parse(raw, guildId: guildId) as Thread,
       ),
       members: parseMany(
-          raw['members'] as List<Object?>,
+          [], //raw['members'] as List<Object?>,
           (Map<String, Object?> raw) =>
               client.channels.parseThreadMember(raw, guildId: guildId)),
     );
@@ -708,8 +710,8 @@ class Gateway extends GatewayManager with EventParser {
   GuildMemberListUpdateEvent parseGuildMembersUpdateEvent(
       Map<String, Object?> raw) {
     final guildId = Snowflake.parse(raw['guild_id']!);
-    print(raw.keys);
-    print(json.encode(raw["ops"]));
+    // print(raw.keys);
+    // print(json.encode(raw["ops"]));
 
     /*
     Idea- member could have an optional param "group"?
@@ -719,15 +721,20 @@ class Gateway extends GatewayManager with EventParser {
     I don't know if there's a documented thing for that
     */
 
+    // print(raw);
+    // json encode raw
+    // print(json.encode(raw));
+
     return GuildMemberListUpdateEvent(
       gateway: this,
       guildId: guildId,
-      members: parseMany(
-          raw['items'] as List<Object?>, client.guilds[guildId].members.parse),
+      members:
+          // TODO: Add member groups and stuff
+          parseMany([] as List<Object?>, client.guilds[guildId].members.parse),
       onlineCount: raw["online_count"] as int,
       memberCount: raw["member_count"] as int,
       groups: [], // parseMany(raw["groups"] as List<Object?>, client.guilds[guildId].members.groups),
-      id: Snowflake(raw["id"] as int),
+      id: Snowflake(int.parse(raw["id"] as String)),
     );
   }
 
@@ -889,6 +896,7 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Parse a [MessageCreateEvent] from [raw].
   MessageCreateEvent parseMessageCreate(Map<String, Object?> raw) {
+    // if (raw['guild_id'] == "820745488231301210") print("Target guild detected.");
     final guildId = maybeParse(raw['guild_id'], Snowflake.parse);
     final message = MessageManager(
       client.options.messageCacheConfig,
@@ -1243,6 +1251,52 @@ class Gateway extends GatewayManager with EventParser {
   void updatePresence(PresenceBuilder builder) {
     for (final shard in shards) {
       shard.add(Send(opcode: Opcode.presenceUpdate, data: builder.build()));
+    }
+  }
+
+  /// Update the current guild subscription with [guildId].
+  void updateChannelStatuses(
+          Snowflake guildId, ChannelStatusesBuilder builder) =>
+      shardFor(guildId).updateChannelStatusesGuild(guildId, builder);
+
+  void updateguildSubscriptionsBulk(
+      Snowflake guildId, GuildSubscriptionsBulkBuilder builder) {
+    // shardFor(guildId).updateguildSubscriptionsBulk(guildId, builder);
+    for (final shard in shards) {
+      // shard.add(Send(opcode: Opcode.requestChannelStatuses, data: {
+      //   // "subscriptions": {
+      //   //   "522681957373575168": {
+      //   //     "channels": {
+      //   //       "759660999032176660": [
+      //   //         [0, 99]
+      //   //       ],
+      //   //       "762200145990254592": [
+      //   //         [0, 99]
+      //   //       ]
+      //   //     }
+      //   //   }
+      //   // }
+      //   "guild_id": "522681957373575168"
+      // }));
+      shard.add(Send(opcode: Opcode.guildSubscriptionsBulk, data: {
+        "subscriptions": {
+          "820745488231301210": {
+            "typing": true,
+            "threads": true,
+            "activities": true,
+            "members": [],
+            "member_updates": false,
+            "channels": {
+              "1233447567199834267": [
+                [0, 99]
+              ]
+            },
+            "thread_member_lists": []
+          }
+        }
+
+        // "guild_id": "522681957373575168"
+      }));
     }
   }
 }
