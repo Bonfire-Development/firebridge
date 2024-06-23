@@ -7,14 +7,14 @@ import 'package:firebridge/src/models/snowflake.dart';
 
 class GuildSubscriptionsBulkBuilder
     extends CreateBuilder<GuildSubscriptionsBulkEvent> {
-  Map<Snowflake, GuildSubscription>? subscriptions;
+  List<GuildSubscription>? subscriptions;
 
   @override
   Map<String, Object?> build() {
     final _subscriptions = <String, Map<String, dynamic>>{};
 
-    subscriptions?.forEach((guildId, subscription) {
-      final guildKey = guildId.value.toString();
+    subscriptions?.forEach((subscription) {
+      final guildKey = subscription.guildId.value.toString();
       final channels = <String, dynamic>{};
 
       subscription.channels.forEach((channelId, channelRange) {

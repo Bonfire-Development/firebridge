@@ -10,6 +10,7 @@ class GuildSubscription with ToStringHelper {
   final List<Snowflake>? members;
   final List<Snowflake>? threadMemberLists;
   final Map<Snowflake, GuildMemberRange> channels;
+  final Snowflake guildId;
 
   GuildSubscription({
     this.typing,
@@ -19,5 +20,6 @@ class GuildSubscription with ToStringHelper {
     this.memberUpdates,
     this.threadMemberLists,
     required this.channels,
+    required this.guildId,
   });
 }

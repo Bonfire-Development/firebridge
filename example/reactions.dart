@@ -11,15 +11,16 @@ void main() async {
 
   client.updateGuildSubscriptionsBulk(
     GuildSubscriptionsBulkBuilder()
-      ..subscriptions = {
-        Snowflake(820745488231301210): GuildSubscription(
+      ..subscriptions = [
+        GuildSubscription(
+          guildId: Snowflake(820745488231301210),
           typing: true,
           channels: {
             Snowflake(1233447567199834267):
                 GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
           },
         ),
-      },
+      ],
   );
 
   client.onMessageCreate.listen((event) async {
