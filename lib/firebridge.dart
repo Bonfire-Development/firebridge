@@ -55,6 +55,7 @@ export 'src/builders/channel/thread.dart'
         ForumThreadBuilder,
         ThreadBuilder,
         ThreadFromMessageBuilder;
+
 export 'src/builders/message/allowed_mentions.dart' show AllowedMentions;
 export 'src/builders/message/attachment.dart' show AttachmentBuilder;
 export 'src/builders/message/embed.dart'
@@ -127,8 +128,7 @@ export 'src/builders/application.dart'
 export 'src/cache/cache.dart' show Cache, CacheConfig;
 
 export 'src/http/bucket.dart' show HttpBucket;
-export 'src/http/handler.dart'
-    show HttpHandler, Oauth2HttpHandler, RateLimitInfo;
+export 'src/http/handler.dart' show HttpHandler, RateLimitInfo;
 export 'src/http/request.dart'
     show BasicRequest, HttpRequest, MultipartRequest, FormDataRequest;
 export 'src/http/response.dart'
@@ -233,6 +233,8 @@ export 'src/models/channel/types/public_thread.dart' show PublicThread;
 export 'src/models/channel/types/guild_media.dart' show GuildMediaChannel;
 export 'src/models/message/activity.dart'
     show MessageActivity, MessageActivityType;
+export 'src/models/channel/guild_subscription_channel.dart'
+    show GuildSubscriptionChannel;
 export 'src/models/message/attachment.dart' show Attachment, AttachmentFlags;
 export 'src/models/message/author.dart' show MessageAuthor;
 export 'src/models/message/channel_mention.dart' show ChannelMention;

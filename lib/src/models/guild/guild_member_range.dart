@@ -1,4 +1,3 @@
-import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 
 class GuildMemberRange with ToStringHelper {

@@ -17,10 +17,13 @@ class GuildSubscriptionsBulkBuilder
       final guildKey = subscription.guildId.value.toString();
       final channels = <String, dynamic>{};
 
-      subscription.channels.forEach((channelId, channelRange) {
-        final channelKey = channelId.value.toString();
+      subscription.channels.forEach((channel) {
+        final channelKey = channel.channelId.value.toString();
         channels[channelKey] = [
-          [channelRange.lowerMemberBound, channelRange.upperMemberBound]
+          [
+            channel.memberRange.lowerMemberBound,
+            channel.memberRange.upperMemberBound
+          ]
         ];
       });
 
