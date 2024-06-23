@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:firebridge/src/builders/builder.dart';
 import 'package:firebridge/src/models/gateway/events/guild.dart';
 import 'package:firebridge/src/models/guild/guild_subscription.dart';
-import 'package:firebridge/src/models/snowflake.dart';
 
 class GuildSubscriptionsBulkBuilder
     extends CreateBuilder<GuildSubscriptionsBulkEvent> {

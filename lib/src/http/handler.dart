@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import 'package:http/http.dart' hide MultipartRequest;
 import 'package:logging/logging.dart';
-import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/http/bucket.dart';
 import 'package:firebridge/src/http/request.dart';
@@ -20,7 +19,12 @@ extension on HttpRequest {
 /// [isGlobal] indicates if the delay applied is due to the global rate limit.
 /// [isAnticipated] will be true if the request was delayed before it was sent. If [isAnticipated] is `false`,
 /// a response with the status code 429 was received from the API.
-typedef RateLimitInfo = ({HttpRequest request, Duration delay, bool isGlobal, bool isAnticipated});
+typedef RateLimitInfo = ({
+  HttpRequest request,
+  Duration delay,
+  bool isGlobal,
+  bool isAnticipated
+});
 
 /// A handler for making HTTP requests to the Discord API.
 ///
@@ -50,9 +54,12 @@ class HttpHandler {
 
   Logger get logger => Logger('${client.options.loggerName}.Http');
 
-  final StreamController<HttpRequest> _onRequestController = StreamController.broadcast();
-  final StreamController<HttpResponse> _onResponseController = StreamController.broadcast();
-  final StreamController<RateLimitInfo> _onRateLimitController = StreamController.broadcast();
+  final StreamController<HttpRequest> _onRequestController =
+      StreamController.broadcast();
+  final StreamController<HttpResponse> _onResponseController =
+      StreamController.broadcast();
+  final StreamController<RateLimitInfo> _onRateLimitController =
+      StreamController.broadcast();
 
   /// A stream of requests executed by this handler.
   ///
@@ -84,7 +91,9 @@ class HttpHandler {
   /// If no requests have been completed, this getter returns [Duration.zero].
   ///
   /// To get the network latency for this [HttpHandler], see [realLatency].
-  Duration get latency => _latencies.isEmpty ? Duration.zero : (_latencies.reduce((a, b) => a + b) ~/ _latencies.length);
+  Duration get latency => _latencies.isEmpty
+      ? Duration.zero
+      : (_latencies.reduce((a, b) => a + b) ~/ _latencies.length);
 
   /// The average network and API latency of the last 10 requests.
   ///
@@ -92,7 +101,9 @@ class HttpHandler {
   /// indicator of how long each call to [execute] takes to complete.
   ///
   /// If no requests have been completed, this getter returns [Duration.zero].
-  Duration get realLatency => _realLatencies.isEmpty ? Duration.zero : (_realLatencies.reduce((a, b) => a + b) ~/ _realLatencies.length);
+  Duration get realLatency => _realLatencies.isEmpty
+      ? Duration.zero
+      : (_realLatencies.reduce((a, b) => a + b) ~/ _realLatencies.length);
 
   /// Create a new [HttpHandler].
   ///
@@ -117,7 +128,8 @@ class HttpHandler {
   Future<HttpResponse> execute(HttpRequest request) async {
     final executeFn = client.options.plugins.fold(
       _execute,
-      (previousValue, plugin) => (request) => plugin.interceptRequest(client, request, previousValue),
+      (previousValue, plugin) =>
+          (request) => plugin.interceptRequest(client, request, previousValue),
     );
     return await executeFn(request);
   }
@@ -131,9 +143,11 @@ class HttpHandler {
       );
 
     if (request is BasicRequest) {
-      logger.finer('Query Parameters: ${request.queryParameters}, Body: ${request.body}');
+      logger.finer(
+          'Query Parameters: ${request.queryParameters}, Body: ${request.body}');
     } else if (request is FormDataRequest) {
-      logger.finer('Query parameters: ${request.queryParameters}, Payload: ${request.formParams}, Files: ${request.files.map((e) => e.filename).join(', ')}');
+      logger.finer(
+          'Query parameters: ${request.queryParameters}, Payload: ${request.formParams}, Files: ${request.files.map((e) => e.filename).join(', ')}');
     } else {
       logger.finer('Query parameters: ${request.queryParameters}');
     }
@@ -152,7 +166,10 @@ class HttpHandler {
 
       final now = DateTime.now();
 
-      final globalWaitTime = (request.applyGlobalRateLimit ? globalReset?.difference(now) : null) ?? Duration.zero;
+      final globalWaitTime = (request.applyGlobalRateLimit
+              ? globalReset?.difference(now)
+              : null) ??
+          Duration.zero;
 
       Duration bucketWaitTime = Duration.zero;
       if (bucket != null && bucket.remaining <= 0) {
@@ -171,12 +188,18 @@ class HttpHandler {
         }
       }
 
-      final isGlobal = globalWaitTime > bucketWaitTime && request.applyGlobalRateLimit;
+      final isGlobal =
+          globalWaitTime > bucketWaitTime && request.applyGlobalRateLimit;
       waitTime = isGlobal ? globalWaitTime : bucketWaitTime;
 
       if (waitTime > Duration.zero) {
         logger.finer('Holding ${request.loggingId} for $waitTime');
-        _onRateLimitController.add((request: request, delay: waitTime, isGlobal: isGlobal, isAnticipated: true));
+        _onRateLimitController.add((
+          request: request,
+          delay: waitTime,
+          isGlobal: isGlobal,
+          isAnticipated: true
+        ));
         await Future.delayed(waitTime);
       }
     } while (waitTime > Duration.zero);
@@ -227,36 +250,47 @@ class HttpHandler {
     _buckets[request.rateLimitId] = bucket;
   }
 
-  Future<HttpResponse> _handle(HttpRequest request, StreamedResponse response) async {
+  Future<HttpResponse> _handle(
+      HttpRequest request, StreamedResponse response) async {
     _updateRatelimitBucket(request, response);
 
     final HttpResponse parsedResponse;
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      parsedResponse = await HttpResponseSuccess.fromResponse(request, response);
+      parsedResponse =
+          await HttpResponseSuccess.fromResponse(request, response);
     } else {
       parsedResponse = await HttpResponseError.fromResponse(request, response);
     }
 
     logger
       ..fine('${response.statusCode} ${request.loggingId}')
-      ..finer('Headers: ${parsedResponse.headers}, Body: ${parsedResponse.textBody ?? parsedResponse.body.map((e) => e.toRadixString(16)).join(' ')}');
+      ..finer(
+          'Headers: ${parsedResponse.headers}, Body: ${parsedResponse.textBody ?? parsedResponse.body.map((e) => e.toRadixString(16)).join(' ')}');
 
     _onResponseController.add(parsedResponse);
 
     if (parsedResponse.statusCode == 429) {
       try {
         final responseBody = parsedResponse.jsonBody;
-        final retryAfter = Duration(milliseconds: ((responseBody["retry_after"] as double) * 1000).ceil());
+        final retryAfter = Duration(
+            milliseconds:
+                ((responseBody["retry_after"] as double) * 1000).ceil());
         final isGlobal = responseBody["global"] as bool;
 
         if (isGlobal) {
           _globalReset = DateTime.now().add(retryAfter);
         }
 
-        _onRateLimitController.add((request: request, delay: retryAfter, isGlobal: isGlobal, isAnticipated: false));
+        _onRateLimitController.add((
+          request: request,
+          delay: retryAfter,
+          isGlobal: isGlobal,
+          isAnticipated: false
+        ));
         return Future.delayed(retryAfter, () => execute(request));
       } on TypeError {
-        logger.shout('Invalid rate limit body for ${request.loggingId}! Your client is probably cloudflare banned!');
+        logger.shout(
+            'Invalid rate limit body for ${request.loggingId}! Your client is probably cloudflare banned!');
       }
     }
 

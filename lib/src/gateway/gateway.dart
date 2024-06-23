@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
@@ -1212,36 +1211,6 @@ class Gateway extends GatewayManager with EventParser {
       deletedEntitlement:
           client.applications[applicationId].entitlements.cache[entitlement.id],
     );
-  }
-
-  /// Stream all members in a guild that match [query] or [userIds].
-  ///
-  /// If neither is provided, all members in the guild are returned.
-  Future<void> parseGuildMemberListUpdate(
-    Snowflake guildId,
-    Snowflake channelId, {
-    int? limit,
-    List<Snowflake>? userIds,
-    bool? includePresences,
-    String? nonce,
-  }) async {
-    limit ??= 0;
-    nonce ??=
-        '${Snowflake.now().value.toRadixString(36)}${guildId.value.toRadixString(36)}';
-
-    final shard = shardFor(guildId);
-    shard.add(Send(opcode: Opcode.lazyRequestGuildMembers, data: {
-      'guild_id': guildId.value.toString(),
-      "typing": true,
-      "threads": false,
-      "activities": true,
-      "members": [],
-      'channels': {
-        channelId.value.toString(): [
-          [0, 99]
-        ]
-      },
-    }));
   }
 
   /// Update the client's voice state in the guild with ID [guildId].

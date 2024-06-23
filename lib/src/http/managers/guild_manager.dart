@@ -20,7 +20,6 @@ import 'package:firebridge/src/models/guild/ban.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/guild/guild_preview.dart';
 import 'package:firebridge/src/models/guild/guild_widget.dart';
-import 'package:firebridge/src/models/guild/member_list_group.dart';
 import 'package:firebridge/src/models/guild/onboarding.dart';
 import 'package:firebridge/src/models/guild/template.dart';
 import 'package:firebridge/src/models/guild/welcome_screen.dart';

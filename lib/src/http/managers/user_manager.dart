@@ -6,7 +6,6 @@ import 'package:firebridge/src/builders/user.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
-import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/channel/types/dm.dart';
 import 'package:firebridge/src/models/channel/types/group_dm.dart';
 import 'package:firebridge/src/models/discord_color.dart';

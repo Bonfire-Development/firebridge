@@ -9,11 +9,6 @@ void main() async {
     options: GatewayClientOptions(plugins: [logging, cliIntegration]),
   );
 
-  var members = client.gateway.parseGuildMemberListUpdate(
-    Snowflake(1238277719511400488),
-    Snowflake(1238277719511400492),
-  );
-
   // on message sent
   // client.onMessageCreate.listen((event) async {
   //   if (event.message.content.contains('nyxx_firebridge')) {

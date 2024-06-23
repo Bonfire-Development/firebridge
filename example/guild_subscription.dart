@@ -4,8 +4,6 @@ void main() async {
   final client = await Nyxx.connectGateway(
     "",
     GatewayIntents.all,
-    // options: GatewayClientOptions(
-    //     plugins: [Logging(logLevel: Level.INFO), cliIntegration]),
   );
 
   client.updateGuildSubscriptionsBulk(

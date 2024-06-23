@@ -255,7 +255,6 @@ export 'src/models/message/message.dart'
         MessageFlags,
         PartialMessage,
         MessageType,
-        MessageInteraction,
         MessageInteractionMetadata;
 export 'src/models/message/reaction.dart' show Reaction, ReactionCountDetails;
 export 'src/models/message/reference.dart' show MessageReference;
@@ -294,7 +293,6 @@ export 'src/models/guild/guild.dart'
         NsfwLevel,
         PremiumTier,
         VerificationLevel,
-        GuildMember,
         UserGuild;
 export 'src/models/guild/guild_subscription.dart' show GuildSubscription;
 export 'src/models/guild/guild_member_range.dart' show GuildMemberRange;
