@@ -1259,44 +1259,11 @@ class Gateway extends GatewayManager with EventParser {
           Snowflake guildId, ChannelStatusesBuilder builder) =>
       shardFor(guildId).updateChannelStatusesGuild(guildId, builder);
 
-  void updateguildSubscriptionsBulk(
-      Snowflake guildId, GuildSubscriptionsBulkBuilder builder) {
-    // shardFor(guildId).updateguildSubscriptionsBulk(guildId, builder);
+  /// Update the current guild subscription with [guildId].
+  void updateguildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) {
     for (final shard in shards) {
-      // shard.add(Send(opcode: Opcode.requestChannelStatuses, data: {
-      //   // "subscriptions": {
-      //   //   "522681957373575168": {
-      //   //     "channels": {
-      //   //       "759660999032176660": [
-      //   //         [0, 99]
-      //   //       ],
-      //   //       "762200145990254592": [
-      //   //         [0, 99]
-      //   //       ]
-      //   //     }
-      //   //   }
-      //   // }
-      //   "guild_id": "522681957373575168"
-      // }));
-      shard.add(Send(opcode: Opcode.guildSubscriptionsBulk, data: {
-        "subscriptions": {
-          "820745488231301210": {
-            "typing": true,
-            "threads": true,
-            "activities": true,
-            "members": [],
-            "member_updates": false,
-            "channels": {
-              "1233447567199834267": [
-                [0, 99]
-              ]
-            },
-            "thread_member_lists": []
-          }
-        }
-
-        // "guild_id": "522681957373575168"
-      }));
+      shard.add(
+          Send(opcode: Opcode.guildSubscriptionsBulk, data: builder.build()));
     }
   }
 }

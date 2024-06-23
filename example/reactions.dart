@@ -9,18 +9,14 @@ void main() async {
     //     plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
   );
 
-  // client.channelStatusesUpdate(Snowflake(820745488231301210),
-  //     ChannelStatusesBuilder()..guildId = Snowflake(820745488231301210));
-  // wait 2
-  await Future.delayed(Duration(seconds: 2));
   client.updateGuildSubscriptionsBulk(
-    Snowflake(662267976984297473),
     GuildSubscriptionsBulkBuilder()
       ..subscriptions = {
-        Snowflake(662267976984297473): GuildSubscription(
+        Snowflake(820745488231301210): GuildSubscription(
+          typing: true,
           channels: {
-            Snowflake(1008571027565072494):
-                GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 98),
+            Snowflake(1233447567199834267):
+                GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
           },
         ),
       },

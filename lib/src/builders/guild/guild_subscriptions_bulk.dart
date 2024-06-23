@@ -1,6 +1,9 @@
-import 'package:firebridge/firebridge.dart';
+import 'dart:convert';
+
+import 'package:firebridge/src/builders/builder.dart';
 import 'package:firebridge/src/models/gateway/events/guild.dart';
 import 'package:firebridge/src/models/guild/guild_subscription.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 
 class GuildSubscriptionsBulkBuilder
     extends CreateBuilder<GuildSubscriptionsBulkEvent> {
@@ -8,17 +11,33 @@ class GuildSubscriptionsBulkBuilder
 
   @override
   Map<String, Object?> build() {
-    // 'ids': subscriptions
-    Map<int, Map<String, Map<int, List<int>>>?> _subscriptions = {};
+    final _subscriptions = <String, Map<String, dynamic>>{};
+
     subscriptions?.forEach((guildId, subscription) {
-      _subscriptions[guildId.value] = {"channels": {}};
+      final guildKey = guildId.value.toString();
+      final channels = <String, dynamic>{};
+
       subscription.channels.forEach((channelId, channelRange) {
-        // _subscriptions[guildId.value]!["channels"]![channelId.value] = [
-        //   channelRange.lowerMemberBound,
-        //   channelRange.upperMemberBound
-        // ];
+        final channelKey = channelId.value.toString();
+        channels[channelKey] = [
+          [channelRange.lowerMemberBound, channelRange.upperMemberBound]
+        ];
       });
+
+      _subscriptions[guildKey] = {
+        if (subscription.typing != null) "typing": subscription.typing,
+        if (subscription.threads != null) "threads": subscription.threads,
+        if (subscription.activities != null)
+          "activities": subscription.activities,
+        if (subscription.memberUpdates != null)
+          "member_updates": subscription.memberUpdates,
+        if (subscription.members != null) "members": subscription.members,
+        if (subscription.threadMemberLists != null)
+          "thread_member_lists": subscription.threadMemberLists,
+        "channels": channels,
+      };
     });
+
     return {"subscriptions": _subscriptions};
   }
 }

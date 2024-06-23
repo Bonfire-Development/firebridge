@@ -262,9 +262,8 @@ class NyxxGateway with ManagerMixin, EventMixin implements NyxxRest {
       gateway.updateChannelStatuses(guildId, builder);
 
   /// Update the client's guild subscriptions.
-  void updateGuildSubscriptionsBulk(
-          Snowflake guildId, GuildSubscriptionsBulkBuilder builder) =>
-      gateway.updateguildSubscriptionsBulk(guildId, builder);
+  void updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) =>
+      gateway.updateguildSubscriptionsBulk(builder);
 
   @override
   Future<void> close() {
