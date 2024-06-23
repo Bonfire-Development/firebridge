@@ -1,3 +1,8 @@
+## 6.2.10
+__06.23.2024__
+- feat: Add guild subscription support
+- feat: Add member list support
+
 ## 6.2.9
 __06.15.2024__
 - feat: Add serialization support
