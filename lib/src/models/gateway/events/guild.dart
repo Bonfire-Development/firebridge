@@ -350,9 +350,9 @@ class GuildMemberListUpdateEvent extends DispatchEvent {
   final Snowflake guildId;
   final int onlineCount;
   final int memberCount;
-  final Snowflake id;
   final List<dynamic> groups;
   final MemberListUpdateType eventType;
+  final PartialRole? partialRole;
   final List<dynamic>? memberList;
 
   GuildMemberListUpdateEvent({
@@ -360,9 +360,9 @@ class GuildMemberListUpdateEvent extends DispatchEvent {
     required this.guildId,
     required this.onlineCount,
     required this.memberCount,
-    required this.id,
     required this.groups,
     required this.eventType,
+    this.partialRole,
     this.memberList,
   });
 

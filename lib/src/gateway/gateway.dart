@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:logging/logging.dart';
@@ -721,21 +722,25 @@ class Gateway extends GatewayManager with EventParser {
         MemberListUpdateType.values.firstWhere((e) {
       return e.value == ops["op"];
     }, orElse: () => MemberListUpdateType.unknown);
-
+    int? id = int.tryParse(raw["id"].toString());
+    PartialRole? role;
+    if (id != null) {
+      role = PartialRole(
+          id: Snowflake(id), json: {}, manager: client.guilds[guildId].roles);
+    }
     return GuildMemberListUpdateEvent(
-      gateway: this,
-      guildId: guildId,
-      eventType: eventType,
-      memberList: (ops["op"] == "SYNC")
-          ? parseMany(
-              items, client.guilds[guildId].members.parseGuildMemberGroups)
-          : items,
-      onlineCount: raw["online_count"] as int,
-      memberCount: raw["member_count"] as int,
-      groups: parseMany(raw["groups"] as List<Object?>,
-          client.guilds[guildId].members.parseGuildMemberListGroup),
-      id: Snowflake(int.parse(raw["id"] as String)),
-    );
+        gateway: this,
+        guildId: guildId,
+        eventType: eventType,
+        memberList: (ops["op"] == "SYNC")
+            ? parseMany(
+                items, client.guilds[guildId].members.parseGuildMemberGroups)
+            : items,
+        onlineCount: raw["online_count"] as int,
+        memberCount: raw["member_count"] as int,
+        groups: parseMany(raw["groups"] as List<Object?>,
+            client.guilds[guildId].members.parseGuildMemberListGroup),
+        partialRole: role);
   }
 
   /// Parse a [GuildRoleCreateEvent] from [raw].
