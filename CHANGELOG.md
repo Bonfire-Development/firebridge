@@ -1,3 +1,7 @@
+## 6.2.12
+__06.23.2024__
+- bug: exported GuildMemberListGroup
+
 ## 6.2.11
 __06.23.2024__
 - bug: fixed excess logging
