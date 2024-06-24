@@ -21,7 +21,8 @@ export 'src/errors.dart'
         IntegrationNotFoundException,
         AlreadyAcknowledgedError,
         AlreadyRespondedError,
-        PluginError;
+        PluginError,
+        JsDisabledError;
 
 export 'src/builders/builder.dart' show Builder, CreateBuilder, UpdateBuilder;
 export 'src/builders/image.dart' show ImageBuilder;

@@ -32,13 +32,18 @@ String stringifyInstance(InstanceMirror mirror) {
 
   final buffer = StringBuffer('$type(\n');
 
-  final getters = mirror.type.instanceMembers.values.where((member) => member.isGetter);
+  final getters =
+      mirror.type.instanceMembers.values.where((member) => member.isGetter);
   const blockedGetters = [#manager, #hashCode, #runtimeType];
 
   final outputtedGetters = List.of(
     getters.where(
       (getter) =>
-          !getter.isPrivate && !blockedGetters.contains(getter.simpleName) && !getter.returnType.toRuntimeType().isSubtypeOf(RuntimeType<ReadOnlyManager>()),
+          !getter.isPrivate &&
+          !blockedGetters.contains(getter.simpleName) &&
+          !getter.returnType
+              .toRuntimeType()
+              .isSubtypeOf(RuntimeType<ReadOnlyManager>()),
     ),
   );
 
@@ -62,7 +67,8 @@ String stringifyInstance(InstanceMirror mirror) {
     return aName.toString().compareTo(bName.toString());
   });
 
-  for (final identifier in outputtedGetters.map((getter) => getter.simpleName)) {
+  for (final identifier
+      in outputtedGetters.map((getter) => getter.simpleName)) {
     late final String representation;
     try {
       representation = mirror.getField(identifier).reflectee.toString();

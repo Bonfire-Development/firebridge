@@ -4,6 +4,8 @@ void main() async {
   final client = await Nyxx.connectGateway(
     "",
     GatewayIntents.all,
+    options: GatewayClientOptions(
+        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
   );
 
   client.updateGuildSubscriptionsBulk(
@@ -31,7 +33,7 @@ void main() async {
   );
 
   client.onMessageCreate.listen((event) async {
-    // print(event.message.content);
+    print(event.message.content);
   });
 
   client.onGuildMemberListUpdate.listen((event) async {
