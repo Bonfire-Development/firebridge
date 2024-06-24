@@ -18,7 +18,8 @@ class ClientStatus with ToStringHelper {
 
   /// {@macro client_status}
   /// @nodoc
-  ClientStatus({required this.desktop, required this.mobile, required this.web});
+  ClientStatus(
+      {required this.desktop, required this.mobile, required this.web});
 }
 
 /// The status of a client.
@@ -122,7 +123,8 @@ enum ActivityType {
   listening._(2),
   watching._(3),
   custom._(4),
-  competing._(5);
+  competing._(5),
+  hangStatus._(6);
 
   /// The value of this [ActivityType].
   final int value;
@@ -171,7 +173,8 @@ class ActivityParty with ToStringHelper {
 
   /// {@macro activity_party}
   /// @nodoc
-  ActivityParty({required this.id, required this.currentSize, required this.maxSize});
+  ActivityParty(
+      {required this.id, required this.currentSize, required this.maxSize});
 }
 
 /// {@template activity_assets}
@@ -217,7 +220,8 @@ class ActivitySecrets with ToStringHelper {
 
   /// {@macro activity_secrets}
   /// @nodoc
-  ActivitySecrets({required this.join, required this.spectate, required this.match});
+  ActivitySecrets(
+      {required this.join, required this.spectate, required this.match});
 }
 
 /// Information about the data in an [Activity] instance.
