@@ -71,7 +71,6 @@ class MemberManager extends Manager<Member> {
 
     raw.forEach((key, item) {
       item = (item as Map<String, dynamic>);
-      print(item.keys);
       if (item.containsKey("id")) {
         // is a group
         items.add(parseGuildMemberListGroup(item));

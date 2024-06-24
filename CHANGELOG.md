@@ -1,3 +1,7 @@
+## 6.2.11
+__06.23.2024__
+- bug: fixed excess logging
+
 ## 6.2.10
 __06.23.2024__
 - feat: Add guild subscription support

@@ -37,7 +37,7 @@ void main() async {
   client.onGuildMemberListUpdate.listen((event) async {
     // print(event);
     if (event.eventType == MemberListUpdateType.sync) {
-      print(event.memberList);
+      // print(event.memberList);
     }
   });
 }

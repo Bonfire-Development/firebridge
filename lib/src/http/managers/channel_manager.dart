@@ -921,8 +921,8 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     final request = BasicRequest(route);
 
     final response = await client.httpHandler.executeSafe(request);
-    var list = response.jsonBody as List<dynamic>;
-    print(list[0]);
+    // var list = response.jsonBody as List<dynamic>;
+    // print(list[0]);
     final channels = parseMany(response.jsonBody as List<dynamic>,
         (raw) => parseDmChannel(raw as Map<String, Object?>));
 
