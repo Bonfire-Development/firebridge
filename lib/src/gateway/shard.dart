@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
@@ -122,7 +123,8 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
         } else {
           logger
             ..fine('Receive event: ${event.name}')
-            ..finer('Seq: ${event.seq}, Data: ${event.payload}');
+            ..finer('Seq: ${event.seq}, Data: ${event.payload}')
+            ..finer('Opcode: ${event.opcode.value}, ');
 
           if (event.name == 'READY') {
             logger.info('Connected to Gateway');

@@ -3,6 +3,7 @@ import 'package:firebridge/src/models/channel/text_channel.dart';
 import 'package:firebridge/src/models/channel/thread.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/unread_update.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 
 /// {@template channel_create_event}
@@ -29,7 +30,10 @@ class ChannelUpdateEvent extends DispatchEvent {
 
   /// {@macro channel_update_event}
   /// @nodoc
-  ChannelUpdateEvent({required super.gateway, required this.oldChannel, required this.channel});
+  ChannelUpdateEvent(
+      {required super.gateway,
+      required this.oldChannel,
+      required this.channel});
 }
 
 /// {@template channel_delete_event}
@@ -68,7 +72,8 @@ class ThreadUpdateEvent extends DispatchEvent {
 
   /// {@macro thread_update_event}
   /// @nodoc
-  ThreadUpdateEvent({required super.gateway, required this.oldThread, required this.thread});
+  ThreadUpdateEvent(
+      {required super.gateway, required this.oldThread, required this.thread});
 }
 
 /// {@template thread_delete_event}
@@ -83,7 +88,10 @@ class ThreadDeleteEvent extends DispatchEvent {
 
   /// {@macro thread_delete_event}
   /// @nodoc
-  ThreadDeleteEvent({required super.gateway, required this.thread, required this.deletedThread});
+  ThreadDeleteEvent(
+      {required super.gateway,
+      required this.thread,
+      required this.deletedThread});
 }
 
 /// {@template thread_list_sync_event}
@@ -116,7 +124,8 @@ class ThreadListSyncEvent extends DispatchEvent {
   PartialGuild get guild => gateway.client.guilds[guildId];
 
   /// The channels the threads are syncing for, or `null` if the entire guild is syncing.
-  List<PartialChannel>? get channels => channelIds?.map((e) => gateway.client.channels[e]).toList();
+  List<PartialChannel>? get channels =>
+      channelIds?.map((e) => gateway.client.channels[e]).toList();
 }
 
 /// {@template thread_member_update_event}
@@ -131,7 +140,8 @@ class ThreadMemberUpdateEvent extends DispatchEvent {
 
   /// {@macro thread_member_update_event}
   /// @nodoc
-  ThreadMemberUpdateEvent({required super.gateway, required this.member, required this.guildId});
+  ThreadMemberUpdateEvent(
+      {required super.gateway, required this.member, required this.guildId});
 
   /// The guild in which the member was updated.
   PartialGuild get guild => gateway.client.guilds[guildId];
@@ -189,11 +199,54 @@ class ChannelPinsUpdateEvent extends DispatchEvent {
 
   /// {@macro channel_pins_update_event}
   /// @nodoc
-  ChannelPinsUpdateEvent({required super.gateway, required this.guildId, required this.channelId, required this.lastPinTimestamp});
+  ChannelPinsUpdateEvent(
+      {required super.gateway,
+      required this.guildId,
+      required this.channelId,
+      required this.lastPinTimestamp});
 
   /// The guild the channel is in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the pins were updated in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
+}
+
+/// {@template channel_unread_event}
+/// Emitted when the unread status of a channel is changed.
+/// {@endtemplate}
+class ChannelUnreadEvent extends DispatchEvent {
+  Snowflake guildId;
+  List<ChannelUnreadUpdate> channelUnreadUpdates;
+
+  ChannelUnreadEvent({
+    required super.gateway,
+    required this.guildId,
+    required this.channelUnreadUpdates,
+  });
+}
+
+/// {@template message_ack_event}
+/// Emitted when a message is acknowledged.
+/// {@endtemplate}
+class MessageAckEvent extends DispatchEvent {
+  final int version;
+  final Snowflake channelId;
+  final Snowflake messageId;
+  final int lastViewed;
+  final int? flags;
+
+  MessageAckEvent({
+    required super.gateway,
+    required this.version,
+    required this.channelId,
+    required this.messageId,
+    required this.lastViewed,
+    required this.flags,
+  });
+
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 }

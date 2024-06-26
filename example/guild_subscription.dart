@@ -5,14 +5,14 @@ void main() async {
     "",
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
+        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
   );
 
   client.updateGuildSubscriptionsBulk(
     GuildSubscriptionsBulkBuilder()
       ..subscriptions = [
         GuildSubscription(
-          guildId: Snowflake(820745488231301210),
+          guildId: Snowflake(1238277719511400488),
           typing: true,
           threads: true,
           memberUpdates: false,
@@ -21,7 +21,7 @@ void main() async {
           members: [],
           channels: [
             GuildSubscriptionChannel(
-              channelId: Snowflake(1233447567199834267),
+              channelId: Snowflake(1238277720023240805),
               memberRange: GuildMemberRange(
                 lowerMemberBound: 0,
                 upperMemberBound: 99,
@@ -32,14 +32,20 @@ void main() async {
       ],
   );
 
+  // client.onVoiceServerUpdate.listen((event) async {
+  //   print(event.);
+  // });
+
   client.onMessageCreate.listen((event) async {
-    print(event.message.content);
+    // print(event.message.content);
   });
 
-  client.onGuildMemberListUpdate.listen((event) async {
-    // print(event);
-    if (event.eventType == MemberListUpdateType.sync) {
-      print(event.memberList![2][0]);
-    }
-  });
+  client.onChannelUnread.listen((event) async {});
+
+  // client.onGuildMemberListUpdate.listen((event) async {
+  //   // print(event);
+  //   if (event.eventType == MemberListUpdateType.sync) {
+  //     print(event.memberList![2][0]);
+  //   }
+  // });
 }

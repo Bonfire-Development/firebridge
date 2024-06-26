@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
+import 'package:firebridge/src/models/guild/unread_update.dart';
+import 'package:firebridge/src/models/role.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/presence.dart';
@@ -234,6 +235,8 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Parse a [DispatchEvent] from [raw].
   DispatchEvent parseDispatchEvent(RawDispatchEvent raw) {
+    // print("got dispatch event");
+    // print(raw.name);
     final mapping = {
       'READY': parseReady,
       'RESUMED': parseResumed,
@@ -301,6 +304,7 @@ class Gateway extends GatewayManager with EventParser {
       'ENTITLEMENT_UPDATE': parseEntitlementUpdate,
       'ENTITLEMENT_DELETE': parseEntitlementDelete,
       "GUILD_MEMBER_LIST_UPDATE": parseGuildMembersUpdateEvent,
+      'CHANNEL_UNREAD_UPDATE': parseChannelUnreadUpdate,
     };
 
     return mapping[raw.name]?.call(raw.payload) ??
@@ -851,7 +855,13 @@ class Gateway extends GatewayManager with EventParser {
   }
 
   /// Parse an [IntegrationUpdateEvent] from [raw].
-  IntegrationUpdateEvent parseIntegrationUpdate(Map<String, Object?> raw) {
+  IntegrationUpdateEvent? parseIntegrationUpdate(Map<String, Object?> raw) {
+    // for some reason, the guild id will *sometimes* just be a wack af string of stuff
+    // when it's a user. It usually breaks the pipe.
+
+    int? num = int.tryParse(raw['guild_id']! as String);
+    if (num == null) return null;
+
     final guildId = Snowflake.parse(raw['guild_id']!);
     final integration = client.guilds[guildId].integrations.parse(raw);
 
@@ -901,7 +911,6 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Parse a [MessageCreateEvent] from [raw].
   MessageCreateEvent parseMessageCreate(Map<String, Object?> raw) {
-    // if (raw['guild_id'] == "820745488231301210") print("Target guild detected.");
     final guildId = maybeParse(raw['guild_id'], Snowflake.parse);
     final message = MessageManager(
       client.options.messageCacheConfig,
@@ -1080,6 +1089,27 @@ class Gateway extends GatewayManager with EventParser {
           (Map<String, Object?> raw) =>
               client.guilds[guildId!].members.parse(raw, userId: userId)),
     );
+  }
+
+  ChannelUnreadEvent? parseChannelUnreadUpdate(Map<String, Object?> raw) {
+    List<ChannelUnreadUpdate> channelUnreadUpdates = [];
+    List<dynamic> rawUpdates = raw["channel_unread_updates"]! as List<dynamic>;
+
+    for (var channelUnreadUpdate in (rawUpdates)) {
+      channelUnreadUpdates.add(ChannelUnreadUpdate(
+        id: Snowflake.parse(channelUnreadUpdate["id"]! as String),
+        lastMessageId:
+            Snowflake.parse(channelUnreadUpdate["last_message_id"]! as String),
+        // nullable try parse for last pin
+        lastPinTimestamp:
+            DateTime.tryParse(raw["last_pin_timestamp"] as String? ?? ""),
+      ));
+    }
+
+    return ChannelUnreadEvent(
+        gateway: this,
+        guildId: Snowflake.parse(raw["guild_id"]!),
+        channelUnreadUpdates: channelUnreadUpdates);
   }
 
   /// Parse a [UserUpdateEvent] from [raw].
