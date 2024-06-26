@@ -5,7 +5,7 @@ void main() async {
     "",
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
+        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
   );
 
   client.updateGuildSubscriptionsBulk(

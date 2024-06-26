@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' if (dart.library.html) 'dart:html';
 import 'dart:math';
 
 import 'package:eterl/eterl.dart';
@@ -10,6 +10,9 @@ import 'package:firebridge/src/gateway/event_parser.dart';
 import 'package:firebridge/src/gateway/message.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/opcode.dart';
+
+import 'websocket_connection_non_web.dart'
+    if (dart.library.html) 'websocket_connection_web.dart' as ws;
 
 /// An internal class that contains the logic for running a shard.
 ///
@@ -325,7 +328,7 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
   static const rateLimitDuration = Duration(seconds: 60);
 
   /// The connection to the Gateway.
-  final WebSocket websocket;
+  final ws.WebSocket websocket;
 
   /// A stream of parsed events received from the Gateway.
   final Stream<GatewayEvent> events;
@@ -371,13 +374,13 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
 
   static Future<ShardConnection> connect(
       String gatewayUri, ShardRunner runner) async {
-    final connection = await WebSocket.connect(gatewayUri);
+    final connection = await ws.WebSocket.connect(gatewayUri);
 
     final uncompressedStream = switch (runner.data.apiOptions.compression) {
       GatewayCompression.transport =>
-        decompressTransport(connection.cast<List<int>>()),
-      GatewayCompression.payload => decompressPayloads(connection),
-      GatewayCompression.none => connection,
+        decompressTransport(connection.onMessage.cast<List<int>>()),
+      GatewayCompression.payload => decompressPayloads(connection.onMessage),
+      GatewayCompression.none => connection.onMessage,
     };
 
     final dataStream = switch (runner.data.apiOptions.payloadFormat) {
@@ -433,8 +436,7 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
   }
 
   @override
-  void addError(Object error, [StackTrace? stackTrace]) =>
-      websocket.addError(error, stackTrace);
+  void addError(Object error, [StackTrace? stackTrace]) => {};
 
   @override
   Future<void> addStream(Stream<Send> stream) => stream.forEach(add);
