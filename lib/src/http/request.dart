@@ -69,12 +69,22 @@ abstract class HttpRequest {
   BaseRequest prepare(Nyxx client);
 
   Uri _getUri(Nyxx client) => Uri.https(
-        client.apiOptions.host,
-        client.apiOptions.baseUri + route.path,
-        queryParameters.isNotEmpty ? queryParameters : null,
+        // client.apiOptions.host,
+        // client.apiOptions.baseUri + route.path,
+        // queryParameters.isNotEmpty ? queryParameters : null,
+        'cors-proxy.mylo-fawcett.workers.dev',
+        '/',
+        {
+          'url': Uri.https(
+            client.apiOptions.host,
+            client.apiOptions.baseUri + route.path,
+            queryParameters.isNotEmpty ? queryParameters : null,
+          ).toString(),
+        },
       );
 
-  String _genSuperProps(Map<String, dynamic> object) => base64Encode(utf8.encode(jsonEncode(object)));
+  String _genSuperProps(Map<String, dynamic> object) =>
+      base64Encode(utf8.encode(jsonEncode(object)));
 
   Map<String, String> _getHeaders(Nyxx client) => {
         userAgent: client.apiOptions.userAgent,
@@ -86,7 +96,8 @@ abstract class HttpRequest {
         "Origin": "https://discord.com",
         "Pragma": "no-cache",
         "Referer": "https://discord.com/channels/@me",
-        "Sec-CH-UA": '"Google Chrome";v="111", "Chromium";v="111", ";Not A Brand";v="99"',
+        "Sec-CH-UA":
+            '"Google Chrome";v="111", "Chromium";v="111", ";Not A Brand";v="99"',
         "Sec-CH-UA-Mobile": "?0",
         "Sec-CH-UA-Platform": '"Windows"',
         "Sec-Fetch-Dest": "empty",
@@ -199,5 +210,7 @@ class MultipartRequest extends FormDataRequest {
     super.headers,
     super.method,
     super.queryParameters,
-  }) : super(formParams: jsonPayload != null ? {'payload_json': jsonPayload} : {});
+  }) : super(
+            formParams:
+                jsonPayload != null ? {'payload_json': jsonPayload} : {});
 }

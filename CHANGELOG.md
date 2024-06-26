@@ -1,3 +1,7 @@
+## 6.2.13
+__06.26.2024__
+- feat: Added support for channel unread events
+
 ## 6.2.12
 __06.23.2024__
 - bug: exported GuildMemberListGroup
