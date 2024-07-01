@@ -57,7 +57,7 @@ class IntegrationManager extends ReadOnlyManager<Integration> {
   /// Parse an [IntegrationApplication] from [raw].
   IntegrationApplication parseIntegrationApplication(Map<String, Object?> raw) {
     return IntegrationApplication(
-      id: Snowflake.parse(raw['id']!),
+      id: Snowflake.parse(int.tryParse(raw['id'] as String) ?? 0),
       name: raw['name'] as String,
       iconHash: raw['icon'] as String?,
       description: raw['description'] as String,
