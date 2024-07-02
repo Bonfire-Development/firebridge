@@ -7,7 +7,7 @@ class ReadState with ToStringHelper {
   DateTime lastPinTimestamp;
   PartialChannel id;
   int flags;
-  String? lastMessageId;
+  Snowflake? lastMessageId;
   int? lastViewed;
 
   ReadState({
