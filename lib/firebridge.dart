@@ -201,6 +201,14 @@ export 'src/models/user/application_role_connection.dart'
 export 'src/models/user/connection.dart'
     show Connection, ConnectionType, ConnectionVisibility;
 export 'src/models/user/user.dart' show PartialUser, User, UserFlags, NitroType;
+export 'src/models/user/settings/channel_overrides.dart' show ChannelOverrides;
+export 'src/models/user/settings/guild_folder.dart' show GuildFolder;
+export 'src/models/user/settings/user_settings.dart' show UserSettings;
+export 'src/models/user/settings/user_guild_settings.dart'
+    show UserGuildSettings;
+export 'src/models/user/settings/read_state.dart' show ReadState;
+export 'src/models/user/settings/private_channel.dart' show PrivateChannel;
+
 export 'src/models/channel/channel.dart'
     show Channel, ChannelFlags, PartialChannel, ChannelType;
 export 'src/models/channel/followed_channel.dart' show FollowedChannel;
