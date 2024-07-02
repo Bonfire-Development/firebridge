@@ -384,7 +384,13 @@ class Gateway extends GatewayManager with EventParser {
           mobilePush: raw['mobile_push'] as bool,
           messageNotifications: raw['message_notifications'] as int,
           hideMutedChannels: raw['hide_muted_channels'] as bool,
-          guildId: raw['guild_id'] as String,
+          partialGuild: tryParse(raw['guild_id'], (String raw) {
+            return PartialGuild(
+              id: Snowflake.parse(raw),
+              json: {},
+              manager: client.guilds,
+            );
+          }),
           flags: raw['flags'] as int,
           channelOverrides: raw['channel_overrides'] as List<dynamic>,
         ),
@@ -413,7 +419,7 @@ class Gateway extends GatewayManager with EventParser {
             raw['recipients'] as List<Object?>,
             (Map<String, Object?> raw) => client.users.parse(raw),
           ),
-          lastMessageId: Snowflake.parse(raw['last_message_id'] as String),
+          lastMessageId: tryParse(raw['last_message_id'], Snowflake.parse),
           isSpam: raw['is_spam'] as bool?,
           id: Snowflake.parse(raw['id'] as String),
           flags: raw['flags'] as int,
