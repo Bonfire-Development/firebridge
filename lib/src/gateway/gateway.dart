@@ -402,7 +402,7 @@ class Gateway extends GatewayManager with EventParser {
           lastViewed: int.tryParse(raw['last_viewed'].toString()),
           lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
           lastMessageId: tryParse(raw['last_message_id'], Snowflake.parse),
-          id: PartialChannel(
+          partialChannel: PartialChannel(
             id: Snowflake.parse(raw['id'] as String),
             json: {},
             manager: client.channels,
