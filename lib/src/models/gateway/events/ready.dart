@@ -1,6 +1,10 @@
 import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/user/settings/private_channel.dart';
+import 'package:firebridge/src/models/user/settings/read_state.dart';
+import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
+import 'package:firebridge/src/models/user/settings/user_settings.dart';
 import 'package:firebridge/src/models/user/user.dart';
 
 /// {@template ready_event}
@@ -28,6 +32,18 @@ class ReadyEvent extends DispatchEvent {
   /// The total number of shards.
   final int? totalShards;
 
+  /// The user's settings.
+  final UserSettings userSettings;
+
+  /// The user's guild settings.
+  final List<UserGuildSettings> userGuildSettings;
+
+  /// The user's read states of guilds.
+  final List<ReadState> readStates;
+
+  /// The client's private channel.
+  final List<PrivateChannel> privateChannels;
+
   /// The client's application.
   final PartialApplication? application;
 
@@ -42,6 +58,10 @@ class ReadyEvent extends DispatchEvent {
     required this.gatewayResumeUrl,
     required this.shardId,
     required this.totalShards,
+    required this.userSettings,
+    required this.userGuildSettings,
+    required this.readStates,
+    required this.privateChannels,
     this.application,
   });
 }

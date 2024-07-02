@@ -5,7 +5,7 @@ void main() async {
     "",
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
+        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
   );
 
   client.updateGuildSubscriptionsBulk(
@@ -19,15 +19,7 @@ void main() async {
           activities: true,
           threadMemberLists: [],
           members: [],
-          channels: [
-            GuildSubscriptionChannel(
-              channelId: Snowflake(1238277720023240805),
-              memberRange: GuildMemberRange(
-                lowerMemberBound: 0,
-                upperMemberBound: 99,
-              ),
-            ),
-          ],
+          channels: [],
         ),
       ],
   );
@@ -48,4 +40,17 @@ void main() async {
   //     print(event.memberList![2][0]);
   //   }
   // });
+
+  client.onReady.listen((event) async {
+    // print(event.userSettings);
+    // print(event.userGuildSettings);
+    // for (var readState in event.readStates) {
+    //   print("${readState.id}: ${readState.mentionCount}");
+    // }
+
+    // for (var privateChannel in event.privateChannels) {
+    //   print(privateChannel.recipients);
+    // }
+    // print(event.application);
+  });
 }

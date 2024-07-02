@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/guild/unread_update.dart';
 import 'package:firebridge/src/models/role.dart';
+import 'package:firebridge/src/models/user/settings/guild_folder.dart';
+import 'package:firebridge/src/models/user/settings/private_channel.dart';
+import 'package:firebridge/src/models/user/settings/read_state.dart';
+import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
+import 'package:firebridge/src/models/user/settings/user_settings.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/presence.dart';
@@ -84,6 +90,12 @@ class Gateway extends GatewayManager with EventParser {
       final event = message.event;
       if (event is! RawDispatchEvent) continue;
 
+      var goofyEvent = (message.event as RawDispatchEvent);
+      // if (goofyEvent.name == "READY") {
+      //   print(jsonEncode(goofyEvent.payload));
+      // }
+
+      //print(jsonEncode((message.event as RawDispatchEvent).payload));
       final parsedEvent = parseDispatchEvent(event);
       // Update the cache as needed.
       client.updateCacheWith(parsedEvent);
@@ -313,6 +325,13 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Parse a [ReadyEvent] from [raw].
   ReadyEvent parseReady(Map<String, Object?> raw) {
+    // I know, it's not great...
+    // I will make it not suck later :D
+    // ~ Eric Apostal
+    Map<String, dynamic> userSettings =
+        raw["user_settings"] as Map<String, dynamic>;
+
+    List<dynamic> guildSettings = raw["user_guild_settings"] as List<dynamic>;
     return ReadyEvent(
       gateway: this,
       version: raw['v'] as int,
@@ -325,6 +344,77 @@ class Gateway extends GatewayManager with EventParser {
       sessionId: raw['session_id'] as String,
       gatewayResumeUrl: Uri.parse(raw['resume_gateway_url'] as String),
       shardId: (raw['shard'] as List<Object?>?)?[0] as int?,
+      userSettings: UserSettings(
+        detectPlatformAccounts:
+            userSettings['detect_platform_accounts'] as bool,
+        animateStickers: userSettings['animate_stickers'] as int,
+        inlineAttachmentMedia: userSettings['inline_attachment_media'] as bool,
+        status: UserStatus.parse(userSettings['status'] as String),
+        messageDisplayCompact: userSettings['message_display_compact'] as bool,
+        viewNsfwGuilds: userSettings['view_nsfw_guilds'] as bool,
+        timezoneOffset: userSettings['timezone_offset'] as int,
+        enableTtsCommand: userSettings['enable_tts_command'] as bool,
+        disableGamesTab: userSettings['disable_games_tab'] as bool,
+        streamNotificationsEnabled:
+            userSettings['stream_notifications_enabled'] as bool,
+        animateEmoji: userSettings['animate_emoji'] as bool,
+        guildFolders: parseMany(
+          userSettings['guild_folders'] as List<Object?>,
+          (Map<String, Object?> raw) => GuildFolder(
+            name: raw['name'] as String?,
+            color: raw['color'] as int?,
+            id: tryParse(raw['id'], Snowflake.parse),
+            guildIds: parseMany(
+              raw['guild_ids'] as List<Object?>,
+              (Object? raw) => Snowflake.parse(raw as String),
+            ),
+          ),
+        ),
+      ),
+      userGuildSettings: parseMany(
+        guildSettings,
+        (Map<String, Object?> raw) => UserGuildSettings(
+          version: raw['version'] as int,
+          suppressRoles: raw['suppress_roles'] as bool,
+          suppressEveryone: raw['suppress_everyone'] as bool,
+          notifyHighlights: raw['notify_highlights'] as int,
+          muted: raw['muted'] as bool,
+          muteScheduledEvents: raw['mute_scheduled_events'] as bool,
+          muteConfig: raw['mute_config'],
+          mobilePush: raw['mobile_push'] as bool,
+          messageNotifications: raw['message_notifications'] as int,
+          hideMutedChannels: raw['hide_muted_channels'] as bool,
+          guildId: raw['guild_id'] as String,
+          flags: raw['flags'] as int,
+          channelOverrides: raw['channel_overrides'] as List<dynamic>,
+        ),
+      ),
+      readStates: parseMany(
+        raw['read_state'] as List<Object?>,
+        (Map<String, Object?> raw) => ReadState(
+          mentionCount: raw['mention_count'] as int,
+          lastViewed: int.tryParse(raw['last_viewed'].toString()),
+          lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
+          lastMessageId: raw['last_message_id'] as String,
+          id: Snowflake.parse(raw['id'] as String),
+          flags: raw['flags'] as int,
+        ),
+      ),
+      privateChannels: parseMany(
+        raw['private_channels'] as List<Object?>,
+        (Map<String, Object?> raw) => PrivateChannel(
+          type: raw['type'] as int,
+          safetyWarnings: raw['safety_warnings'] as List<dynamic>?,
+          recipients: parseMany(
+            raw['recipients'] as List<Object?>,
+            (Map<String, Object?> raw) => client.users.parse(raw),
+          ),
+          lastMessageId: Snowflake.parse(raw['last_message_id'] as String),
+          isSpam: raw['is_spam'] as bool?,
+          id: Snowflake.parse(raw['id'] as String),
+          flags: raw['flags'] as int,
+        ),
+      ),
       totalShards: (raw['shard'] as List<Object?>?)?[1] as int?,
     );
   }
