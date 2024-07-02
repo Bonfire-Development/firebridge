@@ -1,5 +1,5 @@
 import 'package:firebridge/src/models/channel/channel.dart';
-import 'package:firebridge/src/models/snowflake.dart';
+import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/utils/to_string_helper/base_impl.dart';
 
 class ReadState with ToStringHelper {
@@ -7,7 +7,7 @@ class ReadState with ToStringHelper {
   DateTime lastPinTimestamp;
   PartialChannel partialChannel;
   int flags;
-  Snowflake? lastMessageId;
+  PartialMessage? lastPartialMessage;
   int? lastViewed;
 
   ReadState({
@@ -15,7 +15,7 @@ class ReadState with ToStringHelper {
     required this.lastPinTimestamp,
     required this.partialChannel,
     required this.flags,
-    this.lastMessageId,
+    this.lastPartialMessage,
     this.lastViewed,
   });
 }

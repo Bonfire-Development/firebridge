@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/guild/unread_update.dart';
+import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/models/role.dart';
 import 'package:firebridge/src/models/user/settings/guild_folder.dart';
 import 'package:firebridge/src/models/user/settings/private_channel.dart';
@@ -401,7 +402,14 @@ class Gateway extends GatewayManager with EventParser {
           mentionCount: raw['mention_count'] as int,
           lastViewed: int.tryParse(raw['last_viewed'].toString()),
           lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
-          lastMessageId: tryParse(raw['last_message_id'], Snowflake.parse),
+          lastPartialMessage: (raw['last_message_id'] != null)
+              ? PartialMessage(
+                  id: Snowflake.parse(raw['last_message_id'] as String),
+                  json: {},
+                  manager:
+                      (client.channels[Snowflake.zero] as PartialTextChannel)
+                          .messages)
+              : null,
           partialChannel: PartialChannel(
             id: Snowflake.parse(raw['id'] as String),
             json: {},
