@@ -335,7 +335,7 @@ class MessageManager extends Manager<Message> {
 
     // ignore: deprecated_member_use_from_same_package
     return MessageInteraction(
-      id: Snowflake.parse(raw['id']!),
+      id: Snowflake.parse(raw['id'] ?? 0),
       type: InteractionType.parse(raw['type'] as int),
       name: raw['name'] as String,
       user: user,
@@ -350,7 +350,7 @@ class MessageManager extends Manager<Message> {
   MessageInteractionMetadata parseMessageInteractionMetadata(
       Map<String, Object?> raw) {
     return MessageInteractionMetadata(
-      id: Snowflake.parse(raw['id']!),
+      id: Snowflake.parse(raw['id'] ?? 0),
       type: InteractionType.parse(raw['type'] as int),
       userId: Snowflake.parse(raw['user_id']!),
       authorizingIntegrationOwners: {
