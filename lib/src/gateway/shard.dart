@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
@@ -187,7 +186,6 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       });
     } else {
       final sendSink = StreamController<dynamic>();
-      final receiveStream = sendSink.stream.asBroadcastStream();
 
       final exitFuture = _isolateMainWeb(_IsolateSpawnData(
         totalShards: totalShards,

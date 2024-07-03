@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' if (dart.library.html) 'dart:html';
+import 'package:universal_io/io.dart';
 import 'dart:math';
 
 import 'package:eterl/eterl.dart';
@@ -10,9 +10,6 @@ import 'package:firebridge/src/gateway/event_parser.dart';
 import 'package:firebridge/src/gateway/message.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/opcode.dart';
-
-import 'websocket_connection_non_web.dart'
-    if (dart.library.html) 'websocket_connection_web.dart' as ws;
 
 /// An internal class that contains the logic for running a shard.
 ///
@@ -73,8 +70,13 @@ class ShardRunner {
         await connection!.add(e);
       } catch (error, s) {
         controller.add(ErrorReceived(error: error, stackTrace: s));
-        // Try to send the event again.
-        sendController.add(e);
+
+        // Prevent the recursive call to add() from looping too often.
+        await Future.delayed(Duration(milliseconds: 100));
+        // Try to send the event again, unless we are disposing (in which case the controller will be closed).
+        if (!sendController.isClosed) {
+          sendController.add(e);
+        }
       }
     })
       ..pause();
@@ -127,6 +129,8 @@ class ShardRunner {
       while (true) {
         try {
           // Check for dispose requests. If we should be disposing, exit the loop.
+          // Do this now instead of after the connection is closed in case we get
+          // a dispose request before the shard is even started.
           if (disposing) {
             controller.add(Disconnecting(reason: 'Dispose requested'));
             return;
@@ -134,11 +138,6 @@ class ShardRunner {
 
           // Initialize lastHeartbeatAcked to `true` so we don't immediately disconnect in heartbeat().
           lastHeartbeatAcked = true;
-
-          // Pause the send subscription until we are connected.
-          if (!sendHandler.isPaused) {
-            sendHandler.pause();
-          }
 
           // Open the websocket connection.
           connection =
@@ -243,6 +242,12 @@ class ShardRunner {
           // Prevents the while-true loop from looping too often when no internet is available.
           await Future.delayed(Duration(milliseconds: 100));
         } finally {
+          // Pause the send subscription until we are connected again.
+          // The handler may already be paused if the error occurred before we had identified.
+          if (!sendHandler.isPaused) {
+            sendHandler.pause();
+          }
+
           // Reset connection properties.
           await connection?.close(4000);
           connection = null;
@@ -290,8 +295,8 @@ class ShardRunner {
         'token': data.apiOptions.token,
         'properties': {
           'os': Platform.operatingSystem,
-          'browser': 'Firefox',
-          'device': '',
+          'browser': 'nyxx',
+          'device': 'nyxx',
         },
         if (data.apiOptions.compression == GatewayCompression.payload)
           'compress': true,
@@ -328,7 +333,7 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
   static const rateLimitDuration = Duration(seconds: 60);
 
   /// The connection to the Gateway.
-  final ws.WebSocket websocket;
+  final WebSocket websocket;
 
   /// A stream of parsed events received from the Gateway.
   final Stream<GatewayEvent> events;
@@ -374,13 +379,13 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
 
   static Future<ShardConnection> connect(
       String gatewayUri, ShardRunner runner) async {
-    final connection = await ws.WebSocket.connect(gatewayUri);
+    final connection = await WebSocket.connect(gatewayUri);
 
     final uncompressedStream = switch (runner.data.apiOptions.compression) {
       GatewayCompression.transport =>
-        decompressTransport(connection.onMessage.cast<List<int>>()),
-      GatewayCompression.payload => decompressPayloads(connection.onMessage),
-      GatewayCompression.none => connection.onMessage,
+        decompressTransport(connection.cast<List<int>>()),
+      GatewayCompression.payload => decompressPayloads(connection),
+      GatewayCompression.none => connection,
     };
 
     final dataStream = switch (runner.data.apiOptions.payloadFormat) {
@@ -423,7 +428,12 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     final rateLimitLimit =
         event.opcode == Opcode.heartbeat ? 0 : rateLimitHeartbeatReservation;
     while (rateLimitCount - _currentRateLimitCount <= rateLimitLimit) {
-      await _currentRateLimitEnd.future;
+      try {
+        await _currentRateLimitEnd.future;
+      } catch (e) {
+        // Swap out stack trace so the error message makes more sense.
+        Error.throwWithStackTrace(e, StackTrace.current);
+      }
     }
 
     if (event.opcode == Opcode.heartbeat) {
@@ -436,7 +446,8 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
   }
 
   @override
-  void addError(Object error, [StackTrace? stackTrace]) => {};
+  void addError(Object error, [StackTrace? stackTrace]) =>
+      websocket.addError(error, stackTrace);
 
   @override
   Future<void> addStream(Stream<Send> stream) => stream.forEach(add);
