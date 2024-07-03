@@ -69,19 +69,10 @@ abstract class HttpRequest {
   BaseRequest prepare(Nyxx client);
 
   Uri _getUri(Nyxx client) => Uri.https(
-        // client.apiOptions.host,
-        // client.apiOptions.baseUri + route.path,
-        // queryParameters.isNotEmpty ? queryParameters : null,
-        'cors-proxy.mylo-fawcett.workers.dev',
-        '/',
-        {
-          'url': Uri.https(
             client.apiOptions.host,
             client.apiOptions.baseUri + route.path,
             queryParameters.isNotEmpty ? queryParameters : null,
-          ).toString(),
-        },
-      );
+          );
 
   String _genSuperProps(Map<String, dynamic> object) =>
       base64Encode(utf8.encode(jsonEncode(object)));
