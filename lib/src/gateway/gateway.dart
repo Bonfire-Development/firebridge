@@ -6,6 +6,7 @@ import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/guild/unread_update.dart';
 import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/models/role.dart';
+import 'package:firebridge/src/models/user/settings/custom_status.dart';
 import 'package:firebridge/src/models/user/settings/guild_folder.dart';
 import 'package:firebridge/src/models/user/settings/private_channel.dart';
 import 'package:firebridge/src/models/user/settings/read_state.dart';
@@ -329,6 +330,7 @@ class Gateway extends GatewayManager with EventParser {
     // I know, it's not great...
     // I will make it not suck later :D
     // ~ Eric Apostal
+    // print(json.encode(raw));
     Map<String, dynamic> userSettings =
         raw["user_settings"] as Map<String, dynamic>;
 
@@ -371,6 +373,17 @@ class Gateway extends GatewayManager with EventParser {
             ),
           ),
         ),
+        customStatus: userSettings['custom_status'] == null
+            ? null
+            : CustomStatus(
+                text: userSettings['custom_status']['text'] as String?,
+                expiresAt: maybeParse(
+                    userSettings['custom_status']['expires_at'],
+                    DateTime.parse),
+                emojiName:
+                    userSettings['custom_status']['emoji_name'] as String?,
+                emojiId: userSettings['custom_status']['emoji_id'] as String?,
+              ),
       ),
       userGuildSettings: parseMany(
         guildSettings,

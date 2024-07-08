@@ -1,4 +1,5 @@
 import 'package:firebridge/src/models/presence.dart';
+import 'package:firebridge/src/models/user/settings/custom_status.dart';
 import 'package:firebridge/src/models/user/settings/guild_folder.dart';
 import 'package:firebridge/src/utils/to_string_helper/base_impl.dart';
 
@@ -15,6 +16,7 @@ class UserSettings with ToStringHelper {
   bool streamNotificationsEnabled;
   bool animateEmoji;
   List<GuildFolder> guildFolders;
+  CustomStatus? customStatus;
 
   UserSettings({
     required this.detectPlatformAccounts,
@@ -29,5 +31,6 @@ class UserSettings with ToStringHelper {
     required this.streamNotificationsEnabled,
     required this.animateEmoji,
     required this.guildFolders,
+    this.customStatus,
   });
 }
