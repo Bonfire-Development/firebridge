@@ -171,6 +171,9 @@ class ShardRunner {
           // Handle events from the connection & forward them to the result controller.
           final subscription = connection!.listen((event) async {
             if (event is RawDispatchEvent) {
+              // if (event.name == "USER_SETTINGS_UPDATE") {
+              //   print(event.payload);
+              // }
               seq = event.seq;
 
               if (event.name == 'READY') {

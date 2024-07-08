@@ -331,6 +331,10 @@ class Gateway extends GatewayManager with EventParser {
     // I will make it not suck later :D
     // ~ Eric Apostal
     // print(json.encode(raw));
+
+    // TODO: We may need a way to also handle a USER_SETTINGS_EVENT.
+    // I don't want to remake the parsing for this.
+
     Map<String, dynamic> userSettings =
         raw["user_settings"] as Map<String, dynamic>;
 
