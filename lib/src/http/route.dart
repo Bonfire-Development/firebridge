@@ -30,7 +30,8 @@ class HttpRoute {
   String get rateLimitId => parts
       .expand((part) => [
             part.name,
-            ...part.params.map((param) => param.isMajor ? param.value : r'$param'),
+            ...part.params
+                .map((param) => param.isMajor ? param.value : r'$param'),
           ])
       .join('/');
 
@@ -90,10 +91,12 @@ class HttpRouteParam {
 /// Helper methods for constructing [HttpRoute]s.
 extension RouteHelpers on HttpRoute {
   /// Adds the [`guilds`](https://discord.com/developers/docs/resources/guild#get-guild) part to this [HttpRoute].
-  void guilds({String? id}) => add(HttpRoutePart("guilds", [if (id != null) HttpRouteParam(id, isMajor: true)]));
+  void guilds({String? id}) => add(HttpRoutePart(
+      "guilds", [if (id != null) HttpRouteParam(id, isMajor: true)]));
 
   /// Adds the [`channels`](https://discord.com/developers/docs/resources/channel#get-channel) part to this [HttpRoute].
-  void channels({String? id}) => add(HttpRoutePart("channels", [if (id != null) HttpRouteParam(id, isMajor: true)]));
+  void channels({String? id}) => add(HttpRoutePart(
+      "channels", [if (id != null) HttpRouteParam(id, isMajor: true)]));
 
   /// Adds the [`webhooks`](https://discord.com/developers/docs/resources/webhook#get-webhook) part to this [HttpRoute].
   void webhooks({String? id, String? token}) => add(HttpRoutePart("webhooks", [
@@ -102,55 +105,74 @@ extension RouteHelpers on HttpRoute {
       ]));
 
   /// Adds the [`reactions`](https://discord.com/developers/docs/resources/channel#get-reactions) part to this [HttpRoute].
-  void reactions({String? emoji, String? userId}) => add(HttpRoutePart("reactions", [
+  void reactions({String? emoji, String? userId}) =>
+      add(HttpRoutePart("reactions", [
         if (emoji != null) HttpRouteParam(emoji),
         if (userId != null) HttpRouteParam(userId),
       ]));
 
+  /// Adds the [`acknowledge`](https://docs.discord.sex/resources/message#acknowledge-message) part to this [HttpRoute].
+  void acknowledge() => add(HttpRoutePart("ack"));
+
   /// Adds the [`emojis`](https://discord.com/developers/docs/resources/emoji#get-guild-emoji) part to this [HttpRoute].
-  void emojis({String? id}) => add(HttpRoutePart("emojis", [if (id != null) HttpRouteParam(id)]));
+  void emojis({String? id}) =>
+      add(HttpRoutePart("emojis", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`roles`](https://discord.com/developers/docs/resources/guild#get-guild-roles) part to this [HttpRoute].
-  void roles({String? id}) => add(HttpRoutePart("roles", [if (id != null) HttpRouteParam(id)]));
+  void roles({String? id}) =>
+      add(HttpRoutePart("roles", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`members`](https://discord.com/developers/docs/resources/guild#get-guild-member) part to this [HttpRoute].
-  void members({String? id}) => add(HttpRoutePart("members", [if (id != null) HttpRouteParam(id)]));
+  void members({String? id}) =>
+      add(HttpRoutePart("members", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`bans`](https://discord.com/developers/docs/resources/guild#get-guild-bans) part to this [HttpRoute].
-  void bans({String? id}) => add(HttpRoutePart("bans", [if (id != null) HttpRouteParam(id)]));
+  void bans({String? id}) =>
+      add(HttpRoutePart("bans", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`users`](https://discord.com/developers/docs/resources/user#get-user) part to this [HttpRoute].
-  void users({String? id}) => add(HttpRoutePart("users", [if (id != null) HttpRouteParam(id)]));
+  void users({String? id}) =>
+      add(HttpRoutePart("users", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`permissions`](https://discord.com/developers/docs/interactions/application-commands#get-guild-application-command-permissions) part to this [HttpRoute].
-  void permissions({String? id}) => add(HttpRoutePart("permissions", [if (id != null) HttpRouteParam(id)]));
+  void permissions({String? id}) =>
+      add(HttpRoutePart("permissions", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`messages`](https://discord.com/developers/docs/resources/channel#get-channel-messages) part to this [HttpRoute].
-  void messages({String? id}) => add(HttpRoutePart("messages", [if (id != null) HttpRouteParam(id)]));
+  void messages({String? id}) =>
+      add(HttpRoutePart("messages", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`pins`](https://discord.com/developers/docs/resources/channel#get-pinned-messages) part to this [HttpRoute].
-  void pins({String? id}) => add(HttpRoutePart("pins", [if (id != null) HttpRouteParam(id)]));
+  void pins({String? id}) =>
+      add(HttpRoutePart("pins", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`invites`](https://discord.com/developers/docs/resources/guild#get-guild-invites) part to this [HttpRoute].
-  void invites({String? id}) => add(HttpRoutePart("invites", [if (id != null) HttpRouteParam(id)]));
+  void invites({String? id}) =>
+      add(HttpRoutePart("invites", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`applications`](https://discord.com/developers/docs/topics/oauth2#get-current-bot-application-information) part to this [HttpRoute].
-  void applications({String? id}) => add(HttpRoutePart("applications", [if (id != null) HttpRouteParam(id)]));
+  void applications({String? id}) =>
+      add(HttpRoutePart("applications", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`stage-instances`](https://discord.com/developers/docs/resources/stage-instance#get-stage-instance) part to this [HttpRoute].
-  void stageInstances({String? id}) => add(HttpRoutePart("stage-instances", [if (id != null) HttpRouteParam(id)]));
+  void stageInstances({String? id}) => add(
+      HttpRoutePart("stage-instances", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`thread-members`](https://discord.com/developers/docs/resources/channel#get-thread-member) part to this [HttpRoute].
-  void threadMembers({String? id}) => add(HttpRoutePart("thread-members", [if (id != null) HttpRouteParam(id)]));
+  void threadMembers({String? id}) => add(
+      HttpRoutePart("thread-members", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`stickers`](https://discord.com/developers/docs/resources/sticker#get-sticker) part to this [HttpRoute].
-  void stickers({String? id}) => add(HttpRoutePart("stickers", [if (id != null) HttpRouteParam(id)]));
+  void stickers({String? id}) =>
+      add(HttpRoutePart("stickers", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`scheduled-events`](https://discord.com/developers/docs/resources/guild-scheduled-event#get-guild-scheduled-event) part to this [HttpRoute].
-  void scheduledEvents({String? id}) => add(HttpRoutePart("scheduled-events", [if (id != null) HttpRouteParam(id)]));
+  void scheduledEvents({String? id}) => add(
+      HttpRoutePart("scheduled-events", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`rules`](https://discord.com/developers/docs/resources/auto-moderation#get-auto-moderation-rule) part to this [HttpRoute].
-  void rules({String? id}) => add(HttpRoutePart('rules', [if (id != null) HttpRouteParam(id)]));
+  void rules({String? id}) =>
+      add(HttpRoutePart('rules', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`prune`](https://discord.com/developers/docs/resources/guild#get-guild-prune-count) part to this [HttpRoute].
   void prune() => add(HttpRoutePart("prune"));
@@ -204,7 +226,8 @@ extension RouteHelpers on HttpRoute {
   void public() => add(HttpRoutePart("public"));
 
   /// Adds the [`sticker-packs`](https://discord.com/developers/docs/resources/sticker#list-nitro-sticker-packs) part to this [HttpRoute].
-  void stickerPacks({String? id}) => add(HttpRoutePart("sticker-packs", [if (id != null) HttpRouteParam(id)]));
+  void stickerPacks({String? id}) =>
+      add(HttpRoutePart("sticker-packs", [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`welcome-screen`](https://discord.com/developers/docs/resources/guild#get-guild-welcome-screen) part to this [HttpRoute].
   void welcomeScreen() => add(HttpRoutePart('welcome-screen'));
@@ -225,7 +248,8 @@ extension RouteHelpers on HttpRoute {
   void voice() => add(HttpRoutePart('voice'));
 
   /// Adds the [`integrations`](https://discord.com/developers/docs/resources/guild#get-guild-integrations) part to this [HttpRoute].
-  void integrations({String? id}) => add(HttpRoutePart('integrations', [if (id != null) HttpRouteParam(id)]));
+  void integrations({String? id}) =>
+      add(HttpRoutePart('integrations', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`widget`](https://discord.com/developers/docs/resources/guild#get-guild-widget-settings) part to this [HttpRoute].
   void widget() => add(HttpRoutePart('widget'));
@@ -240,7 +264,8 @@ extension RouteHelpers on HttpRoute {
   void onboarding() => add(HttpRoutePart('onboarding'));
 
   /// Adds the [`voice-states`](https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state) part to this [HttpRoute].
-  void voiceStates({String? id}) => add(HttpRoutePart('voice-states', [if (id != null) HttpRouteParam(id)]));
+  void voiceStates({String? id}) =>
+      add(HttpRoutePart('voice-states', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`role-connections`](https://discord.com/developers/docs/resources/application-role-connection-metadata#get-application-role-connection-metadata-records)
   /// part to this [HttpRoute].
@@ -251,7 +276,8 @@ extension RouteHelpers on HttpRoute {
   void metadata() => add(HttpRoutePart('metadata'));
 
   /// Adds the [`templates`](https://discord.com/developers/docs/resources/guild-template#get-guild-template) part to this [HttpRoute].
-  void templates({String? code}) => add(HttpRoutePart('templates', [if (code != null) HttpRouteParam(code)]));
+  void templates({String? code}) =>
+      add(HttpRoutePart('templates', [if (code != null) HttpRouteParam(code)]));
 
   /// Adds the [`role-connection`](https://discord.com/developers/docs/resources/user#get-user-application-role-connection)
   /// part to this [HttpRoute].
@@ -264,56 +290,73 @@ extension RouteHelpers on HttpRoute {
   void vanityUrl() => add(HttpRoutePart('vanity-url'));
 
   /// Adds the [`icons`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void icons({String? id}) => add(HttpRoutePart('icons', [if (id != null) HttpRouteParam(id)]));
+  void icons({String? id}) =>
+      add(HttpRoutePart('icons', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`splashes`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void splashes({String? id}) => add(HttpRoutePart('splashes', [if (id != null) HttpRouteParam(id)]));
+  void splashes({String? id}) =>
+      add(HttpRoutePart('splashes', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`discovery-splashes`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void discoverySplashes({String? id}) => add(HttpRoutePart('discovery-splashes', [if (id != null) HttpRouteParam(id)]));
+  void discoverySplashes({String? id}) => add(HttpRoutePart(
+      'discovery-splashes', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`banners`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void banners({String? id}) => add(HttpRoutePart('banners', [if (id != null) HttpRouteParam(id)]));
+  void banners({String? id}) =>
+      add(HttpRoutePart('banners', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`embed`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void embed({String? id}) => add(HttpRoutePart('embed', [if (id != null) HttpRouteParam(id)]));
+  void embed({String? id}) =>
+      add(HttpRoutePart('embed', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`avatars`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void avatars({String? id}) => add(HttpRoutePart('avatars', [if (id != null) HttpRouteParam(id)]));
+  void avatars({String? id}) =>
+      add(HttpRoutePart('avatars', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`app-icons`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void appIcons({String? id}) => add(HttpRoutePart('app-icons', [if (id != null) HttpRouteParam(id)]));
+  void appIcons({String? id}) =>
+      add(HttpRoutePart('app-icons', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`team-icons`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void teamIcons({String? id}) => add(HttpRoutePart('team-icons', [if (id != null) HttpRouteParam(id)]));
+  void teamIcons({String? id}) =>
+      add(HttpRoutePart('team-icons', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`role-icons`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void roleIcons({String? id}) => add(HttpRoutePart('role-icons', [if (id != null) HttpRouteParam(id)]));
+  void roleIcons({String? id}) =>
+      add(HttpRoutePart('role-icons', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`guild-events`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void guildEvents({String? id}) => add(HttpRoutePart('guild-events', [if (id != null) HttpRouteParam(id)]));
+  void guildEvents({String? id}) =>
+      add(HttpRoutePart('guild-events', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`commands`](https://discord.com/developers/docs/interactions/application-commands#get-global-application-commands) part to this [HttpRoute].
-  void commands({String? id}) => add(HttpRoutePart('commands', [if (id != null) HttpRouteParam(id)]));
+  void commands({String? id}) =>
+      add(HttpRoutePart('commands', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`interactions`](https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response) part to this [HttpRoute].
   void interactions({String? id, String? token}) =>
-      add(HttpRoutePart('interactions', [if (id != null) HttpRouteParam(id), if (token != null) HttpRouteParam(token)]));
+      add(HttpRoutePart('interactions', [
+        if (id != null) HttpRouteParam(id),
+        if (token != null) HttpRouteParam(token)
+      ]));
 
   /// Adds the [`callback`](https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response) part to this [HttpRoute].
   void callback() => add(HttpRoutePart('callback'));
 
   /// Adds the [`entitlements`](https://discord.com/developers/docs/monetization/entitlements#list-entitlements) part to this [HttpRoute].
-  void entitlements({String? id}) => add(HttpRoutePart('entitlements', [if (id != null) HttpRouteParam(id)]));
+  void entitlements({String? id}) =>
+      add(HttpRoutePart('entitlements', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`skus`](https://discord.com/developers/docs/monetization/skus#list-skus) part to this [HttpRoute].
   void skus() => add(HttpRoutePart('skus'));
 
   /// Adds the [`avatar-decorations`](https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints) part to this [HttpRoute].
-  void avatarDecorations({String? id}) => add(HttpRoutePart('avatar-decorations', [if (id != null) HttpRouteParam(id)]));
+  void avatarDecorations({String? id}) => add(HttpRoutePart(
+      'avatar-decorations', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`recipients`](https://discord.com/developers/docs/resources/channel#group-dm-add-recipient) part to this [HttpRoute].
-  void recipients({String? id}) => add(HttpRoutePart('recipients', [if (id != null) HttpRouteParam(id)]));
+  void recipients({String? id}) =>
+      add(HttpRoutePart('recipients', [if (id != null) HttpRouteParam(id)]));
 
   /// Adds the [`bulk-ban`](https://discord.com/developers/docs/resources/guild#bulk-guild-ban) part to this [HttpRoute].
   void bulkBan() => add(HttpRoutePart('bulk-ban'));

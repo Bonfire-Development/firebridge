@@ -656,5 +656,15 @@ class MessageManager extends Manager<Message> {
     return users;
   }
 
-  // TODO once oauth2 is implemented: Group DM control endpoints
+  /// Acknowledge a message.
+  Future<void> acknowledge(Snowflake id) async {
+    final route = HttpRoute()
+      ..channels(id: channelId.toString())
+      ..messages(id: id.toString())
+      ..acknowledge();
+
+    final request = BasicRequest(route, method: 'POST');
+
+    await client.httpHandler.executeSafe(request);
+  }
 }
