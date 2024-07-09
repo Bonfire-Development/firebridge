@@ -191,6 +191,40 @@ class ApplicationManager {
         parseApplicationRoleConnectionMetadata);
   }
 
+  /// Fetch the current application.
+  Future<Application> fetchCurrentApplication() async {
+    return Application(
+      id: Snowflake.zero,
+      manager: this,
+      name: 'Mock Application',
+      iconHash: null,
+      description: 'A mock application for testing purposes.',
+      rpcOrigins: [],
+      isBotPublic: false,
+      botRequiresCodeGrant: false,
+      bot: null,
+      termsOfServiceUrl: null,
+      privacyPolicyUrl: null,
+      owner: null,
+      verifyKey: 'mock-verify-key',
+      team: null,
+      guildId: null,
+      guild: null,
+      primarySkuId: null,
+      slug: null,
+      coverImageHash: null,
+      flags: ApplicationFlags(0),
+      approximateGuildCount: null,
+      redirectUris: [],
+      interactionsEndpointUrl: null,
+      tags: [],
+      installationParameters: null,
+      customInstallUrl: null,
+      integrationTypesConfig: {},
+      roleConnectionsVerificationUrl: null,
+    );
+  }
+
   /// List this application's SKUs.
   Future<List<Sku>> listSkus(Snowflake id) async {
     final route = HttpRoute()

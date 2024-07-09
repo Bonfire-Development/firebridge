@@ -42,8 +42,8 @@ void main() async {
   // });
 
   client.onReady.listen((event) async {
-    // print("got on ready");
-    // print(event.guilds.first);
+    print("got on ready");
+    print(event.guilds.first);
     // print(event.userSettings.customStatus?.text);
     // print(event.userGuildSettings);
     // for (var readState in event.readStates) {

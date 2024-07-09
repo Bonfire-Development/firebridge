@@ -102,7 +102,9 @@ abstract class Nyxx {
     return _doConnect(apiOptions, clientOptions, () async {
       final client = NyxxRest._(apiOptions, clientOptions);
 
-      return client.._user = await client.users.fetchCurrentUser();
+      return client
+        .._application = await client.applications.fetchCurrentApplication()
+        .._user = await client.users.fetchCurrentUser();
     }, clientOptions.plugins);
   }
 
