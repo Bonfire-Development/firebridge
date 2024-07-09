@@ -98,6 +98,11 @@ class GuildManager extends Manager<Guild> {
           parseMany(raw['stickers'] as List? ?? [], this[id].stickers.parse),
       safetyAlertsChannelId:
           maybeParse(raw['safety_alerts_channel_id'], Snowflake.parse),
+      // run parse with arg guildId
+      channels: parseMany(
+          raw['channels'] as List,
+          (Map<String, Object?> raw) =>
+              client.channels.parse(raw, guildId: id) as GuildChannel),
     );
   }
 

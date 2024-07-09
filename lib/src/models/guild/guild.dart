@@ -413,6 +413,9 @@ class Guild extends UserGuild {
   /// The ID of the channel safety alerts are sent to.
   final Snowflake? safetyAlertsChannelId;
 
+  /// A list of channels in this guild. Usually only used when recieved via settings.
+  final List<GuildChannel>? channels;
+
   /// {@macro guild}
   /// @nodoc
   Guild({
@@ -459,6 +462,7 @@ class Guild extends UserGuild {
     required this.emojiList,
     required this.stickerList,
     required this.safetyAlertsChannelId,
+    this.channels,
   });
 
   /// The owner of the guild.
