@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebridge/firebridge.dart';
 
 void main() async {
-  String token = Platform.environment['TOKEN']!;
+  String token = "";
   final client = await Nyxx.connectGateway(
     token,
     GatewayIntents.all,
@@ -11,8 +11,8 @@ void main() async {
   );
 
   client.channels.listDmChannels().then((value) {
-    for (var dm in value) {
-      print(dm.recipients);
-    }
+    // for (var dm in value.reversed) {
+    //   print(dm.recipients.first.username);
+    // }
   });
 }

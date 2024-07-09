@@ -171,9 +171,11 @@ class ShardRunner {
           // Handle events from the connection & forward them to the result controller.
           final subscription = connection!.listen((event) async {
             if (event is RawDispatchEvent) {
-              // if (event.name == "USER_SETTINGS_UPDATE") {
-              //   print(event.payload);
+              // if (event.name == "READY") {
+              //   final file = File('ready-event.json');
+              //   await file.writeAsString(json.encode(event.payload));
               // }
+
               seq = event.seq;
 
               if (event.name == 'READY') {
@@ -298,8 +300,8 @@ class ShardRunner {
         'token': data.apiOptions.token,
         'properties': {
           'os': Platform.operatingSystem,
-          'browser': 'nyxx',
-          'device': 'nyxx',
+          'browser': 'Firefox',
+          'device': '',
         },
         if (data.apiOptions.compression == GatewayCompression.payload)
           'compress': true,

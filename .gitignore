@@ -56,3 +56,4 @@ docs/
 private-*.dart
 test-*.dart
 [Rr]pc*
+ready-event.json
