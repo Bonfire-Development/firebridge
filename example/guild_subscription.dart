@@ -1,4 +1,5 @@
 import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/src/utils/date.dart';
 
 void main() async {
   final client = await Nyxx.connectGateway(
@@ -29,7 +30,9 @@ void main() async {
   // });
 
   client.onMessageCreate.listen((event) async {
-    // print(event.message.content);
+    // print("GOT MESSAGE!");
+    print(DiscordDateUtils.packLastViewed(DateTime.now()));
+    event.message.manager.acknowledge(event.message.id);
   });
 
   client.onChannelUnread.listen((event) async {});
@@ -42,8 +45,8 @@ void main() async {
   // });
 
   client.onReady.listen((event) async {
-    print("got on ready");
-    print((event.guilds[4].channels![1]).name);
+    // print("got on ready");
+    // print((event.guilds[4].channels![1]).name);
     // print(event.userSettings.customStatus?.text);
     // print(event.userGuildSettings);
     // for (var readState in event.readStates) {

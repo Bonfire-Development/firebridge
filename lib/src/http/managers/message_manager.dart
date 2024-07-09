@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebridge/src/utils/date.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:firebridge/src/builders/emoji/reaction.dart';
 import 'package:firebridge/src/builders/message/message.dart';
@@ -663,7 +664,14 @@ class MessageManager extends Manager<Message> {
       ..messages(id: id.toString())
       ..acknowledge();
 
-    final request = BasicRequest(route, method: 'POST');
+    final request = BasicRequest(route,
+        method: 'POST',
+        body: json.encode(
+          {
+            'last_viewed': DiscordDateUtils.packLastViewed(DateTime.now()),
+            'token': null,
+          },
+        ));
 
     await client.httpHandler.executeSafe(request);
   }
