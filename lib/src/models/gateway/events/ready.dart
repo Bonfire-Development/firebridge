@@ -18,7 +18,7 @@ class ReadyEvent extends DispatchEvent {
   final User user;
 
   /// A list of guilds the user is in.
-  final List<PartialGuild> guilds;
+  final List<Guild> guilds;
 
   /// The ID of the Gateway session.
   final String sessionId;
