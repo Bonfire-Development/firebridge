@@ -13,6 +13,7 @@ import 'package:firebridge/src/models/gateway/events/invite.dart';
 import 'package:firebridge/src/models/gateway/events/message.dart';
 import 'package:firebridge/src/models/gateway/events/presence.dart';
 import 'package:firebridge/src/models/gateway/events/ready.dart';
+import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/gateway/events/stage_instance.dart';
 import 'package:firebridge/src/models/gateway/events/voice.dart';
 import 'package:firebridge/src/models/gateway/events/webhook.dart';
@@ -261,6 +262,12 @@ mixin EventMixin implements Nyxx {
   /// A [Stream] of [MessageAckEvent]s received by this client.
   Stream<MessageAckEvent> get onMessageAck =>
       onEvent.whereType<MessageAckEvent>();
+
+  Stream<UserSettingsUpdateEvent> get onUserSettingsUpdate =>
+      onEvent.whereType<UserSettingsUpdateEvent>();
+
+  Stream<UserGuildSettingsUpdateEvent> get onUserGuildSettingsUpdate =>
+      onEvent.whereType<UserGuildSettingsUpdateEvent>();
 
   /// A [Stream] of [PresenceUpdateEvent]s received by this client.
   Stream<PresenceUpdateEvent> get onPresenceUpdate =>

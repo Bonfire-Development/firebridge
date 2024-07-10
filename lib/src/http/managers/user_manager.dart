@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/builders/application_role_connection.dart';
 import 'package:firebridge/src/builders/user.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
@@ -16,6 +17,7 @@ import 'package:firebridge/src/models/locale.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/application_role_connection.dart';
 import 'package:firebridge/src/models/user/connection.dart';
+import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';
 import 'package:firebridge/src/utils/parsing_helpers.dart';
@@ -83,6 +85,92 @@ class UserManager extends ReadOnlyManager<User> {
       showActivity: raw['show_activity'] as bool,
       isTwoWayLink: raw['two_way_link'] as bool,
       visibility: ConnectionVisibility.parse(raw['visibility'] as int),
+    );
+  }
+
+  UserSettings parseUserSettings(Map<String, Object?> raw) {
+    return UserSettings(
+      detectPlatformAccounts: raw['detect_platform_accounts'] as bool,
+      animateStickers: raw['animate_stickers'] as int,
+      inlineAttachmentMedia: raw['inline_attachment_media'] as bool,
+      status: UserStatus.parse(raw['status'] as String),
+      messageDisplayCompact: raw['message_display_compact'] as bool,
+      viewNsfwGuilds: raw['view_nsfw_guilds'] as bool,
+      timezoneOffset: raw['timezone_offset'] as int,
+      enableTtsCommand: raw['enable_tts_command'] as bool,
+      disableGamesTab: raw['disable_games_tab'] as bool,
+      streamNotificationsEnabled: raw['stream_notifications_enabled'] as bool,
+      animateEmoji: raw['animate_emoji'] as bool,
+      guildFolders: parseMany(
+        raw['guild_folders'] as List<Object?>,
+        (Map<String, Object?> raw) => GuildFolder(
+          name: raw['name'] as String?,
+          color: raw['color'] as int?,
+          id: tryParse(raw['id'], Snowflake.parse),
+          guildIds: parseMany(
+            raw['guild_ids'] as List<Object?>,
+            (Object? raw) => Snowflake.parse(raw as String),
+          ),
+        ),
+      ),
+      customStatus: raw['custom_status'] == null
+          ? null
+          : CustomStatus(
+              text: (raw['custom_status'] as Map<String, Object?>)['text']
+                  as String?,
+              expiresAt: maybeParse(
+                  (raw['custom_status'] as Map<String, Object?>)['expires_at'],
+                  DateTime.parse),
+              emojiName: (raw['custom_status']
+                  as Map<String, Object?>)['emoji_name'] as String?,
+              emojiId: (raw['custom_status']
+                  as Map<String, Object?>)['emoji_id'] as String?,
+            ),
+    );
+  }
+
+  UserGuildSettings parseUserGuildSettings(Map<String, Object?> raw) {
+    return UserGuildSettings(
+      version: raw['version'] as int,
+      suppressRoles: raw['suppress_roles'] as bool,
+      suppressEveryone: raw['suppress_everyone'] as bool,
+      notifyHighlights: raw['notify_highlights'] as int,
+      muted: raw['muted'] as bool,
+      muteScheduledEvents: raw['mute_scheduled_events'] as bool,
+      muteConfig: raw['mute_config'],
+      mobilePush: raw['mobile_push'] as bool,
+      messageNotifications: raw['message_notifications'] as int,
+      hideMutedChannels: raw['hide_muted_channels'] as bool,
+      partialGuild: tryParse(raw['guild_id'], (String raw) {
+        return PartialGuild(
+          id: Snowflake.parse(raw),
+          json: {},
+          manager: client.guilds,
+        );
+      }),
+      flags: raw['flags'] as int,
+      channelOverrides: raw['channel_overrides'] as List<dynamic>,
+    );
+  }
+
+  ReadState parseReadState(Map<String, Object?> raw) {
+    return ReadState(
+      mentionCount: raw['mention_count'] as int,
+      lastViewed: int.tryParse(raw['last_viewed'].toString()),
+      lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
+      lastPartialMessage: (raw['last_message_id'] != null)
+          ? PartialMessage(
+              id: Snowflake.parse(raw['last_message_id'] as String),
+              json: {},
+              manager: (client.channels[Snowflake.zero] as PartialTextChannel)
+                  .messages)
+          : null,
+      partialChannel: PartialChannel(
+        id: Snowflake.parse(raw['id'] as String),
+        json: {},
+        manager: client.channels,
+      ),
+      flags: raw['flags'] as int,
     );
   }
 

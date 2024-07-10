@@ -176,7 +176,8 @@ class ShardRunner {
               //   await file.writeAsString(json.encode(event.payload));
               // }
               // print(event.name);
-              // if (event.name == "MESSAGE_ACK") {
+              // if (event.name == "USER_SETTINGS_UPDATE") {
+              //   // USER_SETTINGS_PROTO_UPDATE
               //   print(json.encode(event.payload));
               // }
               seq = event.seq;

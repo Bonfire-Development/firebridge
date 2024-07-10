@@ -36,7 +36,7 @@ void main() async {
   });
 
   client.onChannelUnread.listen((event) async {
-    print("got unread!");
+    // print("got unread!");
     print(event.channelUnreadUpdates.first.id);
   });
 
@@ -48,8 +48,8 @@ void main() async {
   // });
 
   client.onMessageAck.listen((event) async {
-    print("got ack!");
-    print(event.channel);
+    // print("got ack!");
+    // print(event.channel);
     // print("GOT ACK!");
     // print(event.messageId);
   });
