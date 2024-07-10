@@ -87,8 +87,6 @@ mixin EventMixin implements Nyxx {
   Stream<ChannelUnreadEvent> get onChannelUnread =>
       onEvent.whereType<ChannelUnreadEvent>();
 
-  // Stream<8balls
-
   /// A [Stream] of [ThreadCreateEvent]s received by this client.
   Stream<ThreadCreateEvent> get onThreadCreate =>
       onEvent.whereType<ThreadCreateEvent>();
@@ -259,6 +257,10 @@ mixin EventMixin implements Nyxx {
   /// A [Stream] of [MessageReactionRemoveEmojiEvent]s received by this client.
   Stream<MessageReactionRemoveEmojiEvent> get onMessageReactionRemoveEmoji =>
       onEvent.whereType<MessageReactionRemoveEmojiEvent>();
+
+  /// A [Stream] of [MessageAckEvent]s received by this client.
+  Stream<MessageAckEvent> get onMessageAck =>
+      onEvent.whereType<MessageAckEvent>();
 
   /// A [Stream] of [PresenceUpdateEvent]s received by this client.
   Stream<PresenceUpdateEvent> get onPresenceUpdate =>

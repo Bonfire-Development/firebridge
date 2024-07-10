@@ -1,3 +1,4 @@
+import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/models/channel/channel.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';
 import 'package:firebridge/src/models/channel/thread.dart';
@@ -233,20 +234,17 @@ class ChannelUnreadEvent extends DispatchEvent {
 /// {@endtemplate}
 class MessageAckEvent extends DispatchEvent {
   final int version;
-  final Snowflake channelId;
-  final Snowflake messageId;
-  final int lastViewed;
+  final PartialChannel channel;
+  final PartialMessage message;
+  final DateTime lastViewed;
   final int? flags;
 
   MessageAckEvent({
     required super.gateway,
     required this.version,
-    required this.channelId,
-    required this.messageId,
+    required this.channel,
+    required this.message,
     required this.lastViewed,
-    required this.flags,
+    this.flags,
   });
-
-  PartialTextChannel get channel =>
-      gateway.client.channels[channelId] as PartialTextChannel;
 }

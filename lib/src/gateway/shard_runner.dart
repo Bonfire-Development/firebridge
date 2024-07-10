@@ -175,7 +175,10 @@ class ShardRunner {
               //   final file = File('ready-event.json');
               //   await file.writeAsString(json.encode(event.payload));
               // }
-
+              // print(event.name);
+              // if (event.name == "MESSAGE_ACK") {
+              //   print(json.encode(event.payload));
+              // }
               seq = event.seq;
 
               if (event.name == 'READY') {

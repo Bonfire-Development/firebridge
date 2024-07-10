@@ -35,7 +35,10 @@ void main() async {
     event.message.manager.acknowledge(event.message.id);
   });
 
-  client.onChannelUnread.listen((event) async {});
+  client.onChannelUnread.listen((event) async {
+    print("got unread!");
+    print(event.channelUnreadUpdates.first.id);
+  });
 
   // client.onGuildMemberListUpdate.listen((event) async {
   //   // print(event);
@@ -43,6 +46,13 @@ void main() async {
   //     print(event.memberList![2][0]);
   //   }
   // });
+
+  client.onMessageAck.listen((event) async {
+    print("got ack!");
+    print(event.channel);
+    // print("GOT ACK!");
+    // print(event.messageId);
+  });
 
   client.onReady.listen((event) async {
     // print("got on ready");

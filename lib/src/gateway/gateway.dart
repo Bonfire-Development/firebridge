@@ -12,6 +12,7 @@ import 'package:firebridge/src/models/user/settings/private_channel.dart';
 import 'package:firebridge/src/models/user/settings/read_state.dart';
 import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
 import 'package:firebridge/src/models/user/settings/user_settings.dart';
+import 'package:firebridge/src/utils/date.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/presence.dart';
@@ -319,6 +320,7 @@ class Gateway extends GatewayManager with EventParser {
       'ENTITLEMENT_DELETE': parseEntitlementDelete,
       "GUILD_MEMBER_LIST_UPDATE": parseGuildMembersUpdateEvent,
       'CHANNEL_UNREAD_UPDATE': parseChannelUnreadUpdate,
+      'MESSAGE_ACK': parseMessageAck,
     };
 
     return mapping[raw.name]?.call(raw.payload) ??
@@ -1232,6 +1234,25 @@ class Gateway extends GatewayManager with EventParser {
         gateway: this,
         guildId: Snowflake.parse(raw["guild_id"]!),
         channelUnreadUpdates: channelUnreadUpdates);
+  }
+
+  MessageAckEvent parseMessageAck(Map<String, Object?> raw) {
+    return MessageAckEvent(
+      gateway: this,
+      channel: PartialChannel(
+          id: Snowflake.parse(raw["channel_id"]!),
+          json: {},
+          manager: client.channels),
+      version: raw["version"] as int,
+      message: PartialMessage(
+          id: Snowflake.parse(raw["message_id"]!),
+          json: {},
+          manager: (client.channels[Snowflake.parse(raw["channel_id"]!)]
+                  as PartialTextChannel)
+              .messages),
+      lastViewed: DiscordDateUtils.unpackLastViewed(raw["last_viewed"] as int),
+      flags: raw["flags"] as int?,
+    );
   }
 
   /// Parse a [UserUpdateEvent] from [raw].
