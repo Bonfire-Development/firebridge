@@ -236,7 +236,7 @@ class MessageAckEvent extends DispatchEvent {
   final int version;
   final PartialChannel channel;
   final PartialMessage message;
-  final DateTime lastViewed;
+  final DateTime? lastViewed;
   final int? flags;
 
   MessageAckEvent({
@@ -244,7 +244,7 @@ class MessageAckEvent extends DispatchEvent {
     required this.version,
     required this.channel,
     required this.message,
-    required this.lastViewed,
+    this.lastViewed,
     this.flags,
   });
 }

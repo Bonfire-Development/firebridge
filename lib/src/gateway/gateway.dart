@@ -1153,7 +1153,9 @@ class Gateway extends GatewayManager with EventParser {
           manager: (client.channels[Snowflake.parse(raw["channel_id"]!)]
                   as PartialTextChannel)
               .messages),
-      lastViewed: DiscordDateUtils.unpackLastViewed(raw["last_viewed"] as int),
+      lastViewed: (raw["last_viewed"] != null)
+          ? DiscordDateUtils.unpackLastViewed(raw["last_viewed"] as int)
+          : null,
       flags: raw["flags"] as int?,
     );
   }
