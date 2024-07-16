@@ -13,14 +13,20 @@ void main() async {
     GuildSubscriptionsBulkBuilder()
       ..subscriptions = [
         GuildSubscription(
-          guildId: Snowflake(1238277719511400488),
+          guildId: Snowflake(1057441464449249370),
           typing: true,
           threads: true,
           memberUpdates: false,
           activities: true,
           threadMemberLists: [],
           members: [],
-          channels: [],
+          channels: [
+            GuildSubscriptionChannel(
+              channelId: Snowflake(1057441464449249371),
+              memberRange:
+                  GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
+            ),
+          ],
         ),
       ],
   );
@@ -31,13 +37,13 @@ void main() async {
 
   client.onMessageCreate.listen((event) async {
     // print("GOT MESSAGE!");
-    print(DiscordDateUtils.packLastViewed(DateTime.now()));
+    // print(DiscordDateUtils.packLastViewed(DateTime.now()));
     event.message.manager.acknowledge(event.message.id);
   });
 
   client.onChannelUnread.listen((event) async {
     // print("got unread!");
-    print(event.channelUnreadUpdates.first.readState.lastViewed);
+    // print(event.channelUnreadUpdates.first.readState.lastViewed);
   });
 
   // client.onGuildMemberListUpdate.listen((event) async {

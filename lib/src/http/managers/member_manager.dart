@@ -52,15 +52,14 @@ class MemberManager extends Manager<Member> {
 
   /// Parse a [GuildMemberListGroup] from [raw].
   GuildMemberListGroup parseGuildMemberListGroup(Map<String, Object?> raw) {
-    // check if the id is alphanum
     var id = raw['id']! as String?;
     String? name;
-    if (double.tryParse(id!) != null) {
+    if (double.tryParse(id!) == null) {
       name = id;
     }
 
     return GuildMemberListGroup(
-      id: (name != null) ? Snowflake.parse(raw['id']!) : null,
+      id: (name == null) ? Snowflake.parse(raw['id']!) : null,
       name: name,
       count: raw['count'] as int?,
     );
