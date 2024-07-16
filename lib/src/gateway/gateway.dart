@@ -1151,23 +1151,24 @@ class Gateway extends GatewayManager with EventParser {
 
   MessageAckEvent parseMessageAck(Map<String, Object?> raw) {
     return MessageAckEvent(
-      gateway: this,
-      channel: PartialChannel(
-          id: Snowflake.parse(raw["channel_id"]!),
-          json: {},
-          manager: client.channels),
-      version: raw["version"] as int,
-      message: PartialMessage(
-          id: Snowflake.parse(raw["message_id"]!),
-          json: {},
-          manager: (client.channels[Snowflake.parse(raw["channel_id"]!)]
-                  as PartialTextChannel)
-              .messages),
-      lastViewed: (raw["last_viewed"] != null)
-          ? DiscordDateUtils.unpackLastViewed(raw["last_viewed"] as int)
-          : null,
-      flags: raw["flags"] as int?,
-    );
+        gateway: this,
+        readState: ReadState(
+          channel: PartialChannel(
+              id: Snowflake.parse(raw["channel_id"]!),
+              json: {},
+              manager: client.channels),
+          // version: raw["version"] as int,
+          lastMessage: PartialMessage(
+              id: Snowflake.parse(raw["message_id"]!),
+              json: {},
+              manager: (client.channels[Snowflake.parse(raw["channel_id"]!)]
+                      as PartialTextChannel)
+                  .messages),
+          lastViewed: (raw["last_viewed"] != null)
+              ? DiscordDateUtils.unpackLastViewed(raw["last_viewed"] as int)
+              : null,
+          flags: raw["flags"] as int?,
+        ));
   }
 
   UserSettingsUpdateEvent parseUserSettingsUpdate(Map<String, Object?> raw) {

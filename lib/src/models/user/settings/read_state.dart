@@ -7,7 +7,7 @@ class ReadState with ToStringHelper {
   int? flags;
   int? mentionCount;
   PartialMessage? lastMessage;
-  int? lastViewed;
+  DateTime? lastViewed;
   DateTime? lastPinTimestamp;
 
   ReadState({

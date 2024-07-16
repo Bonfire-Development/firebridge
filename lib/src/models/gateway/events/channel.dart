@@ -233,18 +233,20 @@ class ChannelUnreadEvent extends DispatchEvent {
 /// Emitted when a message is acknowledged.
 /// {@endtemplate}
 class MessageAckEvent extends DispatchEvent {
-  final int version;
-  final PartialChannel channel;
-  final PartialMessage message;
-  final DateTime? lastViewed;
-  final int? flags;
+  // final int version;
+  // final PartialChannel channel;
+  // final PartialMessage message;
+  // final DateTime? lastViewed;
+  // final int? flags;
+  final ReadState readState;
 
   MessageAckEvent({
     required super.gateway,
-    required this.version,
-    required this.channel,
-    required this.message,
-    this.lastViewed,
-    this.flags,
+    required this.readState,
+    // required this.version,
+    // required this.channel,
+    // required this.message,
+    // this.lastViewed,
+    // this.flags,
   });
 }

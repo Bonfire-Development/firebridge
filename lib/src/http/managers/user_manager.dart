@@ -20,6 +20,7 @@ import 'package:firebridge/src/models/user/connection.dart';
 import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';
+import 'package:firebridge/src/utils/date.dart';
 import 'package:firebridge/src/utils/parsing_helpers.dart';
 
 /// A manager for [User]s.
@@ -155,7 +156,9 @@ class UserManager extends ReadOnlyManager<User> {
   ReadState parseReadState(Map<String, Object?> raw) {
     return ReadState(
       mentionCount: raw['mention_count'] as int?,
-      lastViewed: int.tryParse(raw['last_viewed'].toString()),
+      lastViewed: (raw["last_viewed"] != null)
+          ? DiscordDateUtils.unpackLastViewed(raw["last_viewed"] as int)
+          : null,
       lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
       lastMessage: (raw['last_message_id'] != null)
           ? PartialMessage(
