@@ -102,7 +102,7 @@ class UserManager extends ReadOnlyManager<User> {
       streamNotificationsEnabled: raw['stream_notifications_enabled'] as bool?,
       animateEmoji: raw['animate_emoji'] as bool?,
       guildFolders: tryParseMany(
-          raw['guild_folders'] as List<Object?>,
+          raw['guild_folders'] as List<Object?>?,
           (Map<String, Object?> raw) => GuildFolder(
                 name: raw['name'] as String?,
                 color: raw['color'] as int?,
