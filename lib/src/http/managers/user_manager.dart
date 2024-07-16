@@ -154,17 +154,17 @@ class UserManager extends ReadOnlyManager<User> {
 
   ReadState parseReadState(Map<String, Object?> raw) {
     return ReadState(
-      mentionCount: raw['mention_count'] as int,
+      mentionCount: raw['mention_count'] as int?,
       lastViewed: int.tryParse(raw['last_viewed'].toString()),
       lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
-      lastPartialMessage: (raw['last_message_id'] != null)
+      lastMessage: (raw['last_message_id'] != null)
           ? PartialMessage(
               id: Snowflake.parse(raw['last_message_id'] as String),
               json: {},
               manager: (client.channels[Snowflake.zero] as PartialTextChannel)
                   .messages)
           : null,
-      partialChannel: PartialChannel(
+      channel: PartialChannel(
         id: Snowflake.parse(raw['id'] as String),
         json: {},
         manager: client.channels,

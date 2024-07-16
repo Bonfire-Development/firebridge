@@ -3,19 +3,19 @@ import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/utils/to_string_helper/base_impl.dart';
 
 class ReadState with ToStringHelper {
-  int mentionCount;
-  DateTime lastPinTimestamp;
-  PartialChannel partialChannel;
-  int flags;
-  PartialMessage? lastPartialMessage;
+  PartialChannel channel;
+  int? flags;
+  int? mentionCount;
+  PartialMessage? lastMessage;
   int? lastViewed;
+  DateTime? lastPinTimestamp;
 
   ReadState({
-    required this.mentionCount,
-    required this.lastPinTimestamp,
-    required this.partialChannel,
-    required this.flags,
-    this.lastPartialMessage,
+    required this.channel,
+    this.flags,
+    this.mentionCount,
+    this.lastMessage,
     this.lastViewed,
+    this.lastPinTimestamp,
   });
 }

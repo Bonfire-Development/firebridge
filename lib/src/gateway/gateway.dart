@@ -5,6 +5,7 @@ import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/guild/unread_update.dart';
 import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/models/role.dart';
+import 'package:firebridge/src/models/user/settings/read_state.dart';
 import 'package:firebridge/src/utils/date.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -1121,16 +1122,25 @@ class Gateway extends GatewayManager with EventParser {
   ChannelUnreadEvent? parseChannelUnreadUpdate(Map<String, Object?> raw) {
     List<ChannelUnreadUpdate> channelUnreadUpdates = [];
     List<dynamic> rawUpdates = raw["channel_unread_updates"]! as List<dynamic>;
-
     for (var channelUnreadUpdate in (rawUpdates)) {
       channelUnreadUpdates.add(ChannelUnreadUpdate(
-        id: Snowflake.parse(channelUnreadUpdate["id"]! as String),
-        lastMessageId:
-            Snowflake.parse(channelUnreadUpdate["last_message_id"]! as String),
-        // nullable try parse for last pin
+          readState: ReadState(
+        channel: PartialChannel(
+            id: Snowflake.parse(channelUnreadUpdate["id"]! as String),
+            json: {},
+            manager: client.channels),
+        lastMessage: PartialMessage(
+          id: Snowflake.parse(
+              channelUnreadUpdate["last_message_id"]! as String),
+          json: {},
+          manager: (client.channels[
+                      Snowflake.parse(channelUnreadUpdate["id"]! as String)]
+                  as PartialTextChannel)
+              .messages,
+        ),
         lastPinTimestamp:
             DateTime.tryParse(raw["last_pin_timestamp"] as String? ?? ""),
-      ));
+      )));
     }
 
     return ChannelUnreadEvent(

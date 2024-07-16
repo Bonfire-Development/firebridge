@@ -37,7 +37,7 @@ void main() async {
 
   client.onChannelUnread.listen((event) async {
     // print("got unread!");
-    print(event.channelUnreadUpdates.first.id);
+    print(event.channelUnreadUpdates.first.readState.lastViewed);
   });
 
   // client.onGuildMemberListUpdate.listen((event) async {
