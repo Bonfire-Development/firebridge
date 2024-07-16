@@ -90,29 +90,28 @@ class UserManager extends ReadOnlyManager<User> {
 
   UserSettings parseUserSettings(Map<String, Object?> raw) {
     return UserSettings(
-      detectPlatformAccounts: raw['detect_platform_accounts'] as bool,
-      animateStickers: raw['animate_stickers'] as int,
-      inlineAttachmentMedia: raw['inline_attachment_media'] as bool,
-      status: UserStatus.parse(raw['status'] as String),
-      messageDisplayCompact: raw['message_display_compact'] as bool,
-      viewNsfwGuilds: raw['view_nsfw_guilds'] as bool,
-      timezoneOffset: raw['timezone_offset'] as int,
-      enableTtsCommand: raw['enable_tts_command'] as bool,
-      disableGamesTab: raw['disable_games_tab'] as bool,
-      streamNotificationsEnabled: raw['stream_notifications_enabled'] as bool,
-      animateEmoji: raw['animate_emoji'] as bool,
-      guildFolders: parseMany(
-        raw['guild_folders'] as List<Object?>,
-        (Map<String, Object?> raw) => GuildFolder(
-          name: raw['name'] as String?,
-          color: raw['color'] as int?,
-          id: tryParse(raw['id'], Snowflake.parse),
-          guildIds: parseMany(
-            raw['guild_ids'] as List<Object?>,
-            (Object? raw) => Snowflake.parse(raw as String),
-          ),
-        ),
-      ),
+      detectPlatformAccounts: raw['detect_platform_accounts'] as bool?,
+      animateStickers: raw['animate_stickers'] as int?,
+      inlineAttachmentMedia: raw['inline_attachment_media'] as bool?,
+      status: tryParse(raw['status'] as String, UserStatus.parse),
+      messageDisplayCompact: raw['message_display_compact'] as bool?,
+      viewNsfwGuilds: raw['view_nsfw_guilds'] as bool?,
+      timezoneOffset: raw['timezone_offset'] as int?,
+      enableTtsCommand: raw['enable_tts_command'] as bool?,
+      disableGamesTab: raw['disable_games_tab'] as bool?,
+      streamNotificationsEnabled: raw['stream_notifications_enabled'] as bool?,
+      animateEmoji: raw['animate_emoji'] as bool?,
+      guildFolders: tryParseMany(
+          raw['guild_folders'] as List<Object?>,
+          (Map<String, Object?> raw) => GuildFolder(
+                name: raw['name'] as String?,
+                color: raw['color'] as int?,
+                id: tryParse(raw['id'], Snowflake.parse),
+                guildIds: parseMany(
+                  raw['guild_ids'] as List<Object?>,
+                  (Object? raw) => Snowflake.parse(raw as String),
+                ),
+              )),
       customStatus: raw['custom_status'] == null
           ? null
           : CustomStatus(
