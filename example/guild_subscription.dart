@@ -61,6 +61,13 @@ void main() async {
   });
 
   client.onReady.listen((event) async {
+    await Future.delayed(Duration(seconds: 1));
+    // print(client.voice.cache.length);
+    // Guild
+    event.guilds.forEach((guild) {
+      print("${guild.name} - ${guild.voiceStates.entries.toList().length}");
+      //print(guild.voiceStates.entries.toList().length);
+    });
     // print("got on ready");
     // print((event.guilds[4].channels![1]).name);
     // print(event.userSettings.customStatus?.text);

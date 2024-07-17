@@ -10,6 +10,7 @@ import 'package:firebridge/src/builders/guild/widget.dart';
 import 'package:firebridge/src/builders/image.dart';
 import 'package:firebridge/src/builders/voice.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/managers/voice_manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
 import 'package:firebridge/src/models/channel/channel.dart';
@@ -45,6 +46,16 @@ class GuildManager extends Manager<Guild> {
   @override
   Guild parse(Map<String, Object?> raw) {
     final id = Snowflake.parse(raw['id']!);
+
+    List<dynamic>? voiceStates = raw["voice_states"] as List<dynamic>?;
+
+    if (voiceStates != null) {
+      // I *think* this is how this works?
+      for (var voiceState in voiceStates) {
+        client.updateCacheWith(VoiceManager(client)
+            .parseVoiceState(voiceState as Map<String, dynamic>, guildId: id));
+      }
+    }
 
     return Guild(
       id: id,
