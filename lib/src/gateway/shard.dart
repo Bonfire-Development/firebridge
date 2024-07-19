@@ -216,6 +216,7 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
     add(Send(opcode: Opcode.voiceStateUpdate, data: {
       'guild_id': guildId.toString(),
       ...builder.build(),
+      'flags': 2,
     }));
   }
 

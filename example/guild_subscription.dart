@@ -61,24 +61,13 @@ void main() async {
   });
 
   client.onReady.listen((event) async {
-    await Future.delayed(Duration(seconds: 1));
-    // print(client.voice.cache.length);
-    // Guild
-    event.guilds.forEach((guild) {
-      print("${guild.name} - ${guild.voiceStates.entries.toList().length}");
-      //print(guild.voiceStates.entries.toList().length);
-    });
-    // print("got on ready");
-    // print((event.guilds[4].channels![1]).name);
-    // print(event.userSettings.customStatus?.text);
-    // print(event.userGuildSettings);
-    // for (var readState in event.readStates) {
-    //   print("${readState.id}: ${readState.mentionCount}");
-    // }
-
-    // for (var privateChannel in event.privateChannels) {
-    //   print(privateChannel.recipients);
-    // }
-    // print(event.application);
+    client.updateVoiceState(
+        Snowflake(1238277719511400488),
+        GatewayVoiceStateBuilder(
+          channelId: Snowflake(1238277720023240805),
+          isMuted: false,
+          isDeafened: false,
+          isStreaming: false,
+        ));
   });
 }

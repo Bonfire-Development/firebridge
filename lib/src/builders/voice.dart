@@ -20,12 +20,17 @@ class VoiceStateUpdateBuilder extends UpdateBuilder<VoiceState> {
 class CurrentUserVoiceStateUpdateBuilder extends VoiceStateUpdateBuilder {
   DateTime? requestToSpeakTimeStamp;
 
-  CurrentUserVoiceStateUpdateBuilder({super.channelId, super.suppress, this.requestToSpeakTimeStamp = sentinelDateTime});
+  CurrentUserVoiceStateUpdateBuilder(
+      {super.channelId,
+      super.suppress,
+      this.requestToSpeakTimeStamp = sentinelDateTime});
 
   @override
   Map<String, Object?> build() => {
         ...super.build(),
-        if (!identical(requestToSpeakTimeStamp, sentinelDateTime)) 'request_to_speak_timestamp': requestToSpeakTimeStamp?.toIso8601String(),
+        if (!identical(requestToSpeakTimeStamp, sentinelDateTime))
+          'request_to_speak_timestamp':
+              requestToSpeakTimeStamp?.toIso8601String(),
       };
 }
 
@@ -36,12 +41,20 @@ class GatewayVoiceStateBuilder extends CreateBuilder<VoiceState> {
 
   bool isDeafened;
 
-  GatewayVoiceStateBuilder({required this.channelId, required this.isMuted, required this.isDeafened});
+  bool isStreaming;
+
+  GatewayVoiceStateBuilder({
+    required this.channelId,
+    required this.isMuted,
+    required this.isDeafened,
+    required this.isStreaming,
+  });
 
   @override
   Map<String, Object?> build() => {
         'channel_id': channelId?.toString(),
         'self_mute': isMuted,
         'self_deaf': isDeafened,
+        'self_video': isStreaming,
       };
 }
