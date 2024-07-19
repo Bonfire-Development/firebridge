@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
@@ -216,8 +217,16 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
     add(Send(opcode: Opcode.voiceStateUpdate, data: {
       'guild_id': guildId.toString(),
       ...builder.build(),
-      'flags': 2,
+      'flags': 2, // idk
     }));
+  }
+
+  /// Send a voice identify payload to the Gateway.
+  void sendVoiceIdentify(VoiceIdentifyBuilder builder) {
+    var data = builder.build();
+    print("SENDING DATA1");
+    print(jsonEncode(data));
+    add(Send(opcode: Opcode.dispatch, data: data));
   }
 
   void updateChannelStatusesGuild(
@@ -228,7 +237,7 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
     }));
   }
 
-  void updateguildSubscriptionsBulk(
+  void updateGuildSubscriptionsBulk(
       Snowflake guildId, GuildSubscriptionsBulkBuilder builder) {
     add(Send(opcode: Opcode.guildSubscriptionsBulk, data: {
       ...builder.build(),

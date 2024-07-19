@@ -1,3 +1,5 @@
+import 'package:firebridge/src/builders/voice.dart';
+
 export 'src/api_options.dart'
     show
         ApiOptions,
@@ -102,7 +104,8 @@ export 'src/builders/voice.dart'
     show
         CurrentUserVoiceStateUpdateBuilder,
         VoiceStateUpdateBuilder,
-        GatewayVoiceStateBuilder;
+        GatewayVoiceStateBuilder,
+        VoiceIdentifyBuilder;
 export 'src/builders/presence.dart'
     show PresenceBuilder, CurrentUserStatus, ActivityBuilder;
 export 'src/builders/application_role_connection.dart'
@@ -361,6 +364,7 @@ export 'src/models/guild/auto_moderation.dart'
 export 'src/models/guild/member_list_group.dart' show GuildMemberListGroup;
 export 'src/models/voice/voice_state.dart' show VoiceState;
 export 'src/models/voice/voice_region.dart' show VoiceRegion;
+export 'src/models/voice/voice_identify.dart' show VoiceIdentify;
 export 'src/models/role.dart' show PartialRole, Role, RoleTags, RoleFlags;
 export 'src/models/gateway/gateway.dart'
     show GatewayBot, GatewayConfiguration, SessionStartLimit;

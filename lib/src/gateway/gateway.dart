@@ -91,7 +91,9 @@ class Gateway extends GatewayManager with EventParser {
       // if (goofyEvent.name == "READY") {
       //   print(jsonEncode(goofyEvent.payload));
       // }
-
+      if (event.name == "READY") {
+        // print((message.event as RawDispatchEvent).payload.keys);
+      }
       //print(jsonEncode((message.event as RawDispatchEvent).payload));
       final parsedEvent = parseDispatchEvent(event);
       // Update the cache as needed.
@@ -244,8 +246,6 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Parse a [DispatchEvent] from [raw].
   DispatchEvent parseDispatchEvent(RawDispatchEvent raw) {
-    // print("got dispatch event");
-    // print(raw.name);
     final mapping = {
       'READY': parseReady,
       'RESUMED': parseResumed,
@@ -325,10 +325,6 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Parse a [ReadyEvent] from [raw].
   ReadyEvent parseReady(Map<String, Object?> raw) {
-    // I know, it's not great...
-    // I will make it not suck later :D
-    // ~ Eric Apostal
-
     List<dynamic> guildSettings = raw["user_guild_settings"] as List<dynamic>;
     return ReadyEvent(
       gateway: this,
@@ -1332,6 +1328,10 @@ class Gateway extends GatewayManager with EventParser {
       shard.add(Send(opcode: Opcode.presenceUpdate, data: builder.build()));
     }
   }
+
+  /// Update the client's status on all shards.
+  void sendVoiceIdentify(Snowflake guildId, VoiceIdentifyBuilder builder) =>
+      shardFor(guildId).sendVoiceIdentify(builder);
 
   /// Update the current guild subscription with [guildId].
   void updateChannelStatuses(

@@ -256,6 +256,10 @@ class NyxxGateway with ManagerMixin, EventMixin implements NyxxRest {
   void updateVoiceState(Snowflake guildId, GatewayVoiceStateBuilder builder) =>
       gateway.updateVoiceState(guildId, builder);
 
+  /// Send a voice identify payload to the guild with the ID [guildId].
+  void sendVoiceIdentify(Snowflake guildId, VoiceIdentifyBuilder builder) =>
+      gateway.sendVoiceIdentify(guildId, builder);
+
   /// Update the client's presence on all shards.
   void updatePresence(PresenceBuilder builder) =>
       gateway.updatePresence(builder);
