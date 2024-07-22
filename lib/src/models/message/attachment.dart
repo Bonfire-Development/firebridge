@@ -61,6 +61,9 @@ class Attachment with ToStringHelper implements CdnAsset {
   /// This attachment's flags.
   final AttachmentFlags? flags;
 
+  /// Hash used for blur.
+  final String placeholder;
+
   @override
   Nyxx get client => manager.client;
 
@@ -68,10 +71,14 @@ class Attachment with ToStringHelper implements CdnAsset {
   String get hash => fileName;
 
   @override
-  HttpRoute get base => HttpRoute()..parts.addAll(proxiedUrl.pathSegments.take(proxiedUrl.pathSegments.length - 1).map((part) => HttpRoutePart(part)));
+  HttpRoute get base => HttpRoute()
+    ..parts.addAll(proxiedUrl.pathSegments
+        .take(proxiedUrl.pathSegments.length - 1)
+        .map((part) => HttpRoutePart(part)));
 
   @override
-  CdnFormat get defaultFormat => throw UnsupportedError('Cannot get attachment format');
+  CdnFormat get defaultFormat =>
+      throw UnsupportedError('Cannot get attachment format');
 
   @override
   bool get isAnimated => false;
@@ -93,6 +100,7 @@ class Attachment with ToStringHelper implements CdnAsset {
     required this.duration,
     required this.waveform,
     required this.flags,
+    required this.placeholder,
   });
 
   @override
@@ -111,7 +119,8 @@ class Attachment with ToStringHelper implements CdnAsset {
       throw UnsupportedError('Cannot specify attachment format or size');
     }
 
-    final response = await client.httpHandler.httpClient.send(Request('GET', url));
+    final response =
+        await client.httpHandler.httpClient.send(Request('GET', url));
     yield* response.stream;
   }
 }

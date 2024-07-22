@@ -139,6 +139,7 @@ class MessageManager extends Manager<Message> {
               microseconds: (value * Duration.microsecondsPerSecond).floor())),
       waveform: maybeParse(raw['waveform'], base64.decode),
       flags: maybeParse(raw['flags'], AttachmentFlags.new),
+      placeholder: raw['placeholder'] as String,
     );
   }
 
