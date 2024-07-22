@@ -94,7 +94,7 @@ class UserManager extends ReadOnlyManager<User> {
       detectPlatformAccounts: raw['detect_platform_accounts'] as bool?,
       animateStickers: raw['animate_stickers'] as int?,
       inlineAttachmentMedia: raw['inline_attachment_media'] as bool?,
-      status: tryParse(raw['status'] as String, UserStatus.parse),
+      status: tryParse(raw['status'] as String?, UserStatus.parse),
       messageDisplayCompact: raw['message_display_compact'] as bool?,
       viewNsfwGuilds: raw['view_nsfw_guilds'] as bool?,
       timezoneOffset: raw['timezone_offset'] as int?,
