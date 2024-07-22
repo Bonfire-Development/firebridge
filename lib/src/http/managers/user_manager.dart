@@ -162,7 +162,7 @@ class UserManager extends ReadOnlyManager<User> {
       lastPinTimestamp: DateTime.parse(raw['last_pin_timestamp'] as String),
       lastMessage: (raw['last_message_id'] != null)
           ? PartialMessage(
-              id: Snowflake.parse(raw['last_message_id'] as String),
+              id: Snowflake.parse(raw['last_message_id'].toString()),
               json: {},
               manager: (client.channels[Snowflake.zero] as PartialTextChannel)
                   .messages)
