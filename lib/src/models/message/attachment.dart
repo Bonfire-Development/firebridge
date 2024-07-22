@@ -62,7 +62,7 @@ class Attachment with ToStringHelper implements CdnAsset {
   final AttachmentFlags? flags;
 
   /// Hash used for blur.
-  final String placeholder;
+  final String? placeholder;
 
   @override
   Nyxx get client => manager.client;
@@ -100,7 +100,7 @@ class Attachment with ToStringHelper implements CdnAsset {
     required this.duration,
     required this.waveform,
     required this.flags,
-    required this.placeholder,
+    this.placeholder,
   });
 
   @override
