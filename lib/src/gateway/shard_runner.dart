@@ -11,6 +11,9 @@ import 'package:firebridge/src/gateway/message.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/opcode.dart';
 
+import 'package:firebridge/src/utils/is_web_web.dart'
+    if (dart.library.io) 'package:firebridge/src/utils/is_web_io.dart';
+
 /// An internal class that contains the logic for running a shard.
 ///
 /// This class handles opening the connection, heartbeating and any connection lifecycle events.
@@ -388,7 +391,10 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
 
   static Future<ShardConnection> connect(
       String gatewayUri, ShardRunner runner) async {
-    final connection = await WebSocket.connect(gatewayUri);
+    final connection = await WebSocket.connect(
+      gatewayUri,
+    );
+    print("connecting...");
 
     final uncompressedStream = switch (runner.data.apiOptions.compression) {
       GatewayCompression.transport =>
@@ -407,6 +413,8 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     final eventStream = dataStream.cast<Map<String, Object?>>().map((event) =>
         parser.parseGatewayEvent(event,
             heartbeatLatency: runner.heartbeatStopwatch?.elapsed));
+
+    print("returning shard connection...");
 
     return ShardConnection(connection, eventStream.asBroadcastStream(), runner);
   }
