@@ -20,6 +20,8 @@ dependencies:
   oauth2: ^2.0.2
   archive: ^3.6.1
   universal_io: ^2.2.2
+  worker_manager: ^7.0.3
+  isolate_manager: ^4.1.5+1
 
 dev_dependencies:
   test: ^1.22.0

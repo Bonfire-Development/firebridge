@@ -63,11 +63,14 @@ void main() async {
   });
 
   client.onReady.listen((event) async {
+    print("ready!");
     /*
     Ready is called a LOT only when joining VC. I think this is because the
     gateway only checks validates the event name, and not the opcode.
 
     I need to find a way to differentiate between the two.
+
+    Nope, it just crashes :D
     */
     // print("Ready!");
     Snowflake guildId = Snowflake(1238277719511400488);

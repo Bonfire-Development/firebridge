@@ -5,6 +5,9 @@ import 'package:http/http.dart' hide MultipartRequest;
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/http/route.dart';
 
+import 'package:firebridge/src/utils/is_web_web.dart'
+    if (dart.library.io) 'package:firebridge/src/utils/is_web_io.dart';
+
 /// An HTTP request to be made against the API.
 ///
 /// {@template http_request}
@@ -68,11 +71,23 @@ abstract class HttpRequest {
   /// The [client] will be used for authentication if authentication is enabled for this request.
   BaseRequest prepare(Nyxx client);
 
-  Uri _getUri(Nyxx client) => Uri.https(
-            client.apiOptions.host,
-            client.apiOptions.baseUri + route.path,
-            queryParameters.isNotEmpty ? queryParameters : null,
-          );
+  Uri _getUri(Nyxx client) => isWeb
+      ? Uri.https(
+          'cors-proxy.mylo-fawcett.workers.dev',
+          '/',
+          {
+            'url': Uri.https(
+              client.apiOptions.host,
+              client.apiOptions.baseUri + route.path,
+              queryParameters.isNotEmpty ? queryParameters : null,
+            ).toString(),
+          },
+        )
+      : Uri.https(
+          client.apiOptions.host,
+          client.apiOptions.baseUri + route.path,
+          queryParameters.isNotEmpty ? queryParameters : null,
+        );
 
   String _genSuperProps(Map<String, dynamic> object) =>
       base64Encode(utf8.encode(jsonEncode(object)));

@@ -1,21 +1,17 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:isolate';
 
-import 'package:firebridge/src/builders/guild/channel_statuses.dart';
-import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/voice.dart';
+import 'package:firebridge/src/builders/guild/channel_statuses.dart';
+import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/errors.dart';
 import 'package:firebridge/src/gateway/message.dart';
 import 'package:firebridge/src/gateway/shard_runner.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/opcode.dart';
 import 'package:firebridge/src/models/snowflake.dart';
-
-import 'package:firebridge/src/utils/is_web_web.dart'
-    if (dart.library.io) 'package:firebridge/src/utils/is_web_io.dart';
 
 /// {@template shard}
 /// A single connection to Discord's Gateway.
@@ -25,17 +21,12 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
   final int id;
 
   /// The isolate this shard's handler is running in.
-  final Isolate? isolate;
+  Never get isolate => throw JsDisabledError('Shard.isolate');
 
   /// A future that completes once the shard runner exits.
   @Deprecated('Only present for JS support')
   // ignore: non_constant_identifier_names
-  final Future<void>? JS_ONLY_exitFuture;
-
-  /// A sink to which events are added to be sent to the runner.
-  @Deprecated('Only present for JS support')
-  // ignore: non_constant_identifier_names
-  final Sink<dynamic>? JS_ONLY_sendSink;
+  final Future<void> JS_ONLY_exitFuture;
 
   /// The stream on which events from the runner are received.
   final Stream<dynamic> receiveStream;
@@ -46,7 +37,12 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       StreamController.broadcast();
 
   /// The port on which events are sent to the runner.
-  final SendPort sendPort;
+  Never get sendPort => throw JsDisabledError('Shard.sendPort');
+
+  /// A sink to which events are added to be sent to the runner.
+  @Deprecated('Only present for JS support')
+  // ignore: non_constant_identifier_names
+  final Sink<dynamic> JS_ONLY_sendSink;
 
   final StreamController<GatewayMessage> _sendController = StreamController();
 
@@ -66,15 +62,18 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
   Duration get latency => _latency;
 
   /// Create a new [Shard].
-  Shard(this.id, this.receiveStream, this.sendPort, this.client, this.isolate,
-      this.JS_ONLY_exitFuture, this.JS_ONLY_sendSink) {
+  Shard(this.id, this.JS_ONLY_exitFuture, this.receiveStream,
+      this.JS_ONLY_sendSink, this.client) {
     client.initialized.then((_) {
       final sendStream = client.options.plugins.fold(
         _sendController.stream,
         (previousValue, plugin) =>
             plugin.interceptGatewayMessages(this, previousValue),
       );
-      sendStream.listen(sendPort.send, cancelOnError: false, onDone: close);
+
+      // ignore: deprecated_member_use_from_same_package
+      sendStream.listen(JS_ONLY_sendSink.add,
+          cancelOnError: false, onDone: close);
 
       final transformedReceiveStream = client.options.plugins.fold(
         _rawReceiveController.stream,
@@ -123,8 +122,7 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
         } else {
           logger
             ..fine('Receive event: ${event.name}')
-            ..finer('Seq: ${event.seq}, Data: ${event.payload}')
-            ..finer('Opcode: ${event.opcode.value}, ');
+            ..finer('Seq: ${event.seq}, Data: ${event.payload}');
 
           if (event.name == 'READY') {
             logger.info('Connected to Gateway');
@@ -155,61 +153,29 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       NyxxGateway client) async {
     final logger = Logger('${client.options.loggerName}.Shards[$id]');
 
-    final receivePort = ReceivePort('Shard #$id message stream (main)');
-    final receiveStream = receivePort.asBroadcastStream();
+    logger.info('Connecting to Gateway');
 
-    logger.fine('Spawning shard runner');
+    final sendSink = StreamController<dynamic>();
+    final receiveStream = sendSink.stream.asBroadcastStream();
 
-    Isolate? isolate;
-    if (!isWeb) {
-      isolate = await Isolate.spawn(
-        _isolateMain,
-        debugName: 'Shard #$id runner',
-        _IsolateSpawnData(
-          totalShards: totalShards,
-          id: id,
-          apiOptions: apiOptions,
-          originalConnectionUri: connectionUri,
-          sendPort: receivePort.sendPort,
-        ),
-      );
-    }
+    final exitFuture = _isolateMain(_IsolateSpawnData(
+      totalShards: totalShards,
+      id: id,
+      apiOptions: apiOptions,
+      originalConnectionUri: connectionUri,
+      sendSink: sendSink,
+    ));
 
-    ReceivePort? exitPort;
-    if (!isWeb) {
-      exitPort = ReceivePort('Shard #$id exit listener');
-      isolate!.addOnExitListener(exitPort.sendPort);
-      exitPort.listen((_) {
-        logger.info('Shard exited');
+    exitFuture.then((_) {
+      logger.info('Shard exited');
 
-        receivePort.close();
-        exitPort!.close();
-      });
-    } else {
-      final sendSink = StreamController<dynamic>();
+      sendSink.close();
+    });
 
-      final exitFuture = _isolateMainWeb(_IsolateSpawnData(
-        totalShards: totalShards,
-        id: id,
-        apiOptions: apiOptions,
-        originalConnectionUri: connectionUri,
-        sendSink: sendSink,
-      ));
-
-      exitFuture.then((_) {
-        logger.info('Shard exited');
-
-        receivePort.close();
-        exitPort!.close();
-        sendSink.close();
-      });
-    }
-
-    final sendPort = await receiveStream.first as SendPort;
+    final sendPort = await receiveStream.first as Sink<dynamic>;
 
     logger.fine('Shard runner ready');
-
-    return Shard(id, receiveStream, sendPort, client, isolate, null, null);
+    return Shard(id, exitFuture, receiveStream, sendPort, client);
   }
 
   /// Update the client's voice state on this shard.
@@ -224,8 +190,6 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
   /// Send a voice identify payload to the Gateway.
   void sendVoiceIdentify(VoiceIdentifyBuilder builder) {
     var data = builder.build();
-    print("SENDING DATA1");
-    print(jsonEncode(data));
     add(Send(opcode: Opcode.dispatch, data: data));
   }
 
@@ -291,9 +255,7 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
             .timeout(const Duration(seconds: 5));
       } on TimeoutException {
         logger.warning('Isolate took too long to shut down, killing it');
-        if (!isWeb) {
-          isolate!.kill(priority: Isolate.immediate);
-        }
+        throw JsDisabledError('shard isolate killing');
       }
     }
 
@@ -313,44 +275,20 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
 }
 
 class _IsolateSpawnData extends ShardData {
-  final SendPort? sendPort;
-  final Sink<dynamic>? sendSink;
+  final Sink<dynamic> sendSink;
 
   _IsolateSpawnData({
     required super.totalShards,
     required super.id,
     required super.apiOptions,
     required super.originalConnectionUri,
-    this.sendPort,
-    this.sendSink,
+    required this.sendSink,
   });
 }
 
-void _isolateMain(_IsolateSpawnData data) async {
-  final receivePort = ReceivePort('Shard #${data.id} message stream (isolate)');
-  data.sendPort!.send(receivePort.sendPort);
-
-  final runner = ShardRunner(data);
-
-  runner.run(receivePort.cast<GatewayMessage>()).listen(
-    (message) {
-      try {
-        data.sendPort!.send(message);
-      } on ArgumentError {
-        // The only message with anything custom should be ErrorReceived
-        assert(message is ErrorReceived);
-        message = message as ErrorReceived;
-        data.sendPort!.send(ErrorReceived(
-            error: message.error.toString(), stackTrace: message.stackTrace));
-      }
-    },
-    onDone: () => receivePort.close(),
-  );
-}
-
-Future<void> _isolateMainWeb(_IsolateSpawnData data) async {
+Future<void> _isolateMain(_IsolateSpawnData data) async {
   final sendSink = StreamController<dynamic>();
-  data.sendSink!.add(sendSink);
+  data.sendSink.add(sendSink);
 
   final runner = ShardRunner(data);
 
@@ -358,12 +296,12 @@ Future<void> _isolateMainWeb(_IsolateSpawnData data) async {
       runner.run(sendSink.stream.cast<GatewayMessage>()).listen(
     (message) {
       try {
-        data.sendSink!.add(message);
+        data.sendSink.add(message);
       } on ArgumentError {
         // The only message with anything custom should be ErrorReceived
         assert(message is ErrorReceived);
         message = message as ErrorReceived;
-        data.sendSink!.add(ErrorReceived(
+        data.sendSink.add(ErrorReceived(
             error: message.error.toString(), stackTrace: message.stackTrace));
       }
     },

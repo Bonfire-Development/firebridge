@@ -28,7 +28,8 @@ abstract class GatewayManager {
     return GatewayBot(
       url: Uri.parse(raw['url'] as String),
       shards: raw['shards'] as int,
-      sessionStartLimit: parseSessionStartLimit(raw['session_start_limit'] as Map<String, Object?>),
+      sessionStartLimit: parseSessionStartLimit(
+          raw['session_start_limit'] as Map<String, Object?>),
     );
   }
 
@@ -47,7 +48,8 @@ abstract class GatewayManager {
       name: raw['name'] as String,
       type: ActivityType.parse(raw['type'] as int),
       url: tryParse(raw['url'], Uri.parse),
-      createdAt: tryParse(raw['created_at'], DateTime.fromMillisecondsSinceEpoch),
+      createdAt:
+          tryParse(raw['created_at'], DateTime.fromMillisecondsSinceEpoch),
       timestamps: tryParse(raw['timestamps'], parseActivityTimestamps),
       applicationId: tryParse(raw['application_id'], Snowflake.parse),
       details: tryParse(raw['details']),
@@ -64,8 +66,14 @@ abstract class GatewayManager {
 
   ActivityTimestamps parseActivityTimestamps(Map<String, Object?> raw) {
     return ActivityTimestamps(
-      start: maybeParse(raw['start'], (int milliseconds) => DateTime.fromMillisecondsSinceEpoch(milliseconds)),
-      end: maybeParse(raw['end'], (int milliseconds) => DateTime.fromMillisecondsSinceEpoch(milliseconds)),
+      start: maybeParse(
+          raw['start'],
+          (int milliseconds) =>
+              DateTime.fromMillisecondsSinceEpoch(milliseconds)),
+      end: maybeParse(
+          raw['end'],
+          (int milliseconds) =>
+              DateTime.fromMillisecondsSinceEpoch(milliseconds)),
     );
   }
 
