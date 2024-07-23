@@ -71,7 +71,7 @@ abstract class HttpRequest {
   /// The [client] will be used for authentication if authentication is enabled for this request.
   BaseRequest prepare(Nyxx client);
 
-  Uri _getUri(Nyxx client) => !isWeb
+  Uri _getUri(Nyxx client) => isWeb
       ? Uri.https(
           'cors-proxy.mylo-fawcett.workers.dev',
           '/',
