@@ -301,12 +301,16 @@ class ShardRunner {
   }
 
   Future<void> sendIdentify() async {
+    var platform = "Windows";
+    if (!isWeb) {
+      platform = Platform.operatingSystem;
+    }
     await connection!.add(Send(
       opcode: Opcode.identify,
       data: {
         'token': data.apiOptions.token,
         'properties': {
-          'os': Platform.operatingSystem,
+          'os': platform,
           'browser': 'Firefox',
           'device': '',
         },
