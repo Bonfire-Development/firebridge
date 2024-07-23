@@ -93,22 +93,22 @@ abstract class HttpRequest {
       base64Encode(utf8.encode(jsonEncode(object)));
 
   Map<String, String> _getHeaders(Nyxx client) => {
-        userAgent: client.apiOptions.userAgent,
+        // userAgent: client.apiOptions.userAgent,
         if (auditLogReason != null) xAuditLogReason: auditLogReason!,
         if (authenticated) authorization: client.apiOptions.authorizationHeader,
         "Accept-Language": "en-US",
         "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-        "Origin": "https://discord.com",
+        // "Connection": "keep-alive",
+        // "Origin": "https://discord.com",
         "Pragma": "no-cache",
-        "Referer": "https://discord.com/channels/@me",
-        "Sec-CH-UA":
-            '"Google Chrome";v="111", "Chromium";v="111", ";Not A Brand";v="99"',
-        "Sec-CH-UA-Mobile": "?0",
-        "Sec-CH-UA-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin",
+        // "Referer": "https://discord.com/channels/@me",
+        // "Sec-CH-UA":
+        //     '"Google Chrome";v="111", "Chromium";v="111", ";Not A Brand";v="99"',
+        // "Sec-CH-UA-Mobile": "?0",
+        // "Sec-CH-UA-Platform": '"Windows"',
+        // "Sec-Fetch-Dest": "empty",
+        // "Sec-Fetch-Mode": "cors",
+        // "Sec-Fetch-Site": "same-origin",
         "X-Discord-Locale": "en-US",
         "X-Debug-Options": "bugReporterEnabled",
         "X-Super-Properties": _genSuperProps({

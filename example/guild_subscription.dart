@@ -64,6 +64,7 @@ void main() async {
 
   client.onReady.listen((event) async {
     print("ready!");
+    var guilds = await client.guilds..
     /*
     Ready is called a LOT only when joining VC. I think this is because the
     gateway only checks validates the event name, and not the opcode.
