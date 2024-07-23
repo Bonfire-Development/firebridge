@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/plugin/plugin.dart';
@@ -30,7 +30,8 @@ class CliIntegration extends NyxxPlugin {
 
     _subscriptions ??= [
       ProcessSignal.sigint.watch().listen(closeClients),
-      if (!Platform.isWindows) ProcessSignal.sigterm.watch().listen(closeClients),
+      if (!Platform.isWindows)
+        ProcessSignal.sigterm.watch().listen(closeClients),
     ];
   }
 
