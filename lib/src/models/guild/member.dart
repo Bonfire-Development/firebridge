@@ -99,15 +99,7 @@ class Member extends PartialMember {
   /// The time until which this member is timed out.
   final DateTime? communicationDisabledUntil;
 
-  /// The status of this member. Only received in a GuildMemberListUpdateEvent.
-  final UserStatus? status;
-
-  /// The client status of this member. Only received in a GuildMemberListUpdateEvent.
-  final ClientStatus? clientStatus;
-
-  /// The activities of this member. Only received in a GuildMemberListUpdateEvent.
-  final List<Activity>? activities;
-
+  /// The presence of this member. Only available when recieved on a GuildMemberListUpdateEvent.
   final PresenceUpdateEvent? presence;
 
   /// {@macro member}
@@ -128,11 +120,6 @@ class Member extends PartialMember {
     required this.isPending,
     required this.permissions,
     required this.communicationDisabledUntil,
-    // this.game, // needs more research
-    // this.broadcast, // also unsure
-    this.status,
-    this.clientStatus,
-    this.activities,
     this.presence,
   });
 
