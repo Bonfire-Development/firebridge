@@ -110,7 +110,7 @@ void main() async {
       print("update!");
       event.memberList?.forEach((element) {
         if (element.first is! Member) return;
-        print((element.first as Member).presence);
+        print((element.first as Member).initialPresence);
       });
       // print("got member list update!");
       // print(event.memberList![0][0]);

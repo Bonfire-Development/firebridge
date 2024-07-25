@@ -49,7 +49,7 @@ class MemberManager extends Manager<Member> {
           raw['permissions'], (String raw) => Permissions(int.parse(raw))),
       communicationDisabledUntil:
           maybeParse(raw['communication_disabled_until'], DateTime.parse),
-      presence:
+      initialPresence:
           gateway?.parsePresenceUpdate(raw['presence'] as Map<String, dynamic>),
     );
   }

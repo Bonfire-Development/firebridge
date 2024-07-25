@@ -99,8 +99,8 @@ class Member extends PartialMember {
   /// The time until which this member is timed out.
   final DateTime? communicationDisabledUntil;
 
-  /// The presence of this member. Only available when recieved on a GuildMemberListUpdateEvent.
-  final PresenceUpdateEvent? presence;
+  /// The initial presence of this member. Only available when recieved on a GuildMemberListUpdateEvent.
+  final PresenceUpdateEvent? initialPresence;
 
   /// {@macro member}
   /// @nodoc
@@ -120,7 +120,7 @@ class Member extends PartialMember {
     required this.isPending,
     required this.permissions,
     required this.communicationDisabledUntil,
-    this.presence,
+    this.initialPresence,
   });
 
   /// The roles this member has.
