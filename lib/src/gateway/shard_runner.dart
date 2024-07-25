@@ -398,7 +398,6 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     final connection = await WebSocket.connect(
       gatewayUri,
     );
-    print("connecting...");
 
     final uncompressedStream = switch (runner.data.apiOptions.compression) {
       GatewayCompression.transport =>
@@ -417,8 +416,6 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     final eventStream = dataStream.cast<Map<String, Object?>>().map((event) =>
         parser.parseGatewayEvent(event,
             heartbeatLatency: runner.heartbeatStopwatch?.elapsed));
-
-    print("returning shard connection...");
 
     return ShardConnection(connection, eventStream.asBroadcastStream(), runner);
   }

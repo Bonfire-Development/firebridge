@@ -20,6 +20,8 @@ dependencies:
   oauth2: ^2.0.2
   archive: ^3.6.1
   universal_io: ^2.2.2
+  web_socket_channel: ^3.0.1
+  stream_channel: ^2.1.2
 
 dev_dependencies:
   test: ^1.22.0

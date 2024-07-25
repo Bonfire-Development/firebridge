@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/gateway/events/settings.dart';
+import 'package:firebridge/src/models/guild/member_list_group.dart';
 import 'package:firebridge/src/models/guild/unread_update.dart';
 import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/models/role.dart';
@@ -737,6 +740,8 @@ class Gateway extends GatewayManager with EventParser {
 
   GuildMemberListUpdateEvent parseGuildMembersUpdateEvent(
       Map<String, Object?> raw) {
+    // print("raw members update");
+    // print(jsonEncode(raw));
     final guildId = Snowflake.parse(raw['guild_id']!);
     var ops = (raw["ops"]! as List<dynamic>)[0] as Map<String, Object?>;
 
@@ -762,13 +767,52 @@ class Gateway extends GatewayManager with EventParser {
         eventType: eventType,
         memberList: (ops["op"] == "SYNC")
             ? parseMany(
-                items, client.guilds[guildId].members.parseGuildMemberGroups)
+                items,
+                (Map<String, Object?> raw) =>
+                    parseGuildMemberGroups(raw, guildId))
             : items,
         onlineCount: raw["online_count"] as int,
         memberCount: raw["member_count"] as int,
-        groups: parseMany(raw["groups"] as List<Object?>,
-            client.guilds[guildId].members.parseGuildMemberListGroup),
+        groups: parseMany(
+            raw["groups"] as List<Object?>, parseGuildMemberListGroup),
         partialRole: role);
+  }
+
+  /// Parse a [GuildMemberListGroup] from [raw].
+  GuildMemberListGroup parseGuildMemberListGroup(Map<String, Object?> raw) {
+    var id = raw['id']! as String?;
+    String? name;
+    if (double.tryParse(id!) == null) {
+      name = id;
+    }
+
+    return GuildMemberListGroup(
+      id: (name == null) ? Snowflake.parse(raw['id']!) : null,
+      name: name,
+      count: raw['count'] as int?,
+    );
+  }
+
+  List<dynamic> parseGuildMemberGroups(
+      Map<String, dynamic> raw, Snowflake guildId) {
+    List<dynamic> items = [];
+
+    raw.forEach((key, item) {
+      item = (item as Map<String, dynamic>);
+      if (item.containsKey("id")) {
+        // is a group
+        items.add(parseGuildMemberListGroup(item));
+      } else if (item.containsKey("user")) {
+        // is a member
+        // print(item);
+        items.add(client.guilds[guildId].members.parse(
+          item,
+          gateway: this, // I hate it here
+        ));
+      }
+    });
+    // print(items);
+    return items;
   }
 
   /// Parse a [GuildRoleCreateEvent] from [raw].

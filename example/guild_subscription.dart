@@ -8,7 +8,7 @@ void main() async {
     gatewayToken,
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.WARNING), cliIntegration]),
+        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
   );
 
   client.updateGuildSubscriptionsBulk(
@@ -73,54 +73,78 @@ void main() async {
     Nope, it just crashes :D
     */
     // print("Ready!");
-    Snowflake guildId = Snowflake(1238277719511400488);
-    Snowflake channelId = Snowflake(1238277720023240805);
+    Snowflake guildId = Snowflake(820745488231301210);
+    Snowflake channelId = Snowflake(1260314304981237842);
 
-    client.updateVoiceState(
-        guildId,
-        GatewayVoiceStateBuilder(
-          channelId: channelId,
-          isMuted: false,
-          isDeafened: false,
-          isStreaming: false,
-        ));
-    /*
-      server_id	snowflake	The ID of the guild or private channel being connecting to
-      user_id	snowflake	The ID of the current user
-      session_id	string	The session ID of the current session
-      token	string	The voice token for the current session
-      video?	boolean	Whether or not this connection supports video
-      streams?	array[stream object]	An array of video stream objects
-    */
-    String? token;
-    String? sessionId;
-    bool hasSentIdentify = false;
-    void sendIdentify() {
-      if (hasSentIdentify) return;
-      hasSentIdentify = true;
-      // // print("sending identify!");
-      // client.sendVoiceIdentify(
-      //     guildId,
-      //     VoiceIdentifyBuilder(
-      //       guildId: guildId,
-      //       userId: Snowflake(1238277719511400488),
-      //       sessionId: sessionId!,
-      //       token: token!,
-      //     ));
-    }
+    // client.updateVoiceState(
+    //     guildId,
+    //     GatewayVoiceStateBuilder(
+    //       channelId: channelId,
+    //       isMuted: false,
+    //       isDeafened: false,
+    //       isStreaming: false,
+    //     ));
 
-    client.onVoiceServerUpdate.listen((event) async {
-      // print("GOT VOICE SERVER UPDATE!");
-      token = event.token;
-      print(event.endpoint);
-      if (token != null && sessionId != null) sendIdentify();
+    // subscribe to guild bulk subscriptions
+    client.updateGuildSubscriptionsBulk(
+      GuildSubscriptionsBulkBuilder()
+        ..subscriptions = [
+          GuildSubscription(
+            typing: true,
+            memberUpdates: true,
+            channels: [
+              GuildSubscriptionChannel(
+                channelId: channelId,
+                memberRange: GuildMemberRange(
+                  lowerMemberBound: 0,
+                  upperMemberBound: 5,
+                ),
+              )
+            ],
+            guildId: guildId,
+          )
+        ],
+    );
+
+    client.onGuildMemberListUpdate.listen((event) async {
+      print("update!");
+      event.memberList?.forEach((element) {
+        if (element.first is! Member) return;
+        print((element.first as Member).presence);
+      });
+      // print("got member list update!");
+      // print(event.memberList![0][0]);
     });
 
-    client.onVoiceStateUpdate.listen((event) async {
-      // print("GOT VOICE STATE UPDATE!");
-      sessionId = event.state.sessionId;
+    // String? token;
+    // String? sessionId;
+    // bool hasSentIdentify = false;
+    // void sendIdentify() {
+    //   if (hasSentIdentify) return;
+    //   hasSentIdentify = true;
+    //   // // print("sending identify!");
+    //   // client.sendVoiceIdentify(
+    //   //     guildId,
+    //   //     VoiceIdentifyBuilder(
+    //   //       guildId: guildId,
+    //   //       userId: Snowflake(1238277719511400488),
+    //   //       sessionId: sessionId!,
+    //   //       token: token!,
+    //   //     ));
+    // }
 
-      if (token != null && sessionId != null) sendIdentify();
-    });
+    // client.onVoiceServerUpdate.listen((event) async {
+    //   // print("GOT VOICE SERVER UPDATE!");
+    //   token = event.token;
+    //   print(event.endpoint);
+    //   if (token != null && sessionId != null) sendIdentify();
+    // });
+
+    // client.onVoiceStateUpdate.listen((event) async {
+    //   // print("GOT VOICE STATE UPDATE!");
+    //   sessionId = event.state.sessionId;
+
+    //   if (token != null && sessionId != null) sendIdentify();
+    // });
   });
 }

@@ -8,6 +8,8 @@ import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/flags.dart';
+import 'package:firebridge/src/models/gateway/events/presence.dart';
+import 'package:firebridge/src/models/presence.dart';
 
 /// A partial [Member].
 class PartialMember extends WritableSnowflakeEntity<Member> {
@@ -97,6 +99,17 @@ class Member extends PartialMember {
   /// The time until which this member is timed out.
   final DateTime? communicationDisabledUntil;
 
+  /// The status of this member. Only received in a GuildMemberListUpdateEvent.
+  final UserStatus? status;
+
+  /// The client status of this member. Only received in a GuildMemberListUpdateEvent.
+  final ClientStatus? clientStatus;
+
+  /// The activities of this member. Only received in a GuildMemberListUpdateEvent.
+  final List<Activity>? activities;
+
+  final PresenceUpdateEvent? presence;
+
   /// {@macro member}
   /// @nodoc
   Member({
@@ -115,6 +128,12 @@ class Member extends PartialMember {
     required this.isPending,
     required this.permissions,
     required this.communicationDisabledUntil,
+    // this.game, // needs more research
+    // this.broadcast, // also unsure
+    this.status,
+    this.clientStatus,
+    this.activities,
+    this.presence,
   });
 
   /// The roles this member has.

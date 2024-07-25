@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebridge/src/builders/guild/member.dart';
 import 'package:firebridge/src/errors.dart';
+import 'package:firebridge/src/gateway/gateway.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
@@ -25,7 +26,8 @@ class MemberManager extends Manager<Member> {
       PartialMember(id: id, json: {}, manager: this);
 
   @override
-  Member parse(Map<String, Object?> raw, {Snowflake? userId}) {
+  Member parse(Map<String, Object?> raw,
+      {Snowflake? userId, Gateway? gateway}) {
     return Member(
       id: maybeParse(
               (raw['user'] as Map<String, Object?>?)?['id'], Snowflake.parse) ??
@@ -47,42 +49,9 @@ class MemberManager extends Manager<Member> {
           raw['permissions'], (String raw) => Permissions(int.parse(raw))),
       communicationDisabledUntil:
           maybeParse(raw['communication_disabled_until'], DateTime.parse),
+      presence:
+          gateway?.parsePresenceUpdate(raw['presence'] as Map<String, dynamic>),
     );
-  }
-
-  /// Parse a [GuildMemberListGroup] from [raw].
-  GuildMemberListGroup parseGuildMemberListGroup(Map<String, Object?> raw) {
-    var id = raw['id']! as String?;
-    String? name;
-    if (double.tryParse(id!) == null) {
-      name = id;
-    }
-
-    return GuildMemberListGroup(
-      id: (name == null) ? Snowflake.parse(raw['id']!) : null,
-      name: name,
-      count: raw['count'] as int?,
-    );
-  }
-
-  List<dynamic> parseGuildMemberGroups(Map<String, dynamic> raw) {
-    List<dynamic> items = [];
-
-    raw.forEach((key, item) {
-      item = (item as Map<String, dynamic>);
-      if (item.containsKey("id")) {
-        // is a group
-        items.add(parseGuildMemberListGroup(item));
-      } else if (item.containsKey("user")) {
-        // is a member
-        // print(item);
-        items.add(client.guilds[guildId].members.parse(
-          item,
-        ));
-      }
-    });
-    // print(items);
-    return items;
   }
 
   @override
