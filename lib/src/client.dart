@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/voice_gateway/voice.dart';
-import 'package:firebridge/src/voice_gateway/connection.dart';
 import 'package:firebridge/src/voice_gateway/voice_gateway.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';

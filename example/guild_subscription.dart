@@ -1,4 +1,5 @@
 import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/src/models/voice_gateway/event.dart';
 import 'package:firebridge/src/models/voice_gateway/voice.dart';
 import 'package:firebridge/src/utils/date.dart';
 
