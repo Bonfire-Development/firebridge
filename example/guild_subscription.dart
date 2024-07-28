@@ -83,7 +83,7 @@ void main() async {
           channelId: channelId,
           isMuted: false,
           isDeafened: false,
-          isStreaming: false,
+          isStreaming: true,
         ));
 
     // subscribe to guild bulk subscriptions
@@ -140,7 +140,7 @@ void main() async {
           sessionId: sessionId!,
           token: token!,
           maxSecureFramesVersion: 0,
-          video: false,
+          video: true,
           streams: [],
         ),
         Uri.parse("wss://${endpoint!}"),

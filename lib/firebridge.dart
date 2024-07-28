@@ -192,6 +192,7 @@ export 'src/gateway/message.dart'
         StartShard;
 export 'src/gateway/shard.dart' show Shard;
 
+export 'src/models/voice_gateway/voice.dart' show VoiceGatewayUser;
 export 'src/models/discord_color.dart' show DiscordColor;
 export 'src/models/locale.dart' show Locale;
 export 'src/models/permission_overwrite.dart'
