@@ -50,14 +50,3 @@ enum VoiceOpcode {
 
   const VoiceOpcode._(this.value);
 }
-
-enum MemberListUpdateType {
-  sync._("SYNC"),
-  update._("UPDATE"),
-  unknown._("UNKNOWN"),
-  delete._("DELETE");
-
-  final String value;
-
-  const MemberListUpdateType._(this.value);
-}

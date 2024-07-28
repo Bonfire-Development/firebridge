@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
@@ -805,6 +804,11 @@ class Gateway extends GatewayManager with EventParser {
       } else if (item.containsKey("user")) {
         // is a member
         // print(item);
+        if (raw['presence'] != null) {
+          // fire a gateway presence update event
+          // client.gateway.events.
+        }
+
         items.add(client.guilds[guildId].members.parse(
           item,
           gateway: this, // I hate it here

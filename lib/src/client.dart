@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
+import 'package:firebridge/src/models/voice_gateway/voice.dart';
+import 'package:firebridge/src/voice_gateway/connection.dart';
+import 'package:firebridge/src/voice_gateway/voice_gateway.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -22,6 +25,7 @@ import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/plugin/plugin.dart';
 import 'package:firebridge/src/utils/flags.dart';
 import 'package:runtime_type/runtime_type.dart';
+import 'package:universal_io/io.dart';
 
 /// A helper function to nest and execute calls to plugin connect methods.
 Future<T> _doConnect<T extends Nyxx>(
@@ -116,6 +120,11 @@ abstract class Nyxx {
       connectGatewayWithOptions(
           GatewayApiOptions(token: token, intents: intents), options);
 
+  static Future<VoiceGateway> connectVoiceGateway(
+      VoiceGatewayUser voiceGatewayUser, Uri url) async {
+    return VoiceGateway.connect(voiceGatewayUser, url);
+  }
+
   /// Create an instance of [NyxxGateway] using the provided options.
   static Future<NyxxGateway> connectGatewayWithOptions(
     GatewayApiOptions apiOptions, [
@@ -205,6 +214,13 @@ class NyxxRest with ManagerMixin implements Nyxx {
   }
 }
 
+class VoiceClient {
+  final VoiceGatewayUser voiceGatewayUser;
+  late final VoiceGateway voiceGateway;
+
+  VoiceClient(this.voiceGatewayUser);
+}
+
 /// A client that can make requests to the HTTP API, connects to the Gateway and is authenticated with a bot token.
 class NyxxGateway with ManagerMixin, EventMixin implements NyxxRest {
   @override
@@ -257,8 +273,8 @@ class NyxxGateway with ManagerMixin, EventMixin implements NyxxRest {
       gateway.updateVoiceState(guildId, builder);
 
   /// Send a voice identify payload to the guild with the ID [guildId].
-  void sendVoiceIdentify(Snowflake guildId, VoiceIdentifyBuilder builder) =>
-      gateway.sendVoiceIdentify(guildId, builder);
+  // void sendVoiceIdentify(Snowflake guildId, VoiceIdentifyBuilder builder) =>
+  //     gateway.sendVoiceIdentify(guildId, builder);
 
   /// Update the client's presence on all shards.
   void updatePresence(PresenceBuilder builder) =>

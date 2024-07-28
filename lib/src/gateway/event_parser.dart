@@ -49,12 +49,12 @@ mixin class EventParser {
   }
 
   RawDispatchEvent parseDispatch(Map<String, Object?> raw) {
-    // I hate it
-    // (it's a thing when recieving self status)
-    // also this definitely still doesn't work
-    if (raw['d'] is List<dynamic>) {
-      raw['d'] == (raw['d'] as List<dynamic>)[0];
-    }
+    // // I hate it
+    // // (it's a thing when recieving self status)
+    // // also this definitely still doesn't work
+    // if (raw['d'] is List<dynamic>) {
+    //   raw['d'] == (raw['d'] as List<dynamic>)[0];
+    // }
 
     return RawDispatchEvent(
       seq: raw['s'] as int,
