@@ -145,7 +145,7 @@ class VoiceSessionUpdateEvent extends VoiceGatewayEvent {
 /// {@endtemplate}
 class VoiceSpeakingEvent extends VoiceGatewayEvent {
   /// The speaking flags
-  final int speaking;
+  final bool speaking;
 
   /// The SSRC of the speaking user
   final int ssrc;

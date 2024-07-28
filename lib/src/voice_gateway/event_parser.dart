@@ -92,7 +92,7 @@ mixin class VoiceEventParser {
   VoiceSpeakingEvent parseSpeaking(Map<String, Object?> raw) {
     var data = raw['d'] as Map<String, Object?>;
     return VoiceSpeakingEvent(
-      speaking: data['speaking'] as int,
+      speaking: data['speaking'] as bool,
       ssrc: data['ssrc'] as int,
       userId: Snowflake.parse(data['user_id']!),
       delay: data['delay'] as int?,
