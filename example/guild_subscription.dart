@@ -121,10 +121,10 @@ void main() async {
     String? sessionId;
     String? endpoint;
     bool hasSentIdentify = false;
-    void sendIdentify() {
+    void sendIdentify() async {
       if (hasSentIdentify) return;
       hasSentIdentify = true;
-      print("sending identify!");
+      // print("sending identify!");
       // client.sendVoiceIdentify(
       //     guildId,
       //     VoiceIdentifyBuilder(
@@ -133,7 +133,7 @@ void main() async {
       //       sessionId: sessionId!,
       //       token: token!,
       //     ));
-      var voiceClient = Nyxx.connectVoiceGateway(
+      VoiceGateway voiceClient = await Nyxx.connectVoiceGateway(
         VoiceGatewayUser(
           serverId: guildId,
           userId: Snowflake(949415879274291251),
@@ -145,10 +145,20 @@ void main() async {
         ),
         Uri.parse("wss://${endpoint!}"),
       );
+
+      voiceClient.onReady.listen((event) {
+        // print("got voice client event!");
+        // print(event.);
+        // Future.delayed(Duration(seconds: 3), () {
+        //   voiceClient.disconnect();
+        //   // you then still have to update the voice state
+        //   print("disconnected!");
+        // });
+      });
     }
 
     client.onVoiceServerUpdate.listen((event) async {
-      print("GOT VOICE SERVER UPDATE!");
+      // print("GOT VOICE SERVER UPDATE!");
       token = event.token;
       endpoint = event.endpoint;
       print(event.endpoint);
@@ -156,7 +166,7 @@ void main() async {
     });
 
     client.onVoiceStateUpdate.listen((event) async {
-      print("GOT VOICE STATE UPDATE!");
+      // print("GOT VOICE STATE UPDATE!");
       sessionId = event.state.sessionId;
 
       if (token != null && sessionId != null) sendIdentify();

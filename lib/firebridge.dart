@@ -7,7 +7,8 @@ export 'src/api_options.dart'
         GatewayApiOptions,
         GatewayCompression,
         GatewayPayloadFormat;
-export 'src/client.dart' show Nyxx, NyxxRest, NyxxGateway;
+export 'src/client.dart' show Nyxx, NyxxRest, NyxxGateway, VoiceClient;
+export 'src/voice_gateway/voice_gateway.dart' show VoiceGateway;
 export 'src/client_options.dart'
     show ClientOptions, RestClientOptions, GatewayClientOptions;
 export 'src/errors.dart'

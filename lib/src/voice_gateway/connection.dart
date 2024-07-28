@@ -26,11 +26,7 @@ class VoiceConnection extends Stream<VoiceGatewayEvent>
     );
 
     final parser = VoiceEventParser();
-    // connection.cast<Map<String, Object?>>().map((event) {
     final eventStream = connection.cast<dynamic>().map((event) {
-      print("parsing event!");
-      print(event);
-
       return parser.parseVoiceGatewayEvent(
           jsonDecode(event as String) as Map<String, Object?>);
     });
@@ -46,9 +42,6 @@ class VoiceConnection extends Stream<VoiceGatewayEvent>
     };
 
     final encoded = jsonEncode(payload);
-    print("sending payload!");
-    print(encoded);
-
     websocket.add(encoded);
     _sentController.add(VoiceSent(payload: event));
   }
