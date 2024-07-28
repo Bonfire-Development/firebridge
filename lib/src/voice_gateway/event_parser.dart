@@ -7,6 +7,7 @@ mixin class VoiceEventParser {
   VoiceGatewayEvent parseVoiceGatewayEvent(Map<String, Object?> raw) {
     final mapping = {
       VoiceOpcode.ready.value: parseReady,
+      VoiceOpcode.selectProtocol.value: parseSelectProtocol,
       VoiceOpcode.heartbeat.value: parseHeartbeat,
       VoiceOpcode.hello.value: parseHello,
       VoiceOpcode.resumed.value: parseResumed,
@@ -18,6 +19,18 @@ mixin class VoiceEventParser {
     };
 
     return mapping[raw['op'] as int]!(raw);
+  }
+
+  VoiceSelectProtocolEvent parseSelectProtocol(Map<String, Object?> raw) {
+    print("SELECT PROTOCOLO1");
+    var data = raw['d'] as Map<String, Object?>;
+    return VoiceSelectProtocolEvent(
+      protocol: data['protocol'] as String,
+      data: data['data'] as String,
+      rtcConnectionId: data['rtc_connection_id'] as String?,
+      codecs: (data['codecs'] as List?)?.cast<Map<String, Object?>>(),
+      experiments: (data['experiments'] as List?)?.cast<String>(),
+    );
   }
 
   VoiceHelloEvent parseHello(Map<String, Object?> raw) {

@@ -24,6 +24,22 @@ class VoiceHelloEvent extends VoiceGatewayEvent {
   }) : super(opcode: VoiceOpcode.hello);
 }
 
+class VoiceSelectProtocolEvent extends VoiceGatewayEvent {
+  final String protocol;
+  final String data;
+  final String? rtcConnectionId;
+  final List<Map<String, Object?>>? codecs;
+  final List<String>? experiments;
+
+  VoiceSelectProtocolEvent({
+    required this.protocol,
+    required this.data,
+    this.rtcConnectionId,
+    this.codecs,
+    this.experiments,
+  }) : super(opcode: VoiceOpcode.selectProtocol);
+}
+
 /// {@template voice_ready_event}
 /// Emitted when the client receives a voice ready event.
 /// {@endtemplate}

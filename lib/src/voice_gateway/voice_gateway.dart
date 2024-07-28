@@ -1,6 +1,10 @@
 import 'dart:async';
 
-import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/src/api_options.dart';
+import 'package:firebridge/src/builders/voice.dart';
+import 'package:firebridge/src/builders/voice_gateway.dart';
+import 'package:firebridge/src/client_options.dart';
+import 'package:firebridge/src/http/handler.dart';
 import 'package:firebridge/src/http/managers/voice_gateway_manager.dart';
 import 'package:firebridge/src/models/voice_gateway/event.dart';
 import 'package:firebridge/src/models/voice_gateway/opcode.dart';
@@ -9,6 +13,7 @@ import 'package:firebridge/src/voice_gateway/connection.dart';
 import 'package:firebridge/src/voice_gateway/event_mixin.dart';
 import 'package:firebridge/src/voice_gateway/event_parser.dart';
 import 'package:firebridge/src/voice_gateway/message.dart';
+import 'package:logging/logging.dart';
 
 class VoiceGateway extends VoiceGatewayManager
     with VoiceEventParser, VoiceEventMixin {
@@ -26,15 +31,34 @@ class VoiceGateway extends VoiceGatewayManager
   /// Create a new [VoiceGateway].
   VoiceGateway(this.voiceGatewayUser, this.connection, this.endpoint)
       : super.create() {
+    runHeartbeat();
     connection.events.listen((event) {
-      connection.add(VoiceSend(opcode: VoiceOpcode.identify, data: {
-        "server_id": voiceGatewayUser.serverId.value.toString(),
-        "user_id": voiceGatewayUser.userId.value.toString(),
-        "session_id": voiceGatewayUser.sessionId,
-        "token": voiceGatewayUser.token,
-        "video": true,
-        "streams": [],
-      }));
+      if (event is VoiceHelloEvent) {
+        connection.add(VoiceSend(opcode: VoiceOpcode.identify, data: {
+          "server_id": voiceGatewayUser.serverId.value.toString(),
+          "user_id": voiceGatewayUser.userId.value.toString(),
+          "session_id": voiceGatewayUser.sessionId,
+          "token": voiceGatewayUser.token,
+          "video": true,
+          "streams": [],
+        }));
+      }
+
+      if (event is VoiceReadyEvent) {
+        print("Voice Ready, attempting connect... ${event.ssrc}");
+      }
+
+      if (event is VoiceSessionDescriptionEvent) {
+        // connection.add(
+        //   VoiceSend(
+        //     opcode: VoiceOpcode.selectProtocol,
+        //     data: {
+        //       "protocol": "webrtc",
+        //       "data": event.ssrc,
+        //     },
+        //   ),
+        // );
+      }
     });
   }
 
@@ -47,6 +71,17 @@ class VoiceGateway extends VoiceGatewayManager
     );
   }
 
+  Future<void> runHeartbeat() async {
+    await for (final event in events) {
+      if (event is VoiceHelloEvent) {
+        final interval = Duration(milliseconds: event.heartbeatInterval);
+        await for (final _ in Stream.periodic(interval)) {
+          connection.add(VoiceSend(opcode: VoiceOpcode.heartbeat, data: null));
+        }
+      }
+    }
+  }
+
   Future<void> disconnect() async {
     await connection.websocket.close();
   }
@@ -54,6 +89,14 @@ class VoiceGateway extends VoiceGatewayManager
   Future<void> sendVoiceIdentify(VoiceIdentifyBuilder builder) async {
     connection.add(VoiceSend(
       opcode: VoiceOpcode.identify,
+      data: builder.build(),
+    ));
+  }
+
+  Future<void> sendVoiceSelectProtocol(
+      VoiceSelectProtocolBuilder builder) async {
+    connection.add(VoiceSend(
+      opcode: VoiceOpcode.selectProtocol,
       data: builder.build(),
     ));
   }

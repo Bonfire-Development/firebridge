@@ -1,7 +1,4 @@
 import 'package:firebridge/firebridge.dart';
-import 'package:firebridge/src/models/voice_gateway/event.dart';
-import 'package:firebridge/src/models/voice_gateway/voice.dart';
-import 'package:firebridge/src/utils/date.dart';
 
 String gatewayToken = "";
 
@@ -65,7 +62,7 @@ void main() async {
   });
 
   client.onReady.listen((event) async {
-    print("ready!");
+    print("Client Ready");
     /*
     Ready is called a LOT only when joining VC. I think this is because the
     gateway only checks validates the event name, and not the opcode.
@@ -148,6 +145,7 @@ void main() async {
       );
 
       voiceClient.onReady.listen((event) {
+        print("Voice Client Ready");
         // print("got voice client event!");
         // print(event.);
         // Future.delayed(Duration(seconds: 3), () {
@@ -155,11 +153,24 @@ void main() async {
         //   // you then still have to update the voice state
         //   print("disconnected!");
         // });
+
+        voiceClient.sendVoiceSelectProtocol(VoiceSelectProtocolBuilder(
+          protocol: "webrtc",
+
+          // you can paste the sdp from the browser here for testing, and a session description is returned.
+          data: "e",
+        ));
+      });
+
+      voiceClient.onVoiceSessionDescription.listen((event) {
+        print("got session description!");
+        print(event.sdp);
       });
     }
 
     client.onVoiceServerUpdate.listen((event) async {
       // print("GOT VOICE SERVER UPDATE!");
+
       token = event.token;
       endpoint = event.endpoint;
       print(event.endpoint);

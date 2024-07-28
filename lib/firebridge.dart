@@ -27,6 +27,7 @@ export 'src/errors.dart'
         PluginError,
         JsDisabledError;
 
+export 'src/builders/voice_gateway.dart' show VoiceSelectProtocolBuilder;
 export 'src/builders/builder.dart' show Builder, CreateBuilder, UpdateBuilder;
 export 'src/builders/image.dart' show ImageBuilder;
 export 'src/builders/user.dart' show UserUpdateBuilder;
