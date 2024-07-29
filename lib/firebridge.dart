@@ -200,7 +200,8 @@ export 'src/models/voice_gateway/event.dart'
         VoiceHelloEvent,
         VoiceReadyEvent,
         VoiceHeartbeatEvent,
-        VoiceResumedEvent;
+        VoiceResumedEvent,
+        VoiceSessionDescriptionEvent;
 export 'src/models/discord_color.dart' show DiscordColor;
 export 'src/models/locale.dart' show Locale;
 export 'src/models/permission_overwrite.dart'
