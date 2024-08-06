@@ -38,9 +38,9 @@ class VoiceRunner {
       ..pause();
 
     Future<void> asyncRun() async {
-      final subscription = connection!.listen((event) async {
-        print("Received event: $event");
-      });
+      // final subscription = connection!.listen((event) async {
+      //   print("Received event: $event");
+      // });
     }
 
     asyncRun().then((_) {

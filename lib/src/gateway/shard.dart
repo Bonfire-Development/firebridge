@@ -219,7 +219,6 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
     } else if (event is Identify) {
       logger.info('Connecting to Gateway');
     }
-
     _sendController.add(event);
   }
 
@@ -271,7 +270,9 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       throw UnimplementedError();
 
   @override
-  Future<void> addStream(Stream<GatewayMessage> stream) => stream.forEach(add);
+  Future<void> addStream(Stream<GatewayMessage> stream) {
+    return stream.forEach(add);
+  }
 }
 
 class _IsolateSpawnData extends ShardData {

@@ -22,6 +22,7 @@ dependencies:
   universal_io: ^2.2.2
   web_socket_channel: ^3.0.1
   stream_channel: ^2.1.2
+  websocket_universal: ^1.2.5
 
 dev_dependencies:
   test: ^1.22.0

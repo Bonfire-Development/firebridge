@@ -18,8 +18,8 @@ void main() async {
   // });
 
   client.onGuildMemberListUpdate.listen((event) async {
-    print("new event just dropped");
-    print(event);
+    // print("new event just dropped");
+    // print(event);
   });
 
   // var memberList = await members.toList();

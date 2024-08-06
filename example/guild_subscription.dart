@@ -7,30 +7,30 @@ void main() async {
     gatewayToken,
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
+        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
   );
 
-  client.updateGuildSubscriptionsBulk(
-    GuildSubscriptionsBulkBuilder()
-      ..subscriptions = [
-        GuildSubscription(
-          guildId: Snowflake(1057441464449249370),
-          typing: true,
-          threads: true,
-          memberUpdates: false,
-          activities: true,
-          threadMemberLists: [],
-          members: [],
-          channels: [
-            GuildSubscriptionChannel(
-              channelId: Snowflake(1057441464449249371),
-              memberRange:
-                  GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
-            ),
-          ],
-        ),
-      ],
-  );
+  // client.updateGuildSubscriptionsBulk(
+  //   GuildSubscriptionsBulkBuilder()
+  //     ..subscriptions = [
+  //       GuildSubscription(
+  //         guildId: Snowflake(1057441464449249370),
+  //         typing: true,
+  //         threads: true,
+  //         memberUpdates: false,
+  //         activities: true,
+  //         threadMemberLists: [],
+  //         members: [],
+  //         channels: [
+  //           GuildSubscriptionChannel(
+  //             channelId: Snowflake(1057441464449249371),
+  //             memberRange:
+  //                 GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  // );
 
   // client.onVoiceServerUpdate.listen((event) async {
   //   print(event.);
@@ -63,6 +63,7 @@ void main() async {
 
   client.onReady.listen((event) async {
     print("Client Ready");
+    return;
     /*
     Ready is called a LOT only when joining VC. I think this is because the
     gateway only checks validates the event name, and not the opcode.
