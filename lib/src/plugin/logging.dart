@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' as io;
+import 'package:universal_io/io.dart' as io;
 
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -80,7 +80,8 @@ class Logging extends NyxxPlugin {
         customMessage = '${customMessage.substring(0, truncateLogsAt! - 3)}...';
       }
 
-      message.writeln('[${rec.time}] [${rec.level.name}] [${rec.loggerName}] $customMessage');
+      message.writeln(
+          '[${rec.time}] [${rec.level.name}] [${rec.loggerName}] $customMessage');
 
       final error = rec.error;
       if (error != null) {
@@ -98,7 +99,8 @@ class Logging extends NyxxPlugin {
         }
       }
 
-      final stackTrace = (error is Error ? error.stackTrace : null) ?? rec.stackTrace;
+      final stackTrace =
+          (error is Error ? error.stackTrace : null) ?? rec.stackTrace;
       if (stackTrace != null) {
         message.writeln('Stack trace:\n$stackTrace\n');
       }
