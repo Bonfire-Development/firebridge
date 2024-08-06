@@ -19,7 +19,7 @@ class CdnRequest extends HttpRequest {
       return Request(
           method,
           Uri.parse(
-              "https://corsproxy.io/?https://${client.apiOptions.host}${client.apiOptions.baseUri}${route.path}"));
+              "https://cors-proxy.mylo-fawcett.workers.dev/?url=https://${client.apiOptions.host}${client.apiOptions.baseUri}${route.path}"));
     }
   }
 }
