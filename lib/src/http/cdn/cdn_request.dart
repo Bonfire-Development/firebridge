@@ -17,9 +17,13 @@ class CdnRequest extends HttpRequest {
       return Request(method, Uri.https(client.apiOptions.cdnHost, route.path));
     } else {
       return Request(
-          method,
-          Uri.parse(
-              "https://cors-proxy.mylo-fawcett.workers.dev/?url=https://${client.apiOptions.host}${client.apiOptions.baseUri}${route.path}"));
+        method,
+        Uri.https(
+          'cors-proxy.mylo-fawcett.workers.dev',
+          '/',
+          {'url': Uri.https(client.apiOptions.cdnHost, route.path).toString()},
+        ),
+      );
     }
   }
 }
