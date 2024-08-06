@@ -72,17 +72,8 @@ abstract class HttpRequest {
   BaseRequest prepare(Nyxx client);
 
   Uri _getUri(Nyxx client) => isWeb
-      ? Uri.https(
-          'cors-proxy.mylo-fawcett.workers.dev',
-          '/',
-          {
-            'url': Uri.https(
-              client.apiOptions.host,
-              client.apiOptions.baseUri + route.path,
-              queryParameters.isNotEmpty ? queryParameters : null,
-            ).toString(),
-          },
-        )
+      ? Uri.parse(
+          "https://corsproxy.io/?https://${client.apiOptions.host}${client.apiOptions.baseUri}${route.path}")
       : Uri.https(
           client.apiOptions.host,
           client.apiOptions.baseUri + route.path,
