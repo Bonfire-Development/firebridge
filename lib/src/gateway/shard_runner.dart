@@ -299,6 +299,7 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     };
 
     final parser = EventParser();
+    // logging.logger.info('Connected to gateway');
     final eventStream = dataStream.cast<Map<String, Object?>>().map((event) =>
         parser.parseGatewayEvent(event,
             heartbeatLatency: runner.heartbeatStopwatch?.elapsed));
