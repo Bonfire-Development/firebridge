@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:universal_io/io.dart' as io;
 
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
@@ -30,16 +29,6 @@ class Logging extends NyxxPlugin {
   /// Whether to censor the token of clients this plugin is attached to.
   final bool censorToken;
 
-  /// The sink normal messages are sent to.
-  ///
-  /// Defaults to [io.stdout].
-  final StringSink stdout;
-
-  /// The sink error messages are sent to.
-  ///
-  /// Defaults to [io.stderr].
-  final StringSink stderr;
-
   /// Create a new instance of the [Logging] plugin.
   Logging({
     this.stderrLevel = Level.WARNING,
@@ -47,10 +36,7 @@ class Logging extends NyxxPlugin {
     this.logLevel = Level.INFO,
     this.truncateLogsAt = 1000,
     this.censorToken = true,
-    StringSink? stdout,
-    StringSink? stderr,
-  })  : stdout = stdout ?? io.stdout,
-        stderr = stderr ?? io.stderr {
+  }) {
     _listenIfNeeded();
   }
 
@@ -112,8 +98,7 @@ class Logging extends NyxxPlugin {
         }
       }
 
-      final outSink = rec.level >= stderrLevel ? stderr : stdout;
-      outSink.write(messageString);
+      print(messageString);
     });
   }
 
