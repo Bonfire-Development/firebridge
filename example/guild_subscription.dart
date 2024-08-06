@@ -63,7 +63,7 @@ void main() async {
 
   client.onReady.listen((event) async {
     print("Client Ready");
-    return;
+
     /*
     Ready is called a LOT only when joining VC. I think this is because the
     gateway only checks validates the event name, and not the opcode.
@@ -73,8 +73,8 @@ void main() async {
     Nope, it just crashes :D
     */
     // print("Ready!");
-    Snowflake guildId = Snowflake(1238277719511400488);
-    Snowflake channelId = Snowflake(1238277720023240805);
+    Snowflake guildId = Snowflake(BigInt.from(1238277719511400488));
+    Snowflake channelId = Snowflake(BigInt.from(1238277720023240805));
 
     client.updateVoiceState(
         guildId,
@@ -135,7 +135,7 @@ void main() async {
       VoiceGateway voiceClient = await Nyxx.connectVoiceGateway(
         VoiceGatewayUser(
           serverId: guildId,
-          userId: Snowflake(949415879274291251),
+          userId: Snowflake(BigInt.from(949415879274291251)),
           sessionId: sessionId!,
           token: token!,
           maxSecureFramesVersion: 0,

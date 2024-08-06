@@ -238,7 +238,8 @@ class Gateway extends GatewayManager with EventParser {
   }
 
   /// Compute the ID of the shard that handles events for [guildId].
-  int shardIdFor(Snowflake guildId) => (guildId.value >> 22) % totalShards;
+  int shardIdFor(Snowflake guildId) =>
+      ((guildId.value >> 22) % BigInt.from(totalShards)).toInt();
 
   /// Return the shard that handles events for [guildId].
   ///
@@ -754,7 +755,7 @@ class Gateway extends GatewayManager with EventParser {
         MemberListUpdateType.values.firstWhere((e) {
       return e.value == ops["op"];
     }, orElse: () => MemberListUpdateType.unknown);
-    int? id = int.tryParse(raw["id"].toString());
+    BigInt? id = BigInt.tryParse(raw["id"].toString());
     PartialRole? role;
     if (id != null) {
       role = PartialRole(

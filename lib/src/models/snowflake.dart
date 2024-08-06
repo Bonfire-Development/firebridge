@@ -23,39 +23,40 @@ class Snowflake implements Comparable<Snowflake> {
   static const bulkDeleteLimit = Duration(days: 14);
 
   /// A snowflake with a value of 0.
-  static const zero = Snowflake(0);
+  static final zero = Snowflake(BigInt.zero);
 
   /// The value of this snowflake.
   ///
   /// While this is stored in a signed [int], Discord treats this as an unsigned value.
-  final int value;
+  final BigInt value;
 
   /// The time at which this snowflake was created.
-  DateTime get timestamp => epoch.add(Duration(milliseconds: millisecondsSinceEpoch));
+  DateTime get timestamp =>
+      epoch.add(Duration(milliseconds: millisecondsSinceEpoch.toInt()));
 
   /// The number of milliseconds since the [epoch].
   ///
   /// Discord uses a non-standard epoch for their snowflakes. As such,
   /// [DateTime.fromMillisecondsSinceEpoch] will not work with this value. Users should instead use
   /// the [timestamp] getter.
-  int get millisecondsSinceEpoch => value >> 22;
+  BigInt get millisecondsSinceEpoch => value >> 22;
 
   /// The internal worker ID for this snowflake.
   ///
   /// {@template internal_field}
   /// This is an internal field and has no practical application.
   /// {@endtemplate}
-  int get workerId => (value & 0x3E0000) >> 17;
+  BigInt get workerId => (value & BigInt.from(0x3E0000)) >> 17;
 
   /// The internal process ID for this snowflake.
   ///
   /// {@macro internal_field}
-  int get processId => (value & 0x1F000) >> 12;
+  BigInt get processId => (value & BigInt.from(0x1F000)) >> 12;
 
   /// The internal increment value for this snowflake.
   ///
   /// {@macro internal_field}
-  int get increment => value & 0xFFF;
+  BigInt get increment => value & BigInt.from(0xFFF);
 
   /// Whether this snowflake has a value of `0`.
   bool get isZero => value == 0;
@@ -77,8 +78,8 @@ class Snowflake implements Comparable<Snowflake> {
   factory Snowflake.parse(Object /* String | int */ value) {
     assert(value is String || value is int);
 
-    if (value is! int) {
-      value = int.parse(value.toString());
+    if (value is! BigInt) {
+      value = BigInt.parse(value.toString());
     }
 
     return Snowflake(value);
@@ -100,13 +101,15 @@ class Snowflake implements Comparable<Snowflake> {
       'Cannot create a Snowflake before the epoch.',
     );
 
-    return Snowflake(dateTime.difference(epoch).inMilliseconds << 22);
+    return Snowflake(BigInt.parse(
+        (dateTime.difference(epoch).inMilliseconds << 22).toString()));
   }
 
   /// Create a snowflake representing the oldest time at which bulk delete operations will work.
   ///
   /// {@macro snowflake}
-  factory Snowflake.firstBulk() => Snowflake.fromDateTime(DateTime.now().subtract(bulkDeleteLimit));
+  factory Snowflake.firstBulk() =>
+      Snowflake.fromDateTime(DateTime.now().subtract(bulkDeleteLimit));
 
   /// Return `true` if this snowflake has a [timestamp] before [other]'s timestamp.
   bool isBefore(Snowflake other) => timestamp.isBefore(other.timestamp);
@@ -115,17 +118,20 @@ class Snowflake implements Comparable<Snowflake> {
   bool isAfter(Snowflake other) => timestamp.isAfter(other.timestamp);
 
   /// Return `true` if this snowflake has a [timestamp] at the same time as [other]'s timestamp.
-  bool isAtSameMomentAs(Snowflake other) => timestamp.isAtSameMomentAs(other.timestamp);
+  bool isAtSameMomentAs(Snowflake other) =>
+      timestamp.isAtSameMomentAs(other.timestamp);
 
   /// Return a snowflake [duration] after this snowflake.
   ///
   /// The returned snowflake has no [workerId], [processId] or [increment].
-  Snowflake operator +(Duration duration) => Snowflake.fromDateTime(timestamp.add(duration));
+  Snowflake operator +(Duration duration) =>
+      Snowflake.fromDateTime(timestamp.add(duration));
 
   /// Return a snowflake [duration] before this snowflake.
   ///
   /// The returned snowflake has no [workerId], [processId] or [increment].
-  Snowflake operator -(Duration duration) => Snowflake.fromDateTime(timestamp.subtract(duration));
+  Snowflake operator -(Duration duration) =>
+      Snowflake.fromDateTime(timestamp.subtract(duration));
 
   @override
   int compareTo(Snowflake other) => value.compareTo(other.value);
@@ -141,7 +147,8 @@ class Snowflake implements Comparable<Snowflake> {
   bool operator >(Snowflake other) => isAfter(other);
 
   @override
-  bool operator ==(Object other) => identical(this, other) || (other is Snowflake && other.value == value);
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Snowflake && other.value == value);
 
   @override
   int get hashCode => value.hashCode;

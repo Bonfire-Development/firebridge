@@ -66,7 +66,7 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
   @override
   Future<AuditLogEntry> fetch(Snowflake id) async {
     // Add one because before and after are exclusive.
-    final entries = await list(before: Snowflake(id.value + 1));
+    final entries = await list(before: Snowflake(id.value + BigInt.from(1)));
 
     return entries.firstWhere(
       (entry) => entry.id == id,

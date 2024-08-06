@@ -110,7 +110,7 @@ class User extends PartialUser
         base: HttpRoute()
           ..embed()
           ..avatars(),
-        hash: ((id.value >> 22) % 6).toString(),
+        hash: ((id.value >> 22) % BigInt.from(6)).toString(),
       );
 
   @override
