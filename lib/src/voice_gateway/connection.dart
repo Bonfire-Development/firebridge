@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:firebridge/src/models/voice_gateway/event.dart';
 import 'package:firebridge/src/voice_gateway/event_parser.dart';
 import 'package:firebridge/src/voice_gateway/message.dart';
-import 'package:universal_io/io.dart';
 
 class VoiceConnection extends Stream<VoiceGatewayEvent>
     implements StreamSink<VoiceSend> {
   /// The connection to the Gateway.
-  late WebSocket websocket;
+  late WebSocketChannel channel;
 
   /// A stream on which [VoiceSent] events are added.
   Stream<VoiceSent> get onSent => _sentController.stream;
@@ -18,20 +17,21 @@ class VoiceConnection extends Stream<VoiceGatewayEvent>
   /// A stream of parsed events received from the Gateway.
   final Stream<VoiceGatewayEvent> events;
 
-  VoiceConnection(this.websocket, this.events);
+  VoiceConnection(this.channel, this.events);
 
   static Future<VoiceConnection> connect(String gatewayUri) async {
-    final connection = await WebSocket.connect(
-      gatewayUri,
-    );
+    final channel = WebSocketChannel.connect(Uri.parse(gatewayUri));
+
+    // Wait for the connection to be established
+    await channel.ready;
 
     final parser = VoiceEventParser();
-    final eventStream = connection.cast<dynamic>().map((event) {
+    final eventStream = channel.stream.map((event) {
       return parser.parseVoiceGatewayEvent(
           jsonDecode(event as String) as Map<String, Object?>);
     });
 
-    return VoiceConnection(connection, eventStream.asBroadcastStream());
+    return VoiceConnection(channel, eventStream.asBroadcastStream());
   }
 
   @override
@@ -40,27 +40,26 @@ class VoiceConnection extends Stream<VoiceGatewayEvent>
       'op': event.opcode.value,
       'd': event.data,
     };
-
     final encoded = jsonEncode(payload);
-    websocket.add(encoded);
+    channel.sink.add(encoded);
     _sentController.add(VoiceSent(payload: event));
   }
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) =>
-      websocket.addError(error, stackTrace);
+      channel.sink.addError(error, stackTrace);
 
   @override
   Future<void> addStream(Stream<VoiceSend> stream) => stream.forEach(add);
 
   @override
   Future<void> close([int code = 1000]) async {
-    await websocket.close(code);
+    await channel.sink.close(code);
     await _sentController.close();
   }
 
   @override
-  Future<void> get done => websocket.done.then((_) => _sentController.done);
+  Future<void> get done => channel.sink.done.then((_) => _sentController.done);
 
   @override
   StreamSubscription<VoiceGatewayEvent> listen(

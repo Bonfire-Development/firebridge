@@ -83,7 +83,7 @@ class VoiceGateway extends VoiceGatewayManager
   }
 
   Future<void> disconnect() async {
-    await connection.websocket.close();
+    await connection.close();
   }
 
   Future<void> sendVoiceIdentify(VoiceIdentifyBuilder builder) async {

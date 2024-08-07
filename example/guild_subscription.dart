@@ -7,7 +7,7 @@ void main() async {
     gatewayToken,
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
+        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
   );
 
   // client.updateGuildSubscriptionsBulk(
@@ -123,19 +123,11 @@ void main() async {
     void sendIdentify() async {
       if (hasSentIdentify) return;
       hasSentIdentify = true;
-      // print("sending identify!");
-      // client.sendVoiceIdentify(
-      //     guildId,
-      //     VoiceIdentifyBuilder(
-      //       guildId: guildId,
-      //       userId: Snowflake(1238277719511400488),
-      //       sessionId: sessionId!,
-      //       token: token!,
-      //     ));
+
       VoiceGateway voiceClient = await Nyxx.connectVoiceGateway(
         VoiceGatewayUser(
           serverId: guildId,
-          userId: Snowflake(BigInt.from(949415879274291251)),
+          userId: Snowflake(BigInt.from(678355607992008736)),
           sessionId: sessionId!,
           token: token!,
           maxSecureFramesVersion: 0,

@@ -1,4 +1,3 @@
-import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/voice_gateway/opcode.dart';
 import 'package:firebridge/src/utils/to_string_helper/base_impl.dart';
 

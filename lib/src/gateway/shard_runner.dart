@@ -232,9 +232,9 @@ class ShardRunner {
       data: {
         'token': data.apiOptions.token,
         'properties': {
-          'os': 'browser',
-          'browser': 'nyxx',
-          'device': 'nyxx',
+          'os': 'Linux',
+          'browser': 'Firefox',
+          'device': '',
         },
         if (data.apiOptions.compression == GatewayCompression.payload)
           'compress': true,
