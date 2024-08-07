@@ -299,7 +299,8 @@ enum MessageType {
   /// [value] must be a valid [MessageType].
   factory MessageType.parse(int value) => MessageType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown MessageType', value),
+        orElse: () =>
+            throw FormatException('Unknown MessageType: $value', value),
       );
 
   @override
