@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebridge/src/models/message/poll.dart';
 import 'package:firebridge/src/utils/date.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:firebridge/src/builders/emoji/reaction.dart';
@@ -75,7 +76,7 @@ class MessageManager extends Manager<Message> {
       nonce: raw['nonce'] /* as int | String */,
       isPinned: raw['pinned'] as bool,
       webhookId: webhookId,
-      type: MessageType.parse(raw['type'] as int),
+      type: MessageType(raw['type'] as int),
       activity: maybeParse(raw['activity'], parseMessageActivity),
       application: maybeParse(
         raw['application'],
@@ -106,6 +107,7 @@ class MessageManager extends Manager<Message> {
           raw['resolved'],
           (Map<String, Object?> raw) => client.interactions
               .parseResolvedData(raw, guildId: guildId, channelId: channelId)),
+      poll: maybeParse(raw['poll'], parsePoll),
     );
   }
 
@@ -369,6 +371,48 @@ class MessageManager extends Manager<Message> {
       triggeringInteractionMetadata: maybeParse(
           raw['triggering_interaction_metadata'],
           parseMessageInteractionMetadata),
+    );
+  }
+
+  PollMedia parsePollMedia(Map<String, Object?> raw) {
+    return PollMedia(
+      text: raw['text'] as String?,
+      emoji:
+          maybeParse(raw['emoji'], client.guilds[Snowflake.zero].emojis.parse),
+    );
+  }
+
+  PollAnswer parsePollAnswer(Map<String, Object?> raw) {
+    return PollAnswer(
+      id: raw['answer_id'] as int,
+      pollMedia: parsePollMedia(raw['poll_media'] as Map<String, Object?>),
+    );
+  }
+
+  PollAnswerCount parsePollAnswerCount(Map<String, Object?> raw) {
+    return PollAnswerCount(
+      answerId: raw['id'] as int,
+      count: raw['count'] as int,
+      me: raw['me_voted'] as bool,
+    );
+  }
+
+  PollResults parsePollResults(Map<String, Object?> raw) {
+    return PollResults(
+      isFinalized: raw['is_finalized'] as bool,
+      answerCounts:
+          parseMany(raw['answer_counts'] as List, parsePollAnswerCount),
+    );
+  }
+
+  Poll parsePoll(Map<String, Object?> raw) {
+    return Poll(
+      question: parsePollMedia(raw['question'] as Map<String, Object?>),
+      answers: parseMany(raw['answers'] as List, parsePollAnswer),
+      endsAt: maybeParse(raw['expiry'] as String?, DateTime.parse),
+      allowsMultiselect: raw['allow_multiselect'] as bool,
+      layoutType: PollLayoutType(raw['layout_type'] as int),
+      results: maybeParse(raw['results'], parsePollResults),
     );
   }
 
@@ -675,5 +719,44 @@ class MessageManager extends Manager<Message> {
         ));
 
     await client.httpHandler.executeSafe(request);
+  }
+
+  /// Get a list of users that voted for this specific answer.
+  Future<List<User>> fetchAnswerVoters(Snowflake id, int answerId,
+      {Snowflake? after, int? limit}) async {
+    final route = HttpRoute()
+      ..channels(id: channelId.toString())
+      ..polls(id: id.toString())
+      ..answers(id: answerId);
+    final request = BasicRequest(
+      route,
+      queryParameters: {
+        if (after != null) 'after': after.toString(),
+        if (limit != null) 'limit': limit.toString(),
+      },
+    );
+
+    final response = await client.httpHandler.executeSafe(request);
+    final users = parseMany(
+        (response.jsonBody as Map<String, Object?>)['users'] as List,
+        client.users.parse);
+
+    users.forEach(client.updateCacheWith);
+    return users;
+  }
+
+  /// Immediately ends the poll.
+  Future<Message> endPoll(Snowflake id) async {
+    final route = HttpRoute()
+      ..channels(id: channelId.toString())
+      ..polls(id: id.toString())
+      ..expire();
+    final request = BasicRequest(route, method: 'POST');
+
+    final response = await client.httpHandler.executeSafe(request);
+    final message = parse(response.jsonBody as Map<String, Object?>);
+
+    client.updateCacheWith(message);
+    return message;
   }
 }
