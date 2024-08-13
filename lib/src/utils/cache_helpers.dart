@@ -310,6 +310,8 @@ extension CacheUpdates on NyxxRest {
           updateCacheWith(entitlement),
         EntitlementDeleteEvent(:final entitlement) =>
           entitlement.manager.cache.remove(entitlement.id),
+        MessagePollVoteAddEvent() => null,
+        MessagePollVoteRemoveEvent() => null,
 
         // null and unhandled entity types
         WebhookAuthor() => null,

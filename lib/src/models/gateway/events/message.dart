@@ -25,10 +25,16 @@ class MessageCreateEvent extends DispatchEvent {
 
   /// {@macro message_create_event}
   /// @nodoc
-  MessageCreateEvent({required super.gateway, required this.guildId, required this.member, required this.mentions, required this.message});
+  MessageCreateEvent(
+      {required super.gateway,
+      required this.guildId,
+      required this.member,
+      required this.mentions,
+      required this.message});
 
   /// The guild the message was sent in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 }
 
 /// {@template message_update_event}
@@ -62,7 +68,8 @@ class MessageUpdateEvent extends DispatchEvent {
   });
 
   /// The guild the message was updated in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 }
 
 /// {@template message_delete_event}
@@ -83,13 +90,20 @@ class MessageDeleteEvent extends DispatchEvent {
 
   /// {@macro message_delete_event}
   /// @nodoc
-  MessageDeleteEvent({required super.gateway, required this.id, required this.channelId, required this.guildId, required this.deletedMessage});
+  MessageDeleteEvent(
+      {required super.gateway,
+      required this.id,
+      required this.channelId,
+      required this.guildId,
+      required this.deletedMessage});
 
   /// The guild the message was deleted in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the message was deleted in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 }
 
 /// {@template message_bulk_delete_event}
@@ -110,13 +124,20 @@ class MessageBulkDeleteEvent extends DispatchEvent {
 
   /// {@macro message_bulk_delete_event}
   /// @nodoc
-  MessageBulkDeleteEvent({required super.gateway, required this.ids, required this.deletedMessages, required this.channelId, required this.guildId});
+  MessageBulkDeleteEvent(
+      {required super.gateway,
+      required this.ids,
+      required this.deletedMessages,
+      required this.channelId,
+      required this.guildId});
 
   /// The guild the messages were deleted in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the messages were deleted in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 }
 
 /// {@template message_reaction_add_event}
@@ -158,10 +179,12 @@ class MessageReactionAddEvent extends DispatchEvent {
   });
 
   /// The guild the message is in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the message is in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 
   /// The user that added the reaction.
   PartialUser get user => gateway.client.users[userId];
@@ -170,7 +193,8 @@ class MessageReactionAddEvent extends DispatchEvent {
   PartialMessage get message => channel.messages[messageId];
 
   /// The user that sent the message the reaction was added to
-  PartialUser? get messageAuthor => messageAuthorId == null ? null : gateway.client.users[messageAuthorId!];
+  PartialUser? get messageAuthor =>
+      messageAuthorId == null ? null : gateway.client.users[messageAuthorId!];
 }
 
 /// {@template message_reaction_remove_event}
@@ -204,10 +228,12 @@ class MessageReactionRemoveEvent extends DispatchEvent {
   });
 
   /// The guild the message is in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the message is in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 
   /// The user that removed the reaction.
   PartialUser get user => gateway.client.users[userId];
@@ -239,10 +265,12 @@ class MessageReactionRemoveAllEvent extends DispatchEvent {
   });
 
   /// The guild the message is in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the message is in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 
   /// The message the reactions were removed from.
   PartialMessage get message => channel.messages[messageId];
@@ -274,11 +302,109 @@ class MessageReactionRemoveEmojiEvent extends DispatchEvent {
   });
 
   /// The guild the message is in.
-  PartialGuild? get guild => guildId == null ? null : gateway.client.guilds[guildId!];
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
 
   /// The channel the message is in.
-  PartialTextChannel get channel => gateway.client.channels[channelId] as PartialTextChannel;
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
 
   /// The message the reactions were removed from.
   PartialMessage get message => channel.messages[messageId];
+}
+
+/// {@template message_poll_vote_add_event}
+/// Emitted when user votes on a poll. If the poll allows multiple selection, one event will be sent per answer.
+/// {@endtemplate}
+class MessagePollVoteAddEvent extends DispatchEvent {
+  /// The ID of the user that voted on a poll.
+  final Snowflake userId;
+
+  /// The ID of the channel the message is in.
+  final Snowflake channelId;
+
+  /// The ID of the message where vote added on a poll.
+  final Snowflake messageId;
+
+  /// The ID of the guild the message is in.
+  final Snowflake? guildId;
+
+  /// The ID of the answer on the poll.
+  final int answerId;
+
+  /// {@macro message_poll_vote_add_event}
+  /// @nodoc
+  MessagePollVoteAddEvent({
+    required super.gateway,
+    required this.userId,
+    required this.channelId,
+    required this.messageId,
+    required this.guildId,
+    required this.answerId,
+  });
+
+  /// The user that voted on a poll.
+  PartialUser get user => gateway.client.users[userId];
+
+  /// The channel the message is in.
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
+
+  /// The message where vote added on a poll.
+  PartialMessage get message => channel.messages[messageId];
+
+  /// The guild the message is in.
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
+
+  /// The member that voted on a poll.
+  PartialMember? get member => guild?.members[userId];
+}
+
+/// {@template message_poll_vote_remove_event}
+/// Emitted when user removes their vote on a poll. If the poll allows for multiple selections, one event will be sent per answer.
+/// {@endtemplate}
+class MessagePollVoteRemoveEvent extends DispatchEvent {
+  /// The ID of the user that removed their vote from a poll.
+  final Snowflake userId;
+
+  /// The ID of the channel the message is in.
+  final Snowflake channelId;
+
+  /// The ID of the message where vote removed from a poll.
+  final Snowflake messageId;
+
+  /// The ID of the guild the message is in.
+  final Snowflake? guildId;
+
+  /// The ID of the answer on the poll.
+  final int answerId;
+
+  /// {@macro message_poll_vote_remove_event}
+  /// @nodoc
+  MessagePollVoteRemoveEvent({
+    required super.gateway,
+    required this.userId,
+    required this.channelId,
+    required this.messageId,
+    required this.guildId,
+    required this.answerId,
+  });
+
+  /// The user that removed their vote from a poll.
+  PartialUser get user => gateway.client.users[userId];
+
+  /// The channel the message is in.
+  PartialTextChannel get channel =>
+      gateway.client.channels[channelId] as PartialTextChannel;
+
+  /// The message where vote removed from a poll.
+  PartialMessage get message => channel.messages[messageId];
+
+  /// The guild the message is in.
+  PartialGuild? get guild =>
+      guildId == null ? null : gateway.client.guilds[guildId!];
+
+  /// The member that removed their vote from a poll.
+  PartialMember? get member => guild?.members[userId];
 }

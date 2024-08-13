@@ -82,6 +82,8 @@ export 'src/builders/message/component.dart'
         SelectMenuOptionBuilder,
         TextInputBuilder,
         DefaultValue;
+export 'src/builders/message/poll.dart'
+    show PollAnswerBuilder, PollBuilder, PollMediaBuilder;
 export 'src/builders/webhook.dart' show WebhookBuilder, WebhookUpdateBuilder;
 export 'src/builders/guild/guild.dart' show GuildBuilder, GuildUpdateBuilder;
 export 'src/builders/guild/member.dart'
@@ -280,6 +282,14 @@ export 'src/models/message/message.dart'
         PartialMessage,
         MessageType,
         MessageInteractionMetadata;
+export 'src/models/message/poll.dart'
+    show
+        Poll,
+        PollAnswer,
+        PollAnswerCount,
+        PollMedia,
+        PollResults,
+        PollLayoutType;
 export 'src/models/message/reaction.dart' show Reaction, ReactionCountDetails;
 export 'src/models/message/reference.dart' show MessageReference;
 export 'src/models/message/role_subscription_data.dart'
@@ -449,7 +459,9 @@ export 'src/models/gateway/events/message.dart'
         MessageReactionRemoveAllEvent,
         MessageReactionRemoveEmojiEvent,
         MessageReactionRemoveEvent,
-        MessageUpdateEvent;
+        MessageUpdateEvent,
+        MessagePollVoteAddEvent,
+        MessagePollVoteRemoveEvent;
 export 'src/models/gateway/events/presence.dart'
     show PresenceUpdateEvent, TypingStartEvent, UserUpdateEvent;
 export 'src/models/gateway/events/ready.dart' show ReadyEvent, ResumedEvent;
