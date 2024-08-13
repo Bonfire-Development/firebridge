@@ -263,7 +263,7 @@ class ShardRunner {
 
 class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
   final WebSocketChannel channel;
-  final Stream<GatewayEvent> events;
+  late final StreamController<GatewayEvent> _controller;
   final ShardRunner runner;
 
   int? get closeCode => _closeCode;
@@ -271,11 +271,18 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
 
   final Completer<void> _doneCompleter = Completer();
 
-  ShardConnection(this.channel, this.events, this.runner) {
-    // channel.stream.listen(null, onDone: () {
-    //   _closeCode = (channel.closeCode ?? 1000);
-    //   _doneCompleter.complete();
-    // });
+  ShardConnection(this.channel, Stream<GatewayEvent> events, this.runner) {
+    _controller = StreamController<GatewayEvent>.broadcast();
+
+    events.listen(
+      _controller.add,
+      onError: _controller.addError,
+      onDone: () {
+        _closeCode = channel.closeCode ?? 1000;
+        _doneCompleter.complete();
+        _controller.close();
+      },
+    );
   }
 
   static Future<ShardConnection> connect(
@@ -314,8 +321,12 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     void Function()? onDone,
     bool? cancelOnError,
   }) {
-    return events.listen(onData,
-        cancelOnError: cancelOnError, onDone: onDone, onError: onError);
+    return _controller.stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
   }
 
   @override

@@ -7,7 +7,7 @@ void main() async {
     gatewayToken,
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
+        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
   );
 
   // client.updateGuildSubscriptionsBulk(
@@ -73,6 +73,7 @@ void main() async {
     Nope, it just crashes :D
     */
     // print("Ready!");
+    return;
     Snowflake guildId = Snowflake(BigInt.from(1238277719511400488));
     Snowflake channelId = Snowflake(BigInt.from(1238277720023240805));
 
