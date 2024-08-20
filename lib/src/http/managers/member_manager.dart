@@ -7,7 +7,6 @@ import 'package:firebridge/src/http/managers/manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
 import 'package:firebridge/src/models/guild/member.dart';
-import 'package:firebridge/src/models/guild/member_list_group.dart';
 import 'package:firebridge/src/models/permissions.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';

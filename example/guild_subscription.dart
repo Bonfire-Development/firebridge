@@ -7,7 +7,7 @@ void main() async {
     gatewayToken,
     GatewayIntents.all,
     options: GatewayClientOptions(
-        plugins: [Logging(logLevel: Level.ALL), cliIntegration]),
+        plugins: [Logging(logLevel: Level.OFF), cliIntegration]),
   );
 
   // client.updateGuildSubscriptionsBulk(
@@ -63,6 +63,7 @@ void main() async {
 
   client.onReady.listen((event) async {
     print("Client Ready");
+    // print(event.presences);
 
     /*
     Ready is called a LOT only when joining VC. I think this is because the

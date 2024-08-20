@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
@@ -51,6 +52,7 @@ import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';
 import 'package:firebridge/src/utils/parsing_helpers.dart';
+
 
 /// Handles the connection to Discord's Gateway with shards, manages the client's cache based on Gateway events and provides an interface to the Gateway.
 class Gateway extends GatewayManager with EventParser {
@@ -352,6 +354,7 @@ class Gateway extends GatewayManager with EventParser {
         raw['private_channels'] as List<Object?>,
         (Map<String, Object?> raw) => client.channels.parsePrivateChannel(raw),
       ),
+      presences: parseMany(raw['presences'] as List<dynamic>, parsePresenceUpdate),
       totalShards: (raw['shard'] as List<Object?>?)?[1] as int?,
     );
   }

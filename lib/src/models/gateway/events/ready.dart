@@ -1,5 +1,6 @@
 import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/gateway/events/presence.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/user/settings/private_channel.dart';
 import 'package:firebridge/src/models/user/settings/read_state.dart';
@@ -45,6 +46,9 @@ class ReadyEvent extends DispatchEvent {
   final List<PrivateChannel> privateChannels;
 
   /// The client's application.
+  final List<PresenceUpdateEvent> presences;
+
+  /// The client's application.
   final PartialApplication? application;
 
   /// {@macro ready_event}
@@ -62,6 +66,7 @@ class ReadyEvent extends DispatchEvent {
     required this.userGuildSettings,
     required this.readStates,
     required this.privateChannels,
+    required this.presences,
     this.application,
   });
 }

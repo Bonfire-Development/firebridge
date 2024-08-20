@@ -235,6 +235,7 @@ class ShardRunner {
           'os': 'Linux',
           'browser': 'Firefox',
           'device': '',
+          "release_channel":"stable",
         },
         if (data.apiOptions.compression == GatewayCompression.payload)
           'compress': true,
@@ -243,7 +244,9 @@ class ShardRunner {
         'shard': [data.id, data.totalShards],
         if (data.apiOptions.initialPresence != null)
           'presence': data.apiOptions.initialPresence!.build(),
-        'intents': data.apiOptions.intents.value,
+          'client_state': {
+            'guild_versions': {},
+          }
       },
     ));
   }
