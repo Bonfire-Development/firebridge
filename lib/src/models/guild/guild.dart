@@ -126,9 +126,6 @@ class PartialGuild extends WritableSnowflakeEntity<Guild> {
   Future<void> updateChannelPositions(List<ChannelPositionBuilder> positions) =>
       manager.updateChannelPositions(id, positions);
 
-  /// List the active threads in this guild.
-  Future<ThreadList> listActiveThreads() => manager.listActiveThreads(id);
-
   /// List the bans in this guild.
   Future<List<Ban>> listBans(
           {int? limit, Snowflake? after, Snowflake? before}) =>

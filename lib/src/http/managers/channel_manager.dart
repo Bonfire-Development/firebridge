@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebridge/src/http/managers/message_manager.dart';
 import 'package:firebridge/src/models/user/settings/private_channel.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:firebridge/src/builders/builder.dart';
@@ -929,6 +930,43 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     return threadList;
   }
 
+  /// Get detailed thread information for a list of threads in a channel.
+  Future<List<ThreadPostData>> getThreadPostData(
+    Snowflake id,
+    List<Snowflake> threadIds,
+  ) async {
+    final route = HttpRoute()
+      ..channels(id: id.toString())
+      ..postData();
+    final request = BasicRequest(
+      route,
+      method: 'POST',
+      body: jsonEncode(
+          {'thread_ids': threadIds.map((id) => id.toString()).toList()}),
+    );
+
+    List<ThreadPostData> threadList = [];
+
+    final response = await client.httpHandler.executeSafe(request);
+    final raw = (response.jsonBody as Map<String, Object?>);
+    for (final key in (raw['threads']! as Map<String, dynamic>).keys) {
+      final threadData =
+          (raw['threads'] as Map<String, dynamic>)[key] as Map<String, Object?>;
+      final firstMessage = MessageManager(
+        client.options.messageCacheConfig,
+        client,
+        channelId: Snowflake.parse(id),
+      ).parse(threadData['first_message'] as Map<String, Object?>);
+
+      threadList.add(ThreadPostData(
+        firstMessage: firstMessage,
+        owner: null,
+      ));
+    }
+
+    return threadList;
+  }
+
   /// List the user's DM channels.
   Future<List<DmChannel>> listDmChannels() async {
     final route = HttpRoute()
@@ -937,8 +975,6 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     final request = BasicRequest(route);
 
     final response = await client.httpHandler.executeSafe(request);
-    // var list = response.jsonBody as List<dynamic>;
-    // print(list[0]);
     final channels = parseMany(response.jsonBody as List<dynamic>,
         (raw) => parseDmChannel(raw as Map<String, Object?>));
 

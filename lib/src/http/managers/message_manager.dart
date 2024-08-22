@@ -51,7 +51,6 @@ class MessageManager extends Manager<Message> {
     }
 
     final webhookId = maybeParse(raw['webhook_id'], Snowflake.parse);
-
     return Message(
       id: Snowflake.parse(raw['id']!),
       json: raw,

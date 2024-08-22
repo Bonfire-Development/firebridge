@@ -499,23 +499,6 @@ class GuildManager extends Manager<Guild> {
     await client.httpHandler.executeSafe(request);
   }
 
-  /// List the active threads in a guild.
-  Future<ThreadList> listActiveThreads(Snowflake id) async {
-    final route = HttpRoute()
-      ..guilds(id: id.toString())
-      ..threads()
-      ..active();
-    final request = BasicRequest(route);
-
-    final response = await client.httpHandler.executeSafe(request);
-    final list = client.channels.parseThreadList(
-        response.jsonBody as Map<String, Object?>,
-        guildId: id);
-
-    client.updateCacheWith(list);
-    return list;
-  }
-
   /// List the bans in a guild.
   Future<List<Ban>> listBans(Snowflake id,
       {int? limit, Snowflake? after, Snowflake? before}) async {

@@ -3,6 +3,7 @@ import 'package:firebridge/src/models/channel/channel.dart';
 import 'package:firebridge/src/models/channel/guild_channel.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';
 import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/flags.dart';
@@ -78,7 +79,8 @@ abstract class Thread implements TextChannel, GuildChannel {
   /// External references:
   /// * [ChannelManager.listThreadMembers]
   /// * Discord API Reference: https://discord.com/developers/docs/resources/channel#list-thread-members
-  Future<List<ThreadMember>> listThreadMembers({bool? withMembers, Snowflake? after, int? limit});
+  Future<List<ThreadMember>> listThreadMembers(
+      {bool? withMembers, Snowflake? after, int? limit});
 }
 
 /// {@template partial_thread_member}
@@ -123,8 +125,19 @@ class ThreadMember extends PartialThreadMember {
   });
 
   /// The thread this member is in.
-  PartialTextChannel get thread => manager.client.channels[threadId] as PartialTextChannel;
+  PartialTextChannel get thread =>
+      manager.client.channels[threadId] as PartialTextChannel;
 
   /// The user associated with this thread member.
   PartialUser get user => manager.client.users[userId];
+}
+
+/// {@template thread_post_data}
+/// Data associated with a thread post.
+/// {@endtemplate}
+class ThreadPostData {
+  final Message firstMessage;
+  final Member? owner;
+
+  ThreadPostData({required this.firstMessage, required this.owner});
 }
