@@ -967,6 +967,28 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     return threadList;
   }
 
+  /// Search for threads in a forum channel.
+  Future<List<ThreadPostData>?> searchThreads(Snowflake id, int limit) async {
+    // example request: /api/v9/channels/1085672960695746600/threads/search
+
+    final route = HttpRoute()
+      ..channels(id: id.toString())
+      ..threads()
+      ..search();
+
+    final request = BasicRequest(
+      route,
+      queryParameters: {
+        'archived': "true",
+        'sort_by': "last_message_time",
+        "sort_order": "desc",
+        "tag_setting": "match_some",
+        "offset": "0",
+        if (limit != null) 'limit': limit.toString()
+      },
+    );
+  }
+
   /// List the user's DM channels.
   Future<List<DmChannel>> listDmChannels() async {
     final route = HttpRoute()
