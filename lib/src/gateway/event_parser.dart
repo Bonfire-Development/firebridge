@@ -50,7 +50,7 @@ mixin class EventParser {
 
   RawDispatchEvent parseDispatch(Map<String, Object?> raw) {
     if (raw['d'] is List<dynamic>) {
-      // Sessions replace event. This needs a lot of work regardless.
+      // Sessions replace event. This needs a lot of work, this is just so the gateway doesn't crash.
       raw['d'] = (raw['d'] as List<dynamic>)[0];
     }
 

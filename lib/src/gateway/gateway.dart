@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
+import 'package:firebridge/src/models/gateway/events/relationship.dart';
 import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/guild/member_list_group.dart';
 import 'package:firebridge/src/models/guild/unread_update.dart';
@@ -321,6 +320,9 @@ class Gateway extends GatewayManager with EventParser {
       'MESSAGE_ACK': parseMessageAck,
       'USER_SETTINGS_UPDATE': parseUserSettingsUpdate,
       'USER_GUILD_SETTINGS_UPDATE': parseUserGuildSettingsUpdate,
+      'RELATIONSHIP_ADD': parseRelationshipAdd,
+      'RELATIONSHIP_REMOVE': parseRelationshipRemove,
+      'RELATIONSHIP_UPDATE': parseRelationshipUpdate,
     };
 
     return mapping[raw.name]?.call(raw.payload) ??
@@ -1369,6 +1371,32 @@ class Gateway extends GatewayManager with EventParser {
       entitlement: entitlement,
       deletedEntitlement:
           client.applications[applicationId].entitlements.cache[entitlement.id],
+    );
+  }
+
+  /// Parse a [RelationshipAddEvent] from [raw].
+  RelationshipAddEvent parseRelationshipAdd(Map<String, Object?> raw) {
+    return RelationshipAddEvent(
+      gateway: this,
+      relationship: client.users.parseRelationship(raw),
+    );
+  }
+
+  RelationshipRemoveEvent parseRelationshipRemove(Map<String, Object?> raw) {
+    return RelationshipRemoveEvent(
+      gateway: this,
+      id: Snowflake.parse(raw['id']!),
+      type: raw['type'] as int,
+      nickname: raw['nickname'] as String,
+    );
+  }
+
+  RelationshipUpdateEvent parseRelationshipUpdate(Map<String, Object?> raw) {
+    return RelationshipUpdateEvent(
+      gateway: this,
+      id: Snowflake.parse(raw['id']!),
+      type: raw['type'] as int,
+      nickname: raw['nickname'] as String,
     );
   }
 

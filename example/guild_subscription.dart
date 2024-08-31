@@ -28,6 +28,21 @@ void main() async {
     // print(event.messageId);
   });
 
+  client.onRelationshipAdd.listen((event) async {
+    print("got relationship add!");
+    print(event.relationship.user);
+  });
+
+  client.onRelationshipRemove.listen((event) async {
+    print("got relationship remove!");
+    print(event.id);
+  });
+
+  client.onRelationshipUpdate.listen((event) async {
+    print("got relationship update!");
+    print(event.id);
+  });
+
   client.onReady.listen((event) async {
     print("Client Ready");
     // print("Ready!");

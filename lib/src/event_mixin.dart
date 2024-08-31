@@ -13,6 +13,7 @@ import 'package:firebridge/src/models/gateway/events/invite.dart';
 import 'package:firebridge/src/models/gateway/events/message.dart';
 import 'package:firebridge/src/models/gateway/events/presence.dart';
 import 'package:firebridge/src/models/gateway/events/ready.dart';
+import 'package:firebridge/src/models/gateway/events/relationship.dart';
 import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/gateway/events/stage_instance.dart';
 import 'package:firebridge/src/models/gateway/events/voice.dart';
@@ -348,4 +349,16 @@ mixin EventMixin implements Nyxx {
           onInteractionCreate.whereType<
               InteractionCreateEvent<
                   ApplicationCommandAutocompleteInteraction>>();
+
+  /// A [Stream] of [ApplicationCommandPermissionsUpdateEvent]s received by this client.
+  Stream<RelationshipAddEvent> get onRelationshipAdd =>
+      onEvent.whereType<RelationshipAddEvent>();
+
+  /// A [Stream] of [RelationshipRemoveEvent]s received by this client.
+  Stream<RelationshipRemoveEvent> get onRelationshipRemove =>
+      onEvent.whereType<RelationshipRemoveEvent>();
+
+  /// A [Stream] of [RelationshipUpdateEvent]s received by this client.
+  Stream<RelationshipUpdateEvent> get onRelationshipUpdate =>
+      onEvent.whereType<RelationshipUpdateEvent>();
 }
