@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/builders/application_role_connection.dart';
 import 'package:firebridge/src/builders/user.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/text_channel.dart';
 import 'package:firebridge/src/models/channel/types/dm.dart';
 import 'package:firebridge/src/models/channel/types/group_dm.dart';
 import 'package:firebridge/src/models/discord_color.dart';
@@ -14,10 +15,17 @@ import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/guild/integration.dart';
 import 'package:firebridge/src/models/guild/member.dart';
 import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/presence.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/application_role_connection.dart';
 import 'package:firebridge/src/models/user/connection.dart';
+import 'package:firebridge/src/models/user/relationship.dart';
+import 'package:firebridge/src/models/user/settings/custom_status.dart';
+import 'package:firebridge/src/models/user/settings/guild_folder.dart';
+import 'package:firebridge/src/models/user/settings/read_state.dart';
 import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
+import 'package:firebridge/src/models/user/settings/user_settings.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';
 import 'package:firebridge/src/utils/date.dart';
@@ -173,6 +181,18 @@ class UserManager extends ReadOnlyManager<User> {
         manager: client.channels,
       ),
       flags: raw['flags'] as int,
+    );
+  }
+
+  Relationship parseRelationship(Map<String, Object?> raw) {
+    return Relationship(
+      user: parse(raw['user'] as Map<String, Object?>),
+      type: raw['type'] as int,
+      isSpamRequest: raw['is_spam_request'] as bool,
+      id: Snowflake.parse(raw['id'] as String),
+      nickname: raw['nickname'] as String?,
+      since:
+          raw['since'] == null ? null : DateTime.parse(raw['since'] as String),
     );
   }
 

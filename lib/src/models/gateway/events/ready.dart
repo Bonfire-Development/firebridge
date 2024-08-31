@@ -2,6 +2,7 @@ import 'package:firebridge/src/models/application.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/events/presence.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/user/relationship.dart';
 import 'package:firebridge/src/models/user/settings/private_channel.dart';
 import 'package:firebridge/src/models/user/settings/read_state.dart';
 import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
@@ -45,11 +46,14 @@ class ReadyEvent extends DispatchEvent {
   /// The client's private channel.
   final List<PrivateChannel> privateChannels;
 
-  /// The client's application.
+  /// The client's presences.
   final List<PresenceUpdateEvent> presences;
 
   /// The client's application.
   final PartialApplication? application;
+
+  /// The client's relationships.
+  final List<Relationship> relationships;
 
   /// {@macro ready_event}
   /// @nodoc
@@ -67,6 +71,7 @@ class ReadyEvent extends DispatchEvent {
     required this.readStates,
     required this.privateChannels,
     required this.presences,
+    required this.relationships,
     this.application,
   });
 }

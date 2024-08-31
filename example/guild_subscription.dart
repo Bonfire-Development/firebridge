@@ -32,13 +32,13 @@ void main() async {
     print("Client Ready");
     // print("Ready!");
 
-    Snowflake guildId = Snowflake(BigInt.from(603970300668805120));
-    Snowflake channelId = Snowflake(BigInt.from(1085672960695746600));
+    // Snowflake guildId = Snowflake(BigInt.from(603970300668805120));
+    // Snowflake channelId = Snowflake(BigInt.from(1085672960695746600));
 
-    // get channel
-    ForumChannel channel = await client.channels.get(channelId) as ForumChannel;
-    var singleThread = await channel.manager
-        .getThreadPostData(channelId, [Snowflake.parse(1152257066656858184)]);
-    print(singleThread.first.firstMessage);
+    // // get channel
+    // ForumChannel channel = await client.channels.get(channelId) as ForumChannel;
+    // var singleThread = await channel.manager
+    //     .getThreadPostData(channelId, [Snowflake.parse(1152257066656858184)]);
+    // print(singleThread.first.firstMessage);
   });
 }
