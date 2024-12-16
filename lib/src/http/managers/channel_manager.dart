@@ -532,13 +532,25 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   }
 
   ThreadList parseThreadList(Map<String, Object?> raw, {Snowflake? guildId}) {
+    final threads = parseMany(raw['threads'] as List<dynamic>, parse);
+    final channelId = threads.firstOrNull?.id ?? Snowflake.zero;
+
     return ThreadList(
-      threads: parseMany(raw['threads'] as List, parse).cast<Thread>(),
+      threads: threads,
       members: parseMany(
-          raw['members'] as List,
-          (Map<String, Object?> raw) =>
-              parseThreadMember(raw, guildId: guildId)),
-      hasMore: raw['has_more'] as bool? ?? false,
+        raw["members"] as List,
+        (Map<String, Object?> raw) => parseThreadMember(raw),
+      ),
+      hasMore: raw["has_more"] as bool,
+      totalResults: raw["total_results"] as int,
+      firstMessages: parseMany(
+        raw["first_messages"] as List,
+        (Map<String, Object?> raw) => MessageManager(
+          client.options.messageCacheConfig,
+          client,
+          channelId: channelId,
+        ).parse(raw),
+      ),
     );
   }
 
@@ -968,7 +980,8 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   }
 
   /// Search for threads in a forum channel.
-  Future<List<ThreadPostData>?> searchThreads(Snowflake id, int limit) async {
+  Future<ThreadList?> searchThreads(Snowflake id, int limit,
+      {int? offset = 0}) async {
     // example request: /api/v9/channels/1085672960695746600/threads/search
 
     final route = HttpRoute()
@@ -979,14 +992,20 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     final request = BasicRequest(
       route,
       queryParameters: {
-        'archived': "true",
+        'archived': "false",
         'sort_by': "last_message_time",
         "sort_order": "desc",
         "tag_setting": "match_some",
         "offset": "0",
-        if (limit != null) 'limit': limit.toString()
+        'limit': limit.toString()
       },
     );
+
+    final response = await client.httpHandler.executeSafe(request);
+    final raw = response.jsonBody as Map<String, Object?>;
+
+    final threadList = parseThreadList(raw);
+    return threadList;
   }
 
   /// List the user's DM channels.

@@ -96,6 +96,8 @@ extension CacheUpdates on NyxxRest {
             entity.emojiList.forEach(updateCacheWith);
             entity.stickerList.forEach(updateCacheWith);
           }(),
+        // I really thought roles would be here.
+        GuildMemberListUpdateEvent() => null,
         Member() => () {
             entity.manager.cache[entity.id] = entity;
 
@@ -179,7 +181,16 @@ extension CacheUpdates on NyxxRest {
 
         // Events
 
-        ReadyEvent(:final user) => updateCacheWith(user),
+        ReadyEvent(
+          :final user,
+          :final guilds,
+          :final presences,
+        ) =>
+          () {
+            updateCacheWith(user);
+            guilds.forEach(updateCacheWith);
+            presences.forEach(updateCacheWith);
+          },
         ResumedEvent() => null,
         ApplicationCommandPermissionsUpdateEvent(:final permissions) =>
           updateCacheWith(permissions),

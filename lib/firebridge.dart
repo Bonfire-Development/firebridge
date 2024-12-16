@@ -235,7 +235,7 @@ export 'src/models/channel/text_channel.dart'
     show PartialTextChannel, TextChannel;
 export 'src/models/channel/thread_list.dart' show ThreadList;
 export 'src/models/channel/thread.dart'
-    show PartialThreadMember, Thread, ThreadMember;
+    show PartialThreadMember, Thread, ThreadMember, ThreadPostData;
 export 'src/models/channel/voice_channel.dart'
     show VoiceChannel, VideoQualityMode;
 export 'src/models/channel/stage_instance.dart'

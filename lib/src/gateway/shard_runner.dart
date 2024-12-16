@@ -65,10 +65,12 @@ class ShardRunner {
     // This subscription is paused whenever the shard is not successfully connected,.
     final controlSubscription = messages.listen((message) {
       if (message is Send) {
+        print("Is send message: ${message.data}");
         connection!.add(message);
       }
 
       if (message is Dispose) {
+        print("message is Dispose!");
         disposing = true;
         connection!.close();
       }
@@ -108,6 +110,12 @@ class ShardRunner {
             sendResume();
           } else {
             sendIdentify();
+            // if (!hasSentIdentify) {
+            //   sendIdentify();
+            //   hasSentIdentify = true;
+            // } else {
+            //   print("WANTS TO IDENTIFY BUT WAS BLOCKED!");
+            // }
           }
 
           canResume = false;
@@ -135,6 +143,7 @@ class ShardRunner {
               canResume = true;
               connection!.close();
             } else if (event is InvalidSessionEvent) {
+              print("invalid session!");
               if (event.isResumable) {
                 canResume = true;
               } else {
@@ -182,13 +191,16 @@ class ShardRunner {
 
           // If we encounter a fatal error, exit the shard.
           if (!canResume && (closeCode ?? 0) >= 4000) {
+            print("is a fatal errror!");
             controller.add(
                 Disconnecting(reason: 'Received error close code: $closeCode'));
             return;
           }
         } catch (error, stackTrace) {
+          print("Catching error: $error");
           controller.add(ErrorReceived(error: error, stackTrace: stackTrace));
         } finally {
+          print("CLOSING!");
           // Reset connection properties.
           connection?.close();
           connection = null;
@@ -200,6 +212,7 @@ class ShardRunner {
     }
 
     asyncRun().then((_) {
+      print("closing");
       controller.close();
       controlSubscription.cancel();
     });
@@ -235,7 +248,7 @@ class ShardRunner {
           'os': 'Linux',
           'browser': 'Firefox',
           'device': '',
-          "release_channel":"stable",
+          "release_channel": "stable",
         },
         if (data.apiOptions.compression == GatewayCompression.payload)
           'compress': true,
@@ -244,9 +257,9 @@ class ShardRunner {
         'shard': [data.id, data.totalShards],
         if (data.apiOptions.initialPresence != null)
           'presence': data.apiOptions.initialPresence!.build(),
-          'client_state': {
-            'guild_versions': {},
-          }
+        'client_state': {
+          'guild_versions': {},
+        }
       },
     ));
   }
