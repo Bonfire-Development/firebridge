@@ -1,6 +1,6 @@
 # Firebridge
 
-**This Project has moved!**
+**Firebridge has moved!**
 We are now operating at https://github.com/OpenBonfire/bonfire, for the sake of development. I may end up using this repository in the future as the project scales.
 
 [![documentation](https://img.shields.io/badge/Documentation-nyxx-yellow.svg)](https://pub.dev/documentation/nyxx/latest/)
